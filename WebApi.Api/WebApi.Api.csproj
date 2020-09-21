@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702,1591</NoWarn>
+    <DocumentationFile>D:\workProgram\NetCore\WebApi\WebApi.Api\WebApi.Api.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebApi.Common\WebApi.Common.csproj" />
+    <ProjectReference Include="..\WebApi.IServices\WebApi.IServices.csproj" />
+    <ProjectReference Include="..\WebApi.Models\WebApi.Models.csproj" />
+    <ProjectReference Include="..\WebApi.Services\WebApi.Services.csproj" />
+  </ItemGroup>
+
+
+</Project>

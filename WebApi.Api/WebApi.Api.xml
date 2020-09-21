@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApi.Api</name>
+    </assembly>
+    <members>
+        <member name="M:WebApi.Api.ConfigureExtensions.SwaggUIConfigure.UseSwaggUIConfigure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:WebApi.Api.Controllers.UserController.UserLogin">
+            <summary>
+            登陆接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.UserController.UserRegirst">
+            <summary>
+            注册接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.UserController.UserChangePassword">
+            <summary>
+            修改密码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.UserController.UserDelete(System.Int32)">
+            <summary>
+            删除用户
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.ServiceExtensions.ServiceCollectionExtenioncs.AddFreeSqlService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入freesql
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceExtensions.ServiceCollectionExtenioncs.AddRedisService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入csredis
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:WebApi.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注册服务
+            </summary>
+            <param name="services"></param>
+        </member>
+    </members>
+</doc>
