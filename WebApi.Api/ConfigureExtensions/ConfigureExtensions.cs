@@ -3,10 +3,6 @@ namespace WebApi.Api.ConfigureExtensions
 {
     public static class ConfigureExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="app"></param>
         public static void UseSwaggUIConfigure(this IApplicationBuilder app)
         {
             app.UseSwagger();
@@ -24,8 +20,6 @@ namespace WebApi.Api.ConfigureExtensions
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
-                //endpoints.MapGrpcService<>();
             });
         }
     }

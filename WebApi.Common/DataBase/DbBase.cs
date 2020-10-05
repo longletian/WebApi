@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebApi.IServices.Base
+namespace WebApi.Common.DataBase
 {
-   public interface IBaseServices
+    public class DbBase
     {
+
+
     }
 }

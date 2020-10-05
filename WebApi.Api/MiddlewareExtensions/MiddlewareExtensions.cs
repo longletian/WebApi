@@ -9,8 +9,7 @@ namespace WebApi.Api.MiddlewareExtensions
 {
     public static  class MiddlewareExtensions
     {
-        public static IApplicationBuilder UseLogMiddleware(
-          this IApplicationBuilder builder)
+        public static IApplicationBuilder UseLogMiddleware(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<LogMiddleware>();
         }

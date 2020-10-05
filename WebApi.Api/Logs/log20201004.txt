@@ -1,0 +1,8 @@
+����ʱ��:18:48:24.724 �¼��ȼ�:[INF] (//) ��ϸ��Ϣ:开始进入
+����ʱ��:18:48:26.421 �¼��ȼ�:[INF] (//) ��ϸ��Ϣ:Connected to broker "127.0.0.1", port 5672, vhost "/"
+����ʱ��:18:48:26.974 �¼��ȼ�:[INF] (//) ��ϸ��Ϣ:Now listening on: "http://localhost:5000"
+����ʱ��:18:48:26.981 �¼��ȼ�:[INF] (//) ��ϸ��Ϣ:Application started. Press Ctrl+C to shut down.
+����ʱ��:18:48:26.983 �¼��ȼ�:[INF] (//) ��ϸ��Ϣ:Hosting environment: "Development"
+����ʱ��:18:48:26.984 �¼��ȼ�:[INF] (//) ��ϸ��Ϣ:Content root path: "D:\workProgram\NetCore\WebApi\WebApi.Api"
+����ʱ��:18:48:28.493 �¼��ȼ�:[INF] (//) ��ϸ��Ϣ:HTTP "GET" "/index.html" responded 200 in 311.6222 ms
+����ʱ��:18:48:29.124 �¼��ȼ�:[INF] (//) ��ϸ��Ϣ:HTTP "GET" "/swagger/v1/swagger.json" responded 200 in 145.4740 ms

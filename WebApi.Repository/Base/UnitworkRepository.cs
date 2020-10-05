@@ -1,52 +1,54 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
 using System.Data;
+using System.Data.Common;
+using System.Threading.Tasks;
 using WebApi.IRepository.Base;
 
 namespace WebApi.Repository.Base
 {
     public class UnitworkRepository : IUnitworkRepository
     {
-        private readonly DbContext dbContext;
-        public UnitworkRepository(DbContext _dbContext)
+        private readonly DbContext context;
+        public UnitworkRepository(DbContext _context)
         {
-            dbContext = _dbContext;
+            context = _context;
         }
-
+        /// <summary>
+        /// 开始事务（efcore）
+        /// </summary>
+        /// <returns></returns>
         public IDbContextTransaction BeginTransaction()
         {
-            return dbContext.Database.BeginTransaction();
+          return  context.Database.BeginTransaction();
         }
 
-        public void Close()
+        /// <summary>
+        /// 数据保存
+        /// </summary>
+        public void SaveChange()
         {
-             dbContext.Database.CloseConnection();
+            context.SaveChanges();
         }
 
         public void Commit()
         {
-            dbContext.Database.BeginTransaction().Commit();
+             context.Database.BeginTransaction().Commit();
         }
 
         public void Dispose()
         {
-            dbContext.Dispose();
-        }
-
-        public IDbConnection GetConnection()
-        {
-            return dbContext.Database.GetDbConnection();
+            context.Database.BeginTransaction().Dispose();
         }
 
         public void Rollback()
         {
-            dbContext.Database.BeginTransaction().Rollback();
+            context.Database.BeginTransaction().Rollback();
         }
 
-        public void SaveChange()
+        public async Task SaveChangeAsync()
         {
-            dbContext.SaveChanges();
+          await  context.SaveChangesAsync();
         }
     }
 }

@@ -10,6 +10,7 @@ using WebApi.Api.ConfigureExtensions;
 using WebApi.Api.ServiceExtensions;
 using WebApi.Api.Middlewares;
 using WebApi.Api.MiddlewareExtensions;
+using Serilog;
 
 namespace WebApi.Api
 {
@@ -34,8 +35,6 @@ namespace WebApi.Api
 
             services.AddSingleton(new AppSetting(Configuration, Env));
 
-            services.AddFreeSqlService();
-
             services.AddRedisService();
 
             services.AddSwaggUIService();
@@ -50,31 +49,49 @@ namespace WebApi.Api
 
             services.AddCorsService();
 
+            services.AddHttpClientService();
+
             services.AddResponseCachingService();
+
+            services.AddJwtService();
+
+            services.AddResponseCompressionService();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseStaticFiles();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseStaticFiles();
+            //使用请求日志中间件
+            app.UseSerilogRequestLogging();
+
+            app.UseAuthentication();
 
             app.UseRoutingConfigure();
+
+            app.UseResponseCaching();
+
+            app.UseResponseCompression();
 
             app.UseSwaggUIConfigure();
 
             app.UseAuthorization();
 
+            app.UseGrpcWeb();
+
             app.UseCors();
+
+            app.UseMiddleware<LogMiddleware>();
 
             app.UseMiniProfiler();
 
             app.UseLogMiddleware();
-
-            app.UseResponseCaching();
 
         }
     }

@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApi.Api.Middlewares
+namespace WebApi.Api.Common.Middlewares
 {
     /// <summary>
     /// 定义请求管道的中间件
@@ -20,6 +18,8 @@ namespace WebApi.Api.Middlewares
         }
         public async Task InvokeAsync(HttpContext context)
         {
+            var exception = context.Features.Get<Exception>();
+
             await _next(context);
         }
     }

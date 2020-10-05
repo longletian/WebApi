@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebApi.IServices.Base
+namespace WebApi.Models.Models
 {
-   public interface IBaseServices
+    public class MenuModel
     {
     }
 }

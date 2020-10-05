@@ -8,11 +8,11 @@ using System.Text;
 
 namespace WebApi.Common.AppSetting
 {
-   public class AppSetting
+    public class AppSetting
     {
         static IConfiguration Configuration { get; set; }
         static IHostEnvironment Env { get; set; }
-        public AppSetting(IConfiguration configuration,IHostEnvironment env)
+        public AppSetting(IConfiguration configuration, IHostEnvironment env)
         {
             Configuration = configuration;
             Env = env;
@@ -35,14 +35,9 @@ namespace WebApi.Common.AppSetting
         /// <returns></returns>
         public static string GetConnStrings(string constr)
         {
-            try
+            if (!string.IsNullOrEmpty(constr))
             {
-                if (!string.IsNullOrEmpty(constr))
-                {
-                    return Configuration.GetConnectionString(constr);
-                }
-            }
-            catch (Exception){
+                return Configuration.GetConnectionString(constr);
             }
             return "";
         }
@@ -52,47 +47,34 @@ namespace WebApi.Common.AppSetting
         /// </summary>
         /// <param name="sectionConstr"></param>
         /// <returns></returns>
-        public static string GetSection(string sectionConstr)
+        public static IConfigurationSection GetSection(string sectionConstr)
         {
-            try
+            if (!string.IsNullOrEmpty(sectionConstr))
             {
-                if (!string.IsNullOrEmpty(sectionConstr))
+                if (Configuration.GetSection(sectionConstr).Exists())
                 {
-                    if (Configuration.GetSection(sectionConstr).Exists())
-                    {
-                        return Configuration.GetSection(sectionConstr).ToString();
-                    }
+                    return Configuration.GetSection(sectionConstr);
                 }
             }
-            catch (Exception) { }
-            return "";
+            return Configuration.GetSection("");
         }
 
-       /// <summary>
-       /// 绑定实体类,使用需要注入使用
-       /// </summary>
-       /// <param name="sectionConstr"></param>
-       /// <returns></returns>
-        public static void BindSection<T>(string sectionConstr)
+        /// <summary>
+        /// 绑定实体类,使用需要注入使用
+        /// </summary>
+        /// <param name="sectionConstr"></param>
+        /// <returns></returns>
+        public static void BindSection<T>(string sectionConstr, T entity)
         {
-            try
+
+            if (!string.IsNullOrEmpty(sectionConstr))
             {
-                if (!string.IsNullOrEmpty(sectionConstr))
+                if (Configuration.GetSection(sectionConstr).Exists())
                 {
-                    if (Configuration.GetSection(sectionConstr).Exists())
-                    {
-                         Configuration.GetSection(sectionConstr).Get<T>();
-                    }
+                    Configuration.GetSection(sectionConstr).Bind(entity);
                 }
             }
-            catch (Exception) { }
-        }
 
-        public static List<T> Get<T>(params string[] sections)
-        {
-            List<T> list = new List<T>();
-            Configuration.Bind(string.Join(":", sections), list);
-            return list;
         }
     }
 }
