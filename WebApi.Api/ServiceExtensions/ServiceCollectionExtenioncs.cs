@@ -22,6 +22,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using WebApi.Common.AutoFac;
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -278,5 +281,22 @@ namespace WebApi.Api.ServiceExtensions
             });
         }
 
+        /// <summary>
+        /// 注入autofac
+        /// </summary>
+        /// <param name="services"></param>
+        public static IServiceProvider AddAutoFac(this IServiceCollection services)
+        {
+            //初始化容器
+            var builder = new ContainerBuilder();
+            //将Services中的服务填充到Autofac中
+            builder.Populate(services);
+            //新模块组件注册    
+            builder.RegisterModule<AutoFacModule>();
+            //创建容器
+            var Container = builder.Build();
+            //第三方IOC接管 core内置DI容器 
+            return new AutofacServiceProvider(Container);
+        }
     }
 }

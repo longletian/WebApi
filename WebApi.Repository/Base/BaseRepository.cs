@@ -100,7 +100,6 @@ namespace WebApi.Repository.Base
             await unitOfWork.SaveChangeAsync();
         }
 
-
         public void Update(T entity)
         {
             if (entity == null)

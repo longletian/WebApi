@@ -7,8 +7,13 @@
   <ItemGroup>
     <PackageReference Include="Caching.CSRedis" Version="3.6.5" />
     <PackageReference Include="CSRedisCore" Version="3.6.5" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.31.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.8" />
     <PackageReference Include="NPOI" Version="2.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Grpc\" />
   </ItemGroup>
 
 </Project>

@@ -8,9 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApi.Api.ConfigureExtensions;
 using WebApi.Api.ServiceExtensions;
-using WebApi.Api.Middlewares;
 using WebApi.Api.MiddlewareExtensions;
 using Serilog;
+using Autofac;
+using WebApi.Common.AutoFac;
+using System;
 
 namespace WebApi.Api
 {
@@ -28,7 +30,7 @@ namespace WebApi.Api
         /// ×¢²á·þÎñ
         /// </summary>
         /// <param name="services"></param>
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddJsonOptions(
                 option => option.JsonSerializerOptions.PropertyNamingPolicy = null);
@@ -47,6 +49,8 @@ namespace WebApi.Api
 
             services.AddGrpc();
 
+            services.AddSignalR();
+
             services.AddCorsService();
 
             services.AddHttpClientService();
@@ -57,6 +61,7 @@ namespace WebApi.Api
 
             services.AddResponseCompressionService();
 
+            return services.AddAutoFac();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -86,8 +91,6 @@ namespace WebApi.Api
             app.UseGrpcWeb();
 
             app.UseCors();
-
-            app.UseMiddleware<LogMiddleware>();
 
             app.UseMiniProfiler();
 

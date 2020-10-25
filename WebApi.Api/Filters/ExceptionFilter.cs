@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Castle.Core.Logging;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace WebApi.Api.Filters
@@ -10,9 +12,21 @@ namespace WebApi.Api.Filters
     /// </summary>
     public class ExceptionFilter : IExceptionFilter
     {
+        private ILogger<ExceptionFilter> logger;
+
+        public ExceptionFilter(ILogger<ExceptionFilter> _logger)
+        {
+            logger = _logger;
+        }
+
+
+        /// <summary>
+        /// 实现IExceptionFilter的OnException方法
+        /// <param name="context">异常上下文</param>
         public void OnException(ExceptionContext context)
         {
-            throw new NotImplementedException();
+         
+
         }
     }
 }
