@@ -4,6 +4,41 @@
         <name>WebApi.Api</name>
     </assembly>
     <members>
+        <member name="T:WebApi.WebApi.Api.AutoFacModule">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApi.WebApi.Api.AutoFacModule.Load(Autofac.ContainerBuilder)">
+            <summary>
+            重写autofac管道load方法
+            </summary>
+        </member>
+        <member name="M:WebApi.WebApi.Api.AutoFacModule.GetAssemblyByName(System.String)">
+            <summary>
+            根据程序集名称获取程序集
+            </summary>
+            <param name="AssemblyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.ConfigureExtensions.ConfigureExtensions.UseSwaggUIConfigure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            swagger-ui
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:WebApi.Api.ConfigureExtensions.ConfigureExtensions.UseRoutingConfigure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            路由配置
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:WebApi.Api.ConfigureExtensions.ConfigureExtensions.UseSignalConfigure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            使用实时通讯
+            </summary>
+            <param name="app"></param>
+        </member>
         <member name="M:WebApi.Api.Controllers.TokenController.GetRefreshToken">
             <summary>
             刷新token
@@ -47,10 +82,13 @@
             FilterAttribute抽象类,可以作为特性使用的全局操作过滤器
             </summary>
         </member>
-        <member name="T:WebApi.Api.Middlewares.LogMiddleware">
+        <!-- Badly formed XML comment ignored for member "M:WebApi.Api.Filters.ExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)" -->
+        <member name="M:WebApi.Api.MiddlewareExtensions.MiddlewareExtensions.UseLogMiddleware(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
-            定义请求管道的中间件
+            中间件
             </summary>
+            <param name="builder"></param>
+            <returns></returns>
         </member>
         <member name="M:WebApi.Api.ServiceExtensions.ServiceCollectionExtenioncs.AddFreeSqlService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
@@ -117,11 +155,23 @@
             注入响应压缩
             </summary>
         </member>
+        <member name="M:WebApi.Api.ServiceExtensions.ServiceCollectionExtenioncs.AddCapEvent(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入cap
+            </summary>
+            <param name="services"></param>
+        </member>
         <member name="M:WebApi.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             注册服务
             </summary>
             <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.Startup.ConfigureContainer(Autofac.ContainerBuilder)">
+            <summary>
+            添加autofa服务 （注意：3.0写法 ）
+            </summary>
+            <param name="builder"></param>
         </member>
     </members>
 </doc>

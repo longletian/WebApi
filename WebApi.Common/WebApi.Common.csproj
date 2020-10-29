@@ -10,7 +10,9 @@
     <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
-    <PackageReference Include="DotNetCore.CAP" Version="3.1.0" />
+    <PackageReference Include="DotNetCore.CAP" Version="3.1.1" />
+    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="3.1.1" />
+    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="3.1.1" />
     <PackageReference Include="EasyNetQ" Version="5.2.2" />
     <PackageReference Include="FreeSql" Version="1.9.0-preview0919" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.31.0" />

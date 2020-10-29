@@ -4,7 +4,4 @@ using System.Text;
 
 namespace WebApi.Tools.Grpc
 {
-   public class GreeterService: Greeter.GreeterBase
-    {
-    }
 }

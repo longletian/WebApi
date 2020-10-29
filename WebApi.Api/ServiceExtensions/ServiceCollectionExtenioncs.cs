@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using WebApi.Common.AutoFac;
+using DotNetCore.CAP.Dashboard.NodeDiscovery;
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -135,7 +136,7 @@ namespace WebApi.Api.ServiceExtensions
         /// <param name="services"></param>
         public static void AddHttpClientService(this IServiceCollection services)
         {
-          
+
             services.AddHttpClient();
             services.AddHttpClient("github", c =>
             {
@@ -200,7 +201,7 @@ namespace WebApi.Api.ServiceExtensions
         /// <param name="services"></param>
         public static void AddJwtService(this IServiceCollection services)
         {
-     
+
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.Configure<JwtConfig>(AppSetting.GetSection("Audience"));
@@ -235,9 +236,9 @@ namespace WebApi.Api.ServiceExtensions
                 };
                 options.Events = new JwtBearerEvents
                 {
-                    OnAuthenticationFailed = context => 
+                    OnAuthenticationFailed = context =>
                     {
-                        var  token=context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                        var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
                         var jwtToken = (new JwtSecurityTokenHandler()).ReadJwtToken(token);
 
                         if (jwtToken.Issuer != jwtConfig.Issuer)
@@ -268,7 +269,8 @@ namespace WebApi.Api.ServiceExtensions
         /// </summary>
         public static void AddResponseCompressionService(this IServiceCollection services)
         {
-            services.AddResponseCompression(options=> {
+            services.AddResponseCompression(options =>
+            {
                 options.Providers.Add<BrotliCompressionProvider>();
                 options.Providers.Add<GzipCompressionProvider>();
                 options.MimeTypes =
@@ -282,21 +284,65 @@ namespace WebApi.Api.ServiceExtensions
         }
 
         /// <summary>
-        /// 注入autofac
+        /// 注入cap
         /// </summary>
         /// <param name="services"></param>
-        public static IServiceProvider AddAutoFac(this IServiceCollection services)
+        public static void AddCapEvent(this IServiceCollection services)
         {
-            //初始化容器
-            var builder = new ContainerBuilder();
-            //将Services中的服务填充到Autofac中
-            builder.Populate(services);
-            //新模块组件注册    
-            builder.RegisterModule<AutoFacModule>();
-            //创建容器
-            var Container = builder.Build();
-            //第三方IOC接管 core内置DI容器 
-            return new AutofacServiceProvider(Container);
+            #region cap简介
+            // CAP 是一个在分布式系统中实现事件总线及最终一致性（分布式事务）
+            // 具有轻量级，高性能，易使用等特点。
+            // 具有 Event Bus 的所有功能，并且CAP提供了更加简化的方式来处理EventBus中的发布 / 订阅
+            // 具有消息持久化的功能
+            // 实现了分布式事务中的最终一致性，
+            #endregion
+
+            services.AddCap(x =>
+            {
+                x.UseDashboard();
+                //x.UseMySql(AppSetting.GetConnStrings("MysqlCon"));
+                x.UseRabbitMQ(cfg =>
+                {
+                    cfg.HostName = AppSetting.GetSection("MQ:Host").ToString();
+                    cfg.VirtualHost = AppSetting.GetSection("MQ:VirtualHost").ToString();
+                    cfg.Port = Convert.ToInt32(AppSetting.GetSection("MQ:Port"));
+                    cfg.UserName = AppSetting.GetSection("MQ:UserName").ToString();
+                    cfg.Password = AppSetting.GetSection("MQ:Password").ToString();
+                });
+                x.FailedRetryInterval = 5;
+                x.FailedRetryCount = 2;
+
+                #region 注入Consul
+                //x.UseDiscovery(d =>
+                //{
+                //    d.DiscoveryServerHostName = "localhost";
+                //    d.DiscoveryServerPort = 8500;
+                //    d.CurrentNodeHostName = "localhost";
+                //    d.CurrentNodePort = 5800;
+                //    d.NodeId = 1;
+                //    d.NodeName = "CAP No.1 Node";
+
+                //});
+                #endregion
+
+            });
         }
+
+
+        public static void AddAuthenticationService(this IServiceCollection services)
+        {
+            services.AddAuthentication("Bearer")
+               .AddJwtBearer("Bearer", options =>
+               {
+                   options.Authority = "https://localhost:5000";
+
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidateAudience = false
+                   };
+               });
+        }
+
+      
     }
 }

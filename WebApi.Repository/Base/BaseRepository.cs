@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using FreeSql;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Crmf;
@@ -10,7 +9,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using WebApi.IRepository.Base;
+using WebApi.Repository.Base.Unitwork;
+
 namespace WebApi.Repository.Base
 {
     /// <summary>
@@ -414,8 +414,6 @@ namespace WebApi.Repository.Base
             throw new NotImplementedException();
         }
 
-
-
         public IEnumerable<T> QueryByProc(string procName)
         {
             throw new NotImplementedException();
@@ -426,8 +424,9 @@ namespace WebApi.Repository.Base
             throw new NotImplementedException();
         }
 
-
-
-
+        public IEnumerable<T> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

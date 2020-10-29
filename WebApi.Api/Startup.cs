@@ -1,3 +1,4 @@
+using Serilog;
 using AutoMapper;
 using WebApi.Common.AppSetting;
 using WebApi.Common.AutoMapper;
@@ -9,10 +10,8 @@ using Microsoft.Extensions.Hosting;
 using WebApi.Api.ConfigureExtensions;
 using WebApi.Api.ServiceExtensions;
 using WebApi.Api.MiddlewareExtensions;
-using Serilog;
 using Autofac;
-using WebApi.Common.AutoFac;
-using System;
+using WebApi.WebApi.Api;
 
 namespace WebApi.Api
 {
@@ -30,9 +29,10 @@ namespace WebApi.Api
         /// 注册服务
         /// </summary>
         /// <param name="services"></param>
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddJsonOptions(
+                // 配置返回格式
                 option => option.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddSingleton(new AppSetting(Configuration, Env));
@@ -47,11 +47,13 @@ namespace WebApi.Api
 
             services.AddEasyNetQService();
 
-            services.AddGrpc();
+            //services.AddGrpc();
 
             services.AddSignalR();
 
             services.AddCorsService();
+
+            services.AddAuthenticationService();
 
             services.AddHttpClientService();
 
@@ -61,8 +63,20 @@ namespace WebApi.Api
 
             services.AddResponseCompressionService();
 
-            return services.AddAutoFac();
         }
+        #region 注入autofac
+
+        /// <summary>
+        /// 添加autofa服务 （注意：3.0写法 ）
+        /// </summary>
+        /// <param name="builder"></param>
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            //新模块组件注册    
+            builder.RegisterModule(new AutoFacModule());
+        }
+
+        #endregion
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -76,8 +90,6 @@ namespace WebApi.Api
             //使用请求日志中间件
             app.UseSerilogRequestLogging();
 
-            app.UseAuthentication();
-
             app.UseRoutingConfigure();
 
             app.UseResponseCaching();
@@ -85,6 +97,8 @@ namespace WebApi.Api
             app.UseResponseCompression();
 
             app.UseSwaggUIConfigure();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

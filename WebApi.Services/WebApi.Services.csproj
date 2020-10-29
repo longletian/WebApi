@@ -5,8 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebApi.IRepository\WebApi.IRepository.csproj" />
+    <Folder Include="Base\" />
+    <Folder Include="Service\" />
+    <Folder Include="IService\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WebApi.Models\WebApi.Models.csproj" />
+    <ProjectReference Include="..\WebApi.Repository\WebApi.Repository.csproj" />
     <ProjectReference Include="..\WebApi.Tools\WebApi.Tools.csproj" />
   </ItemGroup>
 

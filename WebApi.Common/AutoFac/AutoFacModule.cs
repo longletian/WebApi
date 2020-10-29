@@ -1,8 +1,5 @@
 ﻿using Autofac;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace WebApi.Common.AutoFac
 {
@@ -16,6 +13,7 @@ namespace WebApi.Common.AutoFac
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
+
             //注入方式：
             //1：类型注入
             //builder.RegisterType<>().As<>();
@@ -29,12 +27,11 @@ namespace WebApi.Common.AutoFac
             //5：程序集注入
             //builder.RegisterAssemblyTypes(GetAssemblyByName("WXL.Service")).Where(a => a.Name.EndsWith("Service")).AsImplementedInterfaces();
 
-            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.IRepository")).Where(a => a.Name.EndsWith("Repository")).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository")).Where(a => a.Name.EndsWith("Repository")).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.IServices")).Where(a => a.Name.EndsWith("Services")).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services")).Where(a => a.Name.EndsWith("Services")).AsImplementedInterfaces();
+            //builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository")).Where(a => a.Name.EndsWith("Repository"))
+            //    .AsImplementedInterfaces();
 
-
+            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services.dll")).Where(a => a.Name.EndsWith("Services"))
+                .AsImplementedInterfaces();
         }
 
         /// <summary>
@@ -42,9 +39,11 @@ namespace WebApi.Common.AutoFac
         /// </summary>
         /// <param name="AssemblyName"></param>
         /// <returns></returns>
-        public static Assembly GetAssemblyByName(String AssemblyName)
+        public static Assembly GetAssemblyByName(string AssemblyName)
         {
-            return Assembly.Load(AssemblyName);
+            return Assembly.LoadFrom(AssemblyName);
+
+            //return Assembly.GetExecutingAssembly();
         }
     }
 

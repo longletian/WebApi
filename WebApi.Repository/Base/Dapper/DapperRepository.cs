@@ -6,7 +6,6 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using WebApi.IRepository.Base.Dapper;
 
 namespace WebApi.Repository.Base.Dapper
 {
