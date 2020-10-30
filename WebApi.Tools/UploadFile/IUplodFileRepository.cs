@@ -14,6 +14,7 @@ namespace WebApi.Tools.UploadFile
         /// <param name="dicColumns">标题头</param>
         /// <returns></returns>
         MemoryStream ExportExcel<T>(List<T> entities, Dictionary<string, string> dicColumns, string exportFileName = null, string title = null);
+      
         /// <summary>
         /// 导入excel文件
         /// </summary>
@@ -21,6 +22,7 @@ namespace WebApi.Tools.UploadFile
         /// <param name="sheetName"></param>
         /// <returns></returns>
         DataSet ReadExcelToDataSet(string filePath, string sheetName = null);
+      
         /// <summary>
         /// 上传文件
         /// </summary>

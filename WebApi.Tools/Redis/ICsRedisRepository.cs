@@ -103,7 +103,6 @@ namespace WebApi.Tools.Redis
 
         Task<bool> HashSetAsync<T>(string cacheKey, Dictionary<string, T> valuePairs);
 
-
         bool HashSetNx<T>(string cacheKey, string field, T value);
 
         Task<bool> HashSetNxAsync<T>(string cacheKey, string field, T value);

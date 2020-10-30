@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Api.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class UserController : ControllerBase
     {  
@@ -33,8 +28,15 @@ namespace WebApi.Api.Controllers
             return NotFound();
         }
 
-        [HttpGet]
+        [Authorize]
+        [HttpGet,Route("identity")]
         public IActionResult Get()
+        {
+            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+        }
+
+        [HttpGet, Route("token")]
+        public IActionResult GetToken()
         {
             return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
         }

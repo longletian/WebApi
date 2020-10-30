@@ -26,10 +26,22 @@ namespace IdServer4.WebApi.IDS4
         {
             services.AddControllersWithViews();
 
+            //options => {
+                //options.Events.RaiseErrorEvents = true;
+                //options.Events.RaiseInformationEvents = true;
+                //options.Events.RaiseFailureEvents = true;
+                //options.Events.RaiseSuccessEvents = true;
+            //}
+
             services.AddIdentityServer()
                 .AddInMemoryApiScopes(InMemoryConfig.ApiScopes)
                 .AddInMemoryClients(InMemoryConfig.Clients)
-                .AddTestUsers(TestUsers.Users);
+                .AddInMemoryIdentityResources(InMemoryConfig.IdentityResources())
+                //.AddTestUsers(TestUsers.Users)
+
+
+                //扩展在每次启动时，为令牌签名创建了一个临时密钥
+                .AddDeveloperSigningCredential();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -45,15 +57,20 @@ namespace IdServer4.WebApi.IDS4
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseIdentityServer();
 
+            //认证
             app.UseAuthentication();
 
+            //授权
             app.UseAuthorization();
+
+            //调用app.UseAuthorization() ，并且这个调用方法要出现在app.UseRouting() and app.UseEndpoints(...).中间
 
             app.UseEndpoints(endpoints =>
             {

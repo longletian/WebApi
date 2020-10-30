@@ -27,9 +27,19 @@ namespace WebApi.Api.ConfigureExtensions
         {
             app.UseRouting();
 
+
+            //将身份认证中间添加到管道
+
+            //认证
+            app.UseAuthentication();
+
+            //授权
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //.RequireAuthorization("ApiScope");
             });
         }
 
@@ -39,10 +49,10 @@ namespace WebApi.Api.ConfigureExtensions
         /// <param name="app"></param>
         public static void UseSignalConfigure(this IApplicationBuilder app)
         {
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<MessageHub>("/messagehub");
-            });
+            //app.UseSignalR(routes =>
+            //{
+            //    routes.MapHub<MessageHub>("/messagehub");
+            //});
         }
     }
 }

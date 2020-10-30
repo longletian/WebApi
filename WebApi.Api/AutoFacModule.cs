@@ -14,7 +14,6 @@ namespace WebApi.WebApi.Api
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-
             //注入方式：
             //1：类型注入
             //builder.RegisterType<>().As<>();

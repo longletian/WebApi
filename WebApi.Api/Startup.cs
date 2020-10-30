@@ -32,7 +32,6 @@ namespace WebApi.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddJsonOptions(
-                // 配置返回格式
                 option => option.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddSingleton(new AppSetting(Configuration, Env));
@@ -47,9 +46,7 @@ namespace WebApi.Api
 
             services.AddEasyNetQService();
 
-            //services.AddGrpc();
-
-            services.AddSignalR();
+            //services.AddSignalR();
 
             services.AddCorsService();
 
@@ -59,11 +56,12 @@ namespace WebApi.Api
 
             services.AddResponseCachingService();
 
-            services.AddJwtService();
+            //services.AddJwtService();
 
             services.AddResponseCompressionService();
 
         }
+
         #region 注入autofac
 
         /// <summary>
@@ -77,6 +75,7 @@ namespace WebApi.Api
         }
 
         #endregion
+
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -97,10 +96,6 @@ namespace WebApi.Api
             app.UseResponseCompression();
 
             app.UseSwaggUIConfigure();
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
 
             app.UseGrpcWeb();
 

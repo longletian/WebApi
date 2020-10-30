@@ -331,16 +331,33 @@ namespace WebApi.Api.ServiceExtensions
 
         public static void AddAuthenticationService(this IServiceCollection services)
         {
+
+            //将身份验证服务添加到DI和身份验证中间件到管道
+            //注入身份认证服务
             services.AddAuthentication("Bearer")
+               //  JWT 认证处理程序添加到DI中以供身份认证服务使用
                .AddJwtBearer("Bearer", options =>
                {
-                   options.Authority = "https://localhost:5000";
+                   // 验证传入令牌以确保它来自受信任的颁发者
+                   options.Authority = "https://localhost:5001";
 
+                   // 验证token参数
                    options.TokenValidationParameters = new TokenValidationParameters
                    {
                        ValidateAudience = false
                    };
                });
+
+            //授权
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+
+                    policy.RequireClaim("scope", "api1");
+                });
+            });
         }
 
       
