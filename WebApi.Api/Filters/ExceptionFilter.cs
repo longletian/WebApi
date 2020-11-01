@@ -23,6 +23,7 @@ namespace WebApi.Api.Filters
         /// <summary>
         /// 实现IExceptionFilter的OnException方法
         /// <param name="context">异常上下文</param>
+        /// </summary>
         public void OnException(ExceptionContext context)
         {
          

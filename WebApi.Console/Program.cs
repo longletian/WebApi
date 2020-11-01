@@ -11,6 +11,7 @@ namespace WebApi
     {
         static async Task Main(string[] args)
         {
+
             // discover endpoints from metadata
             var client = new HttpClient();
 
@@ -41,9 +42,9 @@ namespace WebApi
 
             // call api
             var apiClient = new HttpClient();
-            apiClient.SetBearerToken(tokenResponse.AccessToken);                 
+            apiClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var response = await apiClient.GetAsync("http://localhost:6883/api/User/identity");
+            var response = await apiClient.GetAsync("https://localhost:6001/api/User/identity");
             Console.WriteLine(JsonConvert.SerializeObject(response));
             if (!response.IsSuccessStatusCode)
             {

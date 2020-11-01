@@ -27,19 +27,16 @@ namespace WebApi.Api.ConfigureExtensions
         {
             app.UseRouting();
 
-
-            //将身份认证中间添加到管道
-
             //认证
             app.UseAuthentication();
-
             //授权
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
-                //.RequireAuthorization("ApiScope");
+                endpoints.MapControllers()
+                 //禁用整个应用程序的匿名访问
+                .RequireAuthorization();
             });
         }
 

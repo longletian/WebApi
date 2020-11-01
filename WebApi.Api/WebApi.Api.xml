@@ -82,7 +82,12 @@
             FilterAttribute抽象类,可以作为特性使用的全局操作过滤器
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:WebApi.Api.Filters.ExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)" -->
+        <member name="M:WebApi.Api.Filters.ExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
+            <summary>
+            实现IExceptionFilter的OnException方法
+            <param name="context">异常上下文</param>
+            </summary>
+        </member>
         <member name="M:WebApi.Api.MiddlewareExtensions.MiddlewareExtensions.UseLogMiddleware(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
             中间件

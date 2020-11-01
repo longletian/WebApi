@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4;
+using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WebApi.IDS4.Config
 {
-    public static  class InMemoryConfig
+    public static class InMemoryConfig
     {
         /// <summary>
         /// 定义访问api
@@ -18,13 +19,12 @@ namespace WebApi.IDS4.Config
                 new ApiScope("api1", "MyAPI")
             };
 
-
-
         /// <summary>
         /// 定义访问的客户端
         /// </summary>
-        public static IEnumerable<Client> Clients
-             => new List<Client>
+        public static IEnumerable<Client> Clients()
+        {
+            return new List<Client>
              {
                  new Client
                  {
@@ -34,24 +34,55 @@ namespace WebApi.IDS4.Config
                      AllowedGrantTypes = GrantTypes.ClientCredentials,
 
                      ClientSecrets=new [] { new Secret("secret".Sha256()) },
-  
-                     AllowedScopes = new [] { "api1" }// 允许访问的 API 资源
+
+                     AllowedScopes = new [] { "api1","openid" }// 允许访问的 API 资源
+                 },
+
+                 new Client
+                 { 
+                     ClientId="pass client",
+                     AllowedGrantTypes=GrantTypes.ResourceOwnerPassword,
+                     ClientSecrets=new [] { new  Secret("secret".Sha256())},
+                     AllowedScopes=new []{ "api1",}
+                 },
+
+                 //code模式
+                 new Client
+                 {
+                     ClientId = "mvc",
+
+                     ClientSecrets = { new Secret("secret".Sha256()) },
+
+                     AllowedGrantTypes = GrantTypes.Code,
+
+                     // where to redirect to after login
+                     RedirectUris = { "https://localhost:5002/signin-oidc" },
+
+                     // where to redirect to after logout
+                     PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+
+                     // 支持刷新令牌
+                     //AllowOfflineAccess = true,
+
+                     AllowedScopes = new List<string>
+                    {
+                         "api1",
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                    }
                  }
              };
-
+        }
 
         /// <summary>
         /// 定义identity资源
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<IdentityResource> IdentityResources()
-        {
-            return new IdentityResource[]
+            => new List<IdentityResource>
             {
-                new IdentityResources.OpenId()
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
             };
-        }
-
-
     }
 }

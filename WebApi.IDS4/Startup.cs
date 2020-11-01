@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using WebApi.IDS4.Config;
 
 namespace IdServer4.WebApi.IDS4
@@ -25,23 +27,55 @@ namespace IdServer4.WebApi.IDS4
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+ 
 
-            //options => {
-                //options.Events.RaiseErrorEvents = true;
-                //options.Events.RaiseInformationEvents = true;
-                //options.Events.RaiseFailureEvents = true;
-                //options.Events.RaiseSuccessEvents = true;
-            //}
-
-            services.AddIdentityServer()
-                .AddInMemoryApiScopes(InMemoryConfig.ApiScopes)
-                .AddInMemoryClients(InMemoryConfig.Clients)
+            services.AddIdentityServer(options =>
+                {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
+                })
+                // IdentityResources 用户相关权限
                 .AddInMemoryIdentityResources(InMemoryConfig.IdentityResources())
-                //.AddTestUsers(TestUsers.Users)
-
+                // api访问权限
+                .AddInMemoryApiScopes(InMemoryConfig.ApiScopes)
+                // 客户端配置
+                .AddInMemoryClients(InMemoryConfig.Clients())
+                // 测试用户
+                .AddTestUsers(TestUsers.Users)
 
                 //扩展在每次启动时，为令牌签名创建了一个临时密钥
                 .AddDeveloperSigningCredential();
+
+            services.AddAuthentication()
+            //覆盖 Cookie 处理程序配置
+            .AddCookie("Cookies")
+            //.AddGoogle("Google", options =>
+            //  {
+            //      options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+            //      options.ClientId = "clientID";
+            //      options.ClientSecret = "clientSecret";
+            //  })
+            //远程测试
+            .AddOpenIdConnect("oidc", "Demo IdentityServer", options =>
+            {
+                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+                options.SaveTokens = true;
+
+                options.Authority = "https://demo.identityserver.io/";
+                options.ClientId = "interactive.confidential";
+                options.ClientSecret = "secret";
+                options.ResponseType = "code";
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                };
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -65,7 +99,7 @@ namespace IdServer4.WebApi.IDS4
             app.UseIdentityServer();
 
             //认证
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
             //授权
             app.UseAuthorization();
@@ -74,9 +108,7 @@ namespace IdServer4.WebApi.IDS4
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }
