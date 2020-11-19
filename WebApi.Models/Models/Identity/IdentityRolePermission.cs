@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace WebApi.Models.Models.Identity
+namespace WebApi.Models
 {
     /// <summary>
     /// 角色权限关联表

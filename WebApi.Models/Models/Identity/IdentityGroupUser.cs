@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace WebApi.Models.Models.Identity
+namespace WebApi.Models
 {
 
     [Table("case_group_user")]

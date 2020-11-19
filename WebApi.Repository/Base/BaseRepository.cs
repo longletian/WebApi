@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using WebApi.Models;
 using WebApi.Repository.Base.Unitwork;
 
 namespace WebApi.Repository.Base

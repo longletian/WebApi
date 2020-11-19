@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApi.Models.Models.Identity
+namespace WebApi.Models
 {
     /// <summary>
     /// 账号信息表

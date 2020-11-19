@@ -3,16 +3,18 @@ using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
+using WebApi.Models;
 
 namespace WebApi.Repository.Base.Unitwork
 {
     public class UnitworkRepository : IUnitworkRepository
     {
-        private readonly DbContext context;
-        public UnitworkRepository(DbContext _context)
+        private readonly DataDbContext context;
+        public UnitworkRepository(DataDbContext _context)
         {
             context = _context;
         }
+
         /// <summary>
         /// 开始事务（efcore）
         /// </summary>

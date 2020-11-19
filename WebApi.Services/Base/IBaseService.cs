@@ -7,11 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WebApi.Models;
 
-namespace WebApi.Repository.Base
+namespace WebApi.Services.Base
 {
-    public interface IBaseRepository<T> where T : class, new()
+    public interface IBaseService<T> where T : class, new()
     {
-
         #region 对象实体 添加、修改、删除
 
         /// <summary>
@@ -123,7 +122,7 @@ namespace WebApi.Repository.Base
         /// </summary>
         /// <param name="procName">存储过程名称</param>
         /// <returns></returns>
-        IEnumerable<T>QueryByProc(string procName);
+        IEnumerable<T> QueryByProc(string procName);
 
         /// <summary>
         /// 执行存储过程
@@ -311,6 +310,5 @@ namespace WebApi.Repository.Base
         IEnumerable<T> GetDBTableFields(string tableName);
 
         #endregion
-
     }
 }
