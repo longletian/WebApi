@@ -226,79 +226,77 @@ namespace WebApi.Tools.UploadFile
         {
             List<T> list = new List<T> { };
             IWorkbook workbook = null;
-            using (MemoryStream ms = new MemoryStream())
+            using MemoryStream ms = new MemoryStream();
+            file.CopyTo(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            workbook = new XSSFWorkbook(ms);
+            #region MyRegion
+            //var filetype = Path.GetExtension(file.FileName).ToLower();
+            //if (filetype == ".xlsx")
+            //{
+            //    workbook = new XSSFWorkbook(ms);
+            //}
+            //else if (filetype == ".xls")
+            //{
+            //    workbook = new HSSFWorkbook(ms);
+            //}
+            //else
+            //{
+            //    workbook = null;
+            //}
+            #endregion
+            ISheet sheet = workbook.GetSheetAt(0);
+            IRow cellNum = sheet.GetRow(0);
+            //获取最后一行行数
+            int num = cellNum.LastCellNum;
+            //反射实体
+            var propertys = typeof(T).GetProperties();
+            var obj = new T();
+            for (int i = 1; i <= sheet.LastRowNum; i++)
             {
-                file.CopyTo(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-                workbook = new XSSFWorkbook(ms);
-                #region MyRegion
-                //var filetype = Path.GetExtension(file.FileName).ToLower();
-                //if (filetype == ".xlsx")
-                //{
-                //    workbook = new XSSFWorkbook(ms);
-                //}
-                //else if (filetype == ".xls")
-                //{
-                //    workbook = new HSSFWorkbook(ms);
-                //}
-                //else
-                //{
-                //    workbook = null;
-                //}
-                #endregion
-                ISheet sheet = workbook.GetSheetAt(0);
-                IRow cellNum = sheet.GetRow(0);
-                //获取最后一行行数
-                int num = cellNum.LastCellNum;
-                //反射实体
-                var propertys = typeof(T).GetProperties();
-                var obj = new T();
-                for (int i = 1; i <= sheet.LastRowNum; i++)
-                {
-                    IRow row = sheet.GetRow(i);
-                    if (row == null) continue;
+                IRow row = sheet.GetRow(i);
+                if (row == null) continue;
 
-                    for (int j = row.FirstCellNum; j < num; j++)
+                for (int j = row.FirstCellNum; j < num; j++)
+                {
+                    if (row.GetCell(j) != null)
                     {
-                        if (row.GetCell(j) != null)
+                        var value = row.GetCell(j).ToString();
+                        string str = (propertys[j].PropertyType).FullName;
+                        if (str == "System.String")
                         {
-                            var value = row.GetCell(j).ToString();
-                            string str = (propertys[j].PropertyType).FullName;
-                            if (str == "System.String")
-                            {
-                                propertys[j].SetValue(obj, value, null);
-                            }
-                            else if (str == "System.DateTime")
-                            {
-                                DateTime pdt = Convert.ToDateTime(value, CultureInfo.InvariantCulture);
-                                propertys[j].SetValue(obj, pdt, null);
-                            }
-                            else if (str == "System.Boolean")
-                            {
-                                bool pb = Convert.ToBoolean(value);
-                                propertys[j].SetValue(obj, pb, null);
-                            }
-                            else if (str == "System.Int32")
-                            {
-                                int pi32 = Convert.ToInt32(value);
-                                propertys[j].SetValue(obj, pi32, null);
-                            }
-                            else if (str == "System.Byte")
-                            {
-                                byte pb = Convert.ToByte(value);
-                                propertys[j].SetValue(obj, pb, null);
-                            }
-                            else
-                            {
-                                propertys[j].SetValue(obj, null, null);
-                            }
+                            propertys[j].SetValue(obj, value, null);
+                        }
+                        else if (str == "System.DateTime")
+                        {
+                            DateTime pdt = Convert.ToDateTime(value, CultureInfo.InvariantCulture);
+                            propertys[j].SetValue(obj, pdt, null);
+                        }
+                        else if (str == "System.Boolean")
+                        {
+                            bool pb = Convert.ToBoolean(value);
+                            propertys[j].SetValue(obj, pb, null);
+                        }
+                        else if (str == "System.Int32")
+                        {
+                            int pi32 = Convert.ToInt32(value);
+                            propertys[j].SetValue(obj, pi32, null);
+                        }
+                        else if (str == "System.Byte")
+                        {
+                            byte pb = Convert.ToByte(value);
+                            propertys[j].SetValue(obj, pb, null);
+                        }
+                        else
+                        {
+                            propertys[j].SetValue(obj, null, null);
                         }
                     }
-                    list.Add(obj);
                 }
-
-                return list;
+                list.Add(obj);
             }
+
+            return list;
         }
     }
 }

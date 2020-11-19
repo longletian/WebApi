@@ -12,6 +12,8 @@ using WebApi.Api.ServiceExtensions;
 using WebApi.Api.MiddlewareExtensions;
 using Autofac;
 using WebApi.WebApi.Api;
+using WebApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Api
 {
@@ -36,9 +38,9 @@ namespace WebApi.Api
 
             services.AddSingleton(new AppSetting(Configuration, Env));
 
-            services.AddRedisService();
-
             services.AddSwaggUIService();
+
+            services.AddDataDbContext();
 
             services.AddMiniProfilerService();
 
@@ -47,6 +49,8 @@ namespace WebApi.Api
             services.AddEasyNetQService();
 
             //services.AddSignalR();
+
+            services.AddRedisService();
 
             services.AddCorsService();
 

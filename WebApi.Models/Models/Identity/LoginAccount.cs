@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace WebApi.Models.Models.Identity
@@ -8,6 +9,7 @@ namespace WebApi.Models.Models.Identity
     /// <summary>
     /// 账号登录
     /// </summary>
+  [Table("case_login_account")]
     public class LoginAccount:Entity
     {
         [Required]
@@ -36,11 +38,11 @@ namespace WebApi.Models.Models.Identity
         /// 浏览器类型
         /// </summary>
         public string Brower { get; set; }
+
         /// <summary>
         /// 登录时间
         /// </summary>
         public DateTime LoginTime { get; set; }
 
-        public AccountModel AccountModels { get; set; }
     }
 }

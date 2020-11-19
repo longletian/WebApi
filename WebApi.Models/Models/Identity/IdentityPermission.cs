@@ -9,12 +9,13 @@ namespace WebApi.Models.Models.Identity
     /// <summary>
     /// 权限表
     /// </summary>
+   [Table("case_permission")]
     public class IdentityPermission : Entity
     {
-        public IdentityPermission()
-        {
-            IdentityRolePermissionList = new List<IdentityRolePermission>();
-        }
+        //public IdentityPermission()
+        //{
+        //    IdentityRolePermissionList = new List<IdentityRolePermission>();
+        //}
 
         [Required]
         /// <summary>
@@ -41,6 +42,6 @@ namespace WebApi.Models.Models.Identity
         public long SortNum { get; set; }
 
 
-        public List<IdentityRolePermission> IdentityRolePermissionList { get; set; }
+        //public ICollection<IdentityRolePermission> IdentityRolePermissionList { get; set; }
     }
 }

@@ -9,12 +9,13 @@ namespace WebApi.Models.Models.Identity
     /// <summary>
     /// 用户信息表
     /// </summary>
+   [Table("case_user")]
     public class IdentityUser:Entity
     {
-        public IdentityUser()
-        {
-            IdentityUserRoleList = new List<IdentityUserRole>();
-        }
+        //public IdentityUser()
+        //{
+        //    IdentityUserRoleList = new List<IdentityUserRole>();
+        //}
 
         [Required]
         /// <summary>
@@ -66,10 +67,10 @@ namespace WebApi.Models.Models.Identity
         /// </summary>
         public string UserAddress { get; set; }
 
-        public AccountModel AccountModels { get; set; }
+        //public AccountModel AccountModels { get; set; }
 
-        public List<IdentityUserRole> IdentityUserRoleList { get; set; }
+        //public ICollection<IdentityUserRole> IdentityUserRoleList { get; set; }
 
-        public List<IdentityGroupUser>  IdentityGroupUsers { get; set; }
+        //public ICollection<IdentityGroupUser>  IdentityGroupUsers { get; set; }
     }
 }

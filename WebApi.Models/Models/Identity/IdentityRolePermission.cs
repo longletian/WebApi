@@ -8,16 +8,26 @@ namespace WebApi.Models.Models.Identity
     /// <summary>
     /// 角色权限关联表
     /// </summary>
-    public class IdentityRolePermission: Entity
+  [Table("case_role_permission")]
+    public class IdentityRolePermission
     {
+        public long Id { get; set; }
+
         /// <summary>
         /// 权限id
         /// </summary>
-        public IdentityPermission  IdentityPermissions { get; set; }
+        public long PermissionId { get; set; }
+
         /// <summary>
         /// 角色id
         /// </summary>
-        public IdentityRole IdentityRoles { get; set; }
+
+        public long  RoleId { get; set; }
+
+
+        //public IdentityPermission  IdentityPermissions { get; set; }
+
+        //public IdentityRole IdentityRoles { get; set; }
 
     }
 }

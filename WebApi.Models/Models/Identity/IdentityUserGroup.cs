@@ -9,14 +9,14 @@ namespace WebApi.Models.Models.Identity
     /// <summary>
     /// 用户组信息表
     /// </summary>
-
+    [Table("case_user_group")]
     public class IdentityUserGroup :Entity
     {
-        public IdentityUserGroup()
-        {
-            IdentityUserGroupRoleList = new List<IdentityUserGroupRole>();
-            IdentityGroupUserList = new List<IdentityGroupUser>();
-        }
+        //public IdentityUserGroup()
+        //{
+        //    IdentityUserGroupRoleList = new List<IdentityUserGroupRole>();
+        //    IdentityGroupUserList = new List<IdentityGroupUser>();
+        //}
         [Required]
         /// <summary>
         /// 用户名
@@ -37,9 +37,9 @@ namespace WebApi.Models.Models.Identity
         public string  UserGroupRemark { get; set; }
 
 
-        public List<IdentityUserGroupRole> IdentityUserGroupRoleList { get; set; }
+        //public ICollection<IdentityUserGroupRole> IdentityUserGroupRoleList { get; set; }
 
-        public List<IdentityGroupUser>  IdentityGroupUserList { get; set; }
+        //public ICollection<IdentityGroupUser>  IdentityGroupUserList { get; set; }
 
     }
 }

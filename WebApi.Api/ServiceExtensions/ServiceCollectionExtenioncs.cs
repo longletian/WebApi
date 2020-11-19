@@ -10,7 +10,6 @@ using System.IO;
 using StackExchange.Profiling.Storage;
 using EasyNetQ;
 using Microsoft.AspNetCore.Http;
-using WebApi.Models.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
@@ -26,6 +25,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using WebApi.Common.AutoFac;
 using DotNetCore.CAP.Dashboard.NodeDiscovery;
+using WebApi.Models;
 
 namespace WebApi.Api.ServiceExtensions
 {

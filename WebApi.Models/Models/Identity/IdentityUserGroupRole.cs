@@ -8,10 +8,17 @@ namespace WebApi.Models.Models.Identity
     /// <summary>
     /// 用户组角色关联表
     /// </summary>
-    public class IdentityUserGroupRole: Entity
+   [Table("case_usergroup_role")]
+    public class IdentityUserGroupRole
     {
-        public IdentityUserGroup  IdentityUserGroups { get; set; }
+        public long Id { get; set; }
 
-        public IdentityRole IdentityRoles { get; set; }
+        public long  UserGroupId { get; set; }
+
+        public long  RoleId { get; set; }
+
+        //public IdentityUserGroup  IdentityUserGroups { get; set; }
+
+        //public IdentityRole IdentityRoles { get; set; }
     }
 }

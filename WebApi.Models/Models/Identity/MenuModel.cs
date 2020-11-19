@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace WebApi.Models.Models.Identity
@@ -8,6 +9,7 @@ namespace WebApi.Models.Models.Identity
     /// <summary>
     /// 菜单实体
     /// </summary>
+    [Table("case_menu")]
     public class MenuModel:Entity
     {
         [Required]
@@ -43,7 +45,6 @@ namespace WebApi.Models.Models.Identity
         /// </summary>
         public long  SortNum  { get; set; }
 
-
-        public IdentityRole IdentityRoles  { get; set; }
+        //public IdentityRole IdentityRoles  { get; set; }
     }
 }

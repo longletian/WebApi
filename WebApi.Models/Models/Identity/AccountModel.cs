@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models.Models.Identity
 {
     /// <summary>
     /// 账号信息表
     /// </summary>
+  [Table("case_account")]
     public class AccountModel:Entity
     {
 
-        public AccountModel()
-        {
-            LoginAccountList = new List<LoginAccount>();
-        }
+        //public AccountModel()
+        //{
+        //    LoginAccountList = new List<LoginAccount>();
+        //}
 
         [Required]
         /// <summary>
@@ -47,12 +49,12 @@ namespace WebApi.Models.Models.Identity
         /// <summary>
         /// 一个用户只有一个账号
         /// </summary>
-        public IdentityUser IdentityUsers{ get; set; }
+        //public IdentityUser IdentityUsers{ get; set; }
 
         /// <summary>
         /// 一个账号有多个登录信息
         /// </summary>
-        public List<LoginAccount> LoginAccountList { get; set; }
+        //public ICollection<LoginAccount> LoginAccountList { get; set; }
 
     }
 }

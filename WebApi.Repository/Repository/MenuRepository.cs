@@ -1,5 +1,4 @@
 ﻿
-using WebApi.Models.Entity;
 using WebApi.Models.Models;
 using WebApi.Repository.Base;
 using WebApi.Repository.Base.Unitwork;

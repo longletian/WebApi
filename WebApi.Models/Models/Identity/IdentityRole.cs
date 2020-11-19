@@ -9,15 +9,16 @@ namespace WebApi.Models.Models.Identity
     /// <summary>
     /// 角色信息表
     /// </summary>
+   [Table("case_role")]
     public class IdentityRole: Entity
     {
-        public IdentityRole()
-        {
-            IdentityUserRoleList = new List<IdentityUserRole>();
-            IdentityUserGroupRoleList = new List<IdentityUserGroupRole>();
-            IdentityRolePermissionList = new List<IdentityRolePermission>();
-            MenuModelList = new List<MenuModel>();
-        }
+        //public IdentityRole()
+        //{
+        //    IdentityUserRoleList = new List<IdentityUserRole>();
+        //    IdentityUserGroupRoleList = new List<IdentityUserGroupRole>();
+        //    IdentityRolePermissionList = new List<IdentityRolePermission>();
+        //    MenuModelList = new List<MenuModel>();
+        //}
 
         [Required]
         /// <summary>
@@ -44,13 +45,13 @@ namespace WebApi.Models.Models.Identity
         /// </summary>
         public long SortNum { get; set; }
 
-        public List<MenuModel> MenuModelList { get; set; }
+        //public ICollection<MenuModel> MenuModelList { get; set; }
 
-        public List<IdentityUserRole>  IdentityUserRoleList { get; set; }
+        //public ICollection<IdentityUserRole>  IdentityUserRoleList { get; set; }
 
-        public List<IdentityUserGroupRole> IdentityUserGroupRoleList { get; set; }
+        //public ICollection<IdentityUserGroupRole> IdentityUserGroupRoleList { get; set; }
 
-        public List<IdentityRolePermission> IdentityRolePermissionList { get; set; }
+        //public ICollection<IdentityRolePermission> IdentityRolePermissionList { get; set; }
 
 
     }

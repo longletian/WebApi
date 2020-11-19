@@ -5,10 +5,18 @@ using System.Text;
 
 namespace WebApi.Models.Models.Identity
 {
-   public class IdentityGroupUser:Entity
-    {
-        public IdentityUser IdentityUsers { get; set; }
 
-        public IdentityUserGroup IdentityUserGroups { get; set; }
+    [Table("case_group_user")]
+   public class IdentityGroupUser
+    {
+        //public IdentityUser IdentityUsers { get; set; }
+
+        //public IdentityUserGroup IdentityUserGroups { get; set; }
+
+        public long Id { get; set; }
+
+        public long   UserId{ get; set; }
+
+        public long  UserGroupId { get; set; }
     }
 }
