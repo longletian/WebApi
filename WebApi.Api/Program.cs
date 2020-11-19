@@ -18,8 +18,6 @@ namespace WebApi.Api
                     .ReadFrom.Configuration(Configuration)
                     .CreateLogger();
 
-                Log.Logger.Information("开始进入");
-
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)

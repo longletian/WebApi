@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebApi.Models.Entity
+namespace WebApi.Models
 {
-    public  interface IEntity: IEntity<int>
+    public  interface IEntity: IEntity<long>
     {
 
     }

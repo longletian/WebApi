@@ -115,8 +115,8 @@ namespace WebApi.Repository.Base.Dapper
         public void Dispose()
         {
             throw new NotImplementedException();
-        }
 
+        }
         public IEnumerable<T> QueryByProc<T>(string procName)
         {
             return GetDbConnection().Query<T>(procName, null, commandType: CommandType.StoredProcedure);

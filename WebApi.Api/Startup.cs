@@ -76,7 +76,6 @@ namespace WebApi.Api
 
         #endregion
 
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseStaticFiles();

@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
+
+namespace WebApi.Models.Models.Identity
+{
+    /// <summary>
+    /// 角色权限关联表
+    /// </summary>
+    public class IdentityRolePermission: Entity
+    {
+        /// <summary>
+        /// 权限id
+        /// </summary>
+        public IdentityPermission  IdentityPermissions { get; set; }
+        /// <summary>
+        /// 角色id
+        /// </summary>
+        public IdentityRole IdentityRoles { get; set; }
+
+    }
+}

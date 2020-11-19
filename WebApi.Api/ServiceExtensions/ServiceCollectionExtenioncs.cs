@@ -185,7 +185,7 @@ namespace WebApi.Api.ServiceExtensions
                 switch (AppSetting.GetConnStrings("DbAllow"))
                 {
                     case "MSSQL":
-                        options.UseSqlServer(AppSetting.GetConnStrings("MSSQLCon"));
+                        //options.UseSqlServer(AppSetting.GetConnStrings("MSSQLCon"));
                         break;
 
                     default:

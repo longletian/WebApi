@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WebApi.Models.Models;
+﻿using WebApi.Models.Models;
+using WebApi.Repository.Base;
 
 namespace WebApi.Repository.IRepository
 {
-    public interface IMenuRepository 
+    public interface IMenuRepository
     {
+
     }
 }
