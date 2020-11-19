@@ -32,21 +32,34 @@ namespace WebApi.Repository.Base.Unitwork
             context.SaveChanges();
         }
 
+        /// <summary>
+        /// 事务数据提交
+        /// </summary>
         public void Commit()
         {
              context.Database.BeginTransaction().Commit();
         }
 
+        /// <summary>
+        /// 数据事务释放
+        /// </summary>
         public void Dispose()
         {
             context.Database.BeginTransaction().Dispose();
         }
 
+        /// <summary>
+        /// 事务回滚
+        /// </summary>
         public void Rollback()
         {
             context.Database.BeginTransaction().Rollback();
         }
 
+        /// <summary>
+        /// 异步数据保存
+        /// </summary>
+        /// <returns></returns>
         public async Task SaveChangeAsync()
         {
           await  context.SaveChangesAsync();

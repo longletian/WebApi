@@ -1,22 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿
 
 namespace WebApi.Models
 {
-    /// <summary>
-    /// 用户信息表
-    /// </summary>
-   [Table("case_user")]
-    public class IdentityUser:Entity
+   public class UserRegirstDto
     {
-        [Required]
+
         /// <summary>
-        /// 用户名
+        /// 账号名称
         /// </summary>
-        public string UserName { get; set; }
+        public string AccountName { get; set; }
+        /// <summary>
+        /// 账号密码
+        /// </summary>
+        public string AccountPasswd { get; set; }
+        /// <summary>
+        /// 加密密码
+        /// </summary>
+        public string AccountPasswdEncrypt { get; set; }
+        /// <summary>
+        /// 账号类型
+        /// </summary>
+        public long AccountType { get; set; }
+        /// <summary>
+        /// 账号注册ip
+        /// </summary>
+        public string AccountIp { get; set; }
+        /// <summary>
+        /// 账号状态
+        /// </summary>
+        public long AccountState { get; set; }
         /// <summary>
         /// 用户昵称
         /// </summary>
@@ -24,7 +36,7 @@ namespace WebApi.Models
         /// <summary>
         /// 真实姓名
         /// </summary>
-        public string  RealName { get; set; }
+        public string RealName { get; set; }
         /// <summary>
         /// 电话号码
         /// </summary>
@@ -36,7 +48,7 @@ namespace WebApi.Models
         /// <summary>
         /// 出生日期
         /// </summary>
-        public string  BirthDay { get; set; }
+        public string BirthDay { get; set; }
         /// <summary>
         /// 用户性别
         /// </summary>
@@ -44,11 +56,11 @@ namespace WebApi.Models
         /// <summary>
         /// 邮件地址
         /// </summary>
-        public string  Email { get; set; }
+        public string Email { get; set; }
         /// <summary>
         /// 省份
         /// </summary>
-        public string  ProvinceCode { get; set; }
+        public string ProvinceCode { get; set; }
         /// <summary>
         /// 市
         /// </summary>
@@ -61,11 +73,5 @@ namespace WebApi.Models
         /// 用户居住地址
         /// </summary>
         public string UserAddress { get; set; }
-
-        //public AccountModel AccountModels { get; set; }
-
-        //public ICollection<IdentityUserRole> IdentityUserRoleList { get; set; }
-
-        //public ICollection<IdentityGroupUser>  IdentityGroupUsers { get; set; }
     }
 }

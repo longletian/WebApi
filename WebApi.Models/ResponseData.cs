@@ -6,6 +6,12 @@ namespace WebApi.Models
 {  
    public class ResponseData
     {
+        public ResponseData()
+        {
+            MsgCode = 404;
+            Message = "账号异常";
+        }
+
         /// <summary>
         /// 状态码
         /// </summary>
