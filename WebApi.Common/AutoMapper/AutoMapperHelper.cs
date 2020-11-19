@@ -13,6 +13,7 @@ namespace WebApi.Common.AutoMapper
             return new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new UserProfiles());
+                cfg.AddProfile(new AccountProfiles());
             });
         }
     }

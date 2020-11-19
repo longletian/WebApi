@@ -2,7 +2,7 @@
 
 namespace WebApi.Models
 {
-   public class UserRegirstDto
+   public class AccountRegirstDto
     {
 
         /// <summary>

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApi.Models
 {
-    public class UserLoginDto
+    public class AccountLoginDto
     {
         [Required]
         /// <summary>
@@ -18,7 +18,7 @@ namespace WebApi.Models
     }
 
 
-    public class UserChangePassDto
+    public class AccountChangePassDto
     {
         public string AccountName { get; set; }
 
