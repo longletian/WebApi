@@ -26,6 +26,9 @@ using Autofac.Extensions.DependencyInjection;
 using WebApi.Common.AutoFac;
 using DotNetCore.CAP.Dashboard.NodeDiscovery;
 using WebApi.Models;
+using FluentValidation.AspNetCore;
+using WebApi.Models.Data;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -51,6 +54,23 @@ namespace WebApi.Api.ServiceExtensions
             //services.AddFreeRepository();
             //services.AddScoped<UnitOfWorkManager>();
         }
+
+
+        /// <summary>
+        /// 添加控制器数据验证
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddControllService(this IServiceCollection services)
+        {
+            services.AddControllers()
+               .AddJsonOptions(option => option.JsonSerializerOptions.PropertyNamingPolicy = null)
+               .AddFluentValidation(fv => {
+                   //是否同时支持两种验证方式
+                   fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                   fv.RegisterValidatorsFromAssemblyContaining<IValidator>();
+               });
+        }
+
 
         /// <summary>
         /// 注入csredis
@@ -96,6 +116,8 @@ namespace WebApi.Api.ServiceExtensions
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+                // 引入Swashbuckle和FluentValidation
+                c.AddFluentValidationRules();
             });
 
         }

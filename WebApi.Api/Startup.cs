@@ -14,6 +14,8 @@ using Autofac;
 using WebApi.WebApi.Api;
 using WebApi.Models;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
+using System.Reflection;
 
 namespace WebApi.Api
 {
@@ -33,10 +35,9 @@ namespace WebApi.Api
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddJsonOptions(
-                option => option.JsonSerializerOptions.PropertyNamingPolicy = null);
-
             services.AddSingleton(new AppSetting(Configuration, Env));
+
+            services.AddControllService();
 
             services.AddSwaggUIService();
 

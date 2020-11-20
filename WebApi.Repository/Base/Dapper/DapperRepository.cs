@@ -6,14 +6,15 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using WebApi.Models;
 
 namespace WebApi.Repository.Base.Dapper
 {
     public class DapperRepository : IDapperRepository
     {
-        private readonly DbContext context;
+        private readonly DataDbContext context;
 
-        public DapperRepository(DbContext _context)
+        public DapperRepository(DataDbContext _context)
         {
             context = _context;
         }
@@ -55,11 +56,13 @@ namespace WebApi.Repository.Base.Dapper
         public T FindEntity<T>(object KeyValue) where T : class
         {
             throw new NotImplementedException();
+            //return GetDbConnection().Query<T>();
         }
 
         public T FindEntity<T>(Expression<Func<T, bool>> condition) where T : class, new()
         {
             throw new NotImplementedException();
+            //return GetDbConnection().Execute<T>(condition);
         }
 
         public T FindEntity<T>(string strSql, object dbParameter = null) where T : class, new()

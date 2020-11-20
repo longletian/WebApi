@@ -13,8 +13,7 @@ namespace WebApi.Common.AutoFac
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-
-            //注入方式：
+            #region 注入方式
             //1：类型注入
             //builder.RegisterType<>().As<>();
             //2：实例注入
@@ -27,11 +26,18 @@ namespace WebApi.Common.AutoFac
             //5：程序集注入
             //builder.RegisterAssemblyTypes(GetAssemblyByName("WXL.Service")).Where(a => a.Name.EndsWith("Service")).AsImplementedInterfaces();
 
+            #endregion
+
             //builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository")).Where(a => a.Name.EndsWith("Repository"))
             //    .AsImplementedInterfaces();
 
-            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services.dll")).Where(a => a.Name.EndsWith("Services"))
+            //注册service服务
+            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services")).Where(a => a.Name.EndsWith("Services"))
                 .AsImplementedInterfaces();
+
+            //注册实体验证
+            //builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Models")).Where(a => a.Name.EndsWith("Dto"))
+            //       .AsImplementedInterfaces();
         }
 
         /// <summary>
@@ -42,11 +48,6 @@ namespace WebApi.Common.AutoFac
         public static Assembly GetAssemblyByName(string AssemblyName)
         {
             return Assembly.LoadFrom(AssemblyName);
-
-            //return Assembly.GetExecutingAssembly();
         }
     }
-
-
-   
 }

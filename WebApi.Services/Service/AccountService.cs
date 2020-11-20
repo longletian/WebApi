@@ -1,6 +1,14 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using WebApi.Common.BaseHelper.Md5Helper;
+using WebApi.Models;
+using WebApi.Repository.Base.Unitwork;
+using WebApi.Repository.IRepository;
+using WebApi.Services.Base;
+using WebApi.Services.IService;
 
 namespace WebApi.Services.Service
 {
@@ -12,15 +20,15 @@ namespace WebApi.Services.Service
         private readonly IMapper mapper;
         public AccountService(
             IUserRepository userRepository,
-            IAccountRepository _accountRepository,
+            IAccountRepository accountRepository,
             IUnitworkRepository unitwork,
             IMapper mapper)
         {
-            baseRepository = userRepository;
-            this.userRepository = userRepository;
-            this.accountRepository = _accountRepository;
-            this.unitwork = unitwork;
             this.mapper = mapper;
+            this.unitwork = unitwork;
+            this.userRepository = userRepository;
+            baseRepository = accountRepository;
+            this.accountRepository = accountRepository;
         }
 
         public ResponseData AccountLogin(AccountLoginDto accountLoginDto)
@@ -48,7 +56,7 @@ namespace WebApi.Services.Service
             }
             else
             {
-                IdentityUser identityUser = this.mapper.Map<AccountRegirstDto, IdentityUser>(accountRegirstDto);
+                IdentityUser identityUser = mapper.Map<AccountRegirstDto, IdentityUser>(accountRegirstDto);
                 accountModel = this.mapper.Map<AccountRegirstDto, AccountModel>(accountRegirstDto);
                 accountModel.AccountPasswdEncrypt = Md5Helper.MD5Encrypt64(accountRegirstDto.AccountPasswd);
                 IDbContextTransaction dbContextTransaction = null;
@@ -73,7 +81,7 @@ namespace WebApi.Services.Service
 
         public ResponseData ChangePassWord(AccountChangePassDto accountChangePassDto)
         {
-            AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == userChangePassDto.AccountName);
+            AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == accountChangePassDto.AccountName);
             if (!string.IsNullOrEmpty(accountModel.AccountPasswd))
             {
                 accountModel.AccountPasswd = accountChangePassDto.AccountPasswd;

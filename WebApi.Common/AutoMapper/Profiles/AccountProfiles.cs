@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using WebApi.Models;
 
 namespace WebApi.Common.AutoMapper.Profiles
 {
@@ -11,10 +13,10 @@ namespace WebApi.Common.AutoMapper.Profiles
         /// </summary>
         public AccountProfiles()
         {
-            CreateMap<IdentityUser, UserRegirstDto>();
-            CreateMap<AccountModel, UserRegirstDto>();
-            CreateMap<UserRegirstDto, IdentityUser>();
-            CreateMap<UserRegirstDto, AccountModel>();
+            CreateMap<IdentityUser, AccountRegirstDto>();
+            CreateMap<AccountModel, AccountRegirstDto>();
+            CreateMap<AccountRegirstDto, IdentityUser>();
+            CreateMap<AccountRegirstDto, AccountModel>();
         }
     }
 }
