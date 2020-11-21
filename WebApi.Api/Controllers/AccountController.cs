@@ -1,21 +1,32 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using WebApi.Models;
+using WebApi.Services.IService;
 
 namespace WebApi.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
-    {  
+    public class AccountController : ControllerBase
+    {
+        private readonly IAccountService accountService;
+        public AccountController(IAccountService accountService)
+        {
+            this.accountService = accountService;
+        }
+
         /// <summary>
         /// 登陆接口
         /// </summary>
         /// <returns></returns>
         [HttpPost, Route("login")]
-        public IActionResult UserLogin()
+        public ResponseData AccountLogin([FromBody] AccountLoginDto accountLoginDto)
         {
-            return NotFound();
+            return accountService.AccountLogin(accountLoginDto);
         }
 
         /// <summary>
@@ -28,18 +39,6 @@ namespace WebApi.Api.Controllers
             return NotFound();
         }
 
-        //[Authorize]
-        [HttpGet,Route("identity")]
-        public IActionResult Get()
-        {
-            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
-        }
-
-        [HttpGet, Route("token")]
-        public IActionResult GetToken()
-        {
-            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
-        }
 
         /// <summary>
         /// 修改密码
@@ -60,6 +59,5 @@ namespace WebApi.Api.Controllers
         {
             return NotFound();
         }
-
     }
 }

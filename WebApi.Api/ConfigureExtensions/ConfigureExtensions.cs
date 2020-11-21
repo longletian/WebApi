@@ -26,7 +26,6 @@ namespace WebApi.Api.ConfigureExtensions
         public static void UseRoutingConfigure(this IApplicationBuilder app)
         {
             app.UseRouting();
-
             //认证
             app.UseAuthentication();
             //授权
@@ -34,9 +33,9 @@ namespace WebApi.Api.ConfigureExtensions
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers()
+                endpoints.MapControllers();
                  //禁用整个应用程序的匿名访问
-                .RequireAuthorization();
+                //.RequireAuthorization();
             });
         }
 

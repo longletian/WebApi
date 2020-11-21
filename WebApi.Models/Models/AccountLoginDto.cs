@@ -1,6 +1,6 @@
 ﻿
 using FluentValidation;
-using System.ComponentModel.DataAnnotations;
+using WebApi.Models.Data;
 
 namespace WebApi.Models
 {
@@ -36,6 +36,7 @@ namespace WebApi.Models
 
         public string AccountChangePasswd { get; set; }
     }
+
 
     public class AccountChangePassDtoValidator : AbstractValidator<AccountChangePassDto>, IValidator
     {

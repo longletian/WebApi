@@ -1,8 +1,8 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿
 using System;
-using System.Collections.Concurrent;
 using System.Reflection;
+using System.Collections.Concurrent;
+using FluentValidation;
 
 namespace WebApi.Common.BaseHelper.ValidatorHelper
 {
@@ -55,7 +55,5 @@ namespace WebApi.Common.BaseHelper.ValidatorHelper
             }
             return true;
         }
-
-
     }
 }

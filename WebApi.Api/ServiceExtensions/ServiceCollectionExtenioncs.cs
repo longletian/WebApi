@@ -22,13 +22,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using WebApi.Common.AutoFac;
-using DotNetCore.CAP.Dashboard.NodeDiscovery;
 using WebApi.Models;
 using FluentValidation.AspNetCore;
 using WebApi.Models.Data;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -64,11 +63,33 @@ namespace WebApi.Api.ServiceExtensions
         {
             services.AddControllers()
                .AddJsonOptions(option => option.JsonSerializerOptions.PropertyNamingPolicy = null)
-               .AddFluentValidation(fv => {
+               .AddFluentValidation(fv =>
+               {
                    //是否同时支持两种验证方式
                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                   fv.RegisterValidatorsFromAssemblyContaining<IValidator>();
+                   //自定义IValidator验证空接口
+                   fv.RegisterValidatorsFromAssemblyContaining<Models.IValidator>();
                });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (context) =>
+                {
+                    var errors = context.ModelState
+                        .Values
+                        .SelectMany(x => x.Errors
+                               .Select(p => p.ErrorMessage))
+                        .ToList();
+
+                    var result = new
+                    {
+                        Code = "405",
+                        Message = "Validation errors",
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(result);
+                };
+            });
         }
 
 
@@ -382,6 +403,6 @@ namespace WebApi.Api.ServiceExtensions
             });
         }
 
-      
+
     }
 }

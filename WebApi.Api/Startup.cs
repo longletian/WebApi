@@ -1,21 +1,17 @@
 using Serilog;
+using Autofac;
 using AutoMapper;
+using WebApi.WebApi.Api;
 using WebApi.Common.AppSetting;
 using WebApi.Common.AutoMapper;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting
 using Microsoft.Extensions.Hosting;
 using WebApi.Api.ConfigureExtensions;
 using WebApi.Api.ServiceExtensions;
 using WebApi.Api.MiddlewareExtensions;
-using Autofac;
-using WebApi.WebApi.Api;
-using WebApi.Models;
-using Microsoft.EntityFrameworkCore;
-using FluentValidation.AspNetCore;
-using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebApi.Api
 {
@@ -37,9 +33,9 @@ namespace WebApi.Api
         {
             services.AddSingleton(new AppSetting(Configuration, Env));
 
-            services.AddControllService();
-
             services.AddSwaggUIService();
+
+            services.AddControllService();
 
             services.AddDataDbContext();
 
@@ -55,7 +51,7 @@ namespace WebApi.Api
 
             services.AddCorsService();
 
-            services.AddAuthenticationService();
+            //services.AddAuthenticationService();
 
             services.AddHttpClientService();
 

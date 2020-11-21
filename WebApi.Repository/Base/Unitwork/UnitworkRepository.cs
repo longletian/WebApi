@@ -37,7 +37,9 @@ namespace WebApi.Repository.Base.Unitwork
         /// </summary>
         public void Commit()
         {
-             context.Database.BeginTransaction().Commit();
+            context.Database.CommitTransaction();
+          
+            //context.Database.BeginTransaction().Commit();
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace WebApi.Repository.Base.Unitwork
         /// </summary>
         public void Dispose()
         {
-            context.Database.BeginTransaction().Dispose();
+            context.Dispose();
         }
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace WebApi.Repository.Base.Unitwork
         /// </summary>
         public void Rollback()
         {
-            context.Database.BeginTransaction().Rollback();
+            context.Database.RollbackTransaction();
         }
 
         /// <summary>
