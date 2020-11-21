@@ -1,5 +1,8 @@
 ﻿using Autofac;
 using System.Reflection;
+using Autofac.Extras.DynamicProxy;
+using WebApi.Common.AOP;
+
 
 namespace WebApi.Common.AutoFac
 {
@@ -24,20 +27,20 @@ namespace WebApi.Common.AutoFac
             //4：泛型注入
             //builder.RegisterGeneric(typeof(NHibernateRepository<>)) .As(typeof(IRepository<>)).InstancePerLifetimeScope();
             //5：程序集注入
-            //builder.RegisterAssemblyTypes(GetAssemblyByName("WXL.Service")).Where(a => a.Name.EndsWith("Service")).AsImplementedInterfaces();
-
             #endregion
 
-            //builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository")).Where(a => a.Name.EndsWith("Repository"))
-            //    .AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services")).Where(a => a.Name.EndsWith("Service")).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository")).Where(a => a.Name.EndsWith("Repository")).AsImplementedInterfaces();
 
-            //注册service服务
-            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services")).Where(a => a.Name.EndsWith("Services"))
-                .AsImplementedInterfaces();
+            //注册拦截器
+            //builder.RegisterType<ValidatorAop>();
+            //对目标类型启动动态代理，并注入自定义拦截器拦截
+            //builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Models"))
+            //        .Where(a => a.Name.EndsWith("Validator"))
+            //        .AsImplementedInterfaces()
+            //      .InstancePerDependency()
+            //      .EnableInterfaceInterceptors().InterceptedBy(typeof(ValidatorAop));
 
-            //注册实体验证
-            //builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Models")).Where(a => a.Name.EndsWith("Dto"))
-            //       .AsImplementedInterfaces();
         }
 
         /// <summary>
@@ -45,9 +48,9 @@ namespace WebApi.Common.AutoFac
         /// </summary>
         /// <param name="AssemblyName"></param>
         /// <returns></returns>
-        public static Assembly GetAssemblyByName(string AssemblyName)
+        public Assembly GetAssemblyByName(string AssemblyName)
         {
-            return Assembly.LoadFrom(AssemblyName);
+            return Assembly.Load(AssemblyName);
         }
     }
 }

@@ -1,17 +1,17 @@
 using Serilog;
 using Autofac;
 using AutoMapper;
-using WebApi.WebApi.Api;
 using WebApi.Common.AppSetting;
 using WebApi.Common.AutoMapper;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using WebApi.Api.ConfigureExtensions;
 using WebApi.Api.ServiceExtensions;
 using WebApi.Api.MiddlewareExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApi.Common.AutoFac;
 
 namespace WebApi.Api
 {

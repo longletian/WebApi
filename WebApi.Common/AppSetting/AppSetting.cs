@@ -74,7 +74,6 @@ namespace WebApi.Common.AppSetting
                     Configuration.GetSection(sectionConstr).Bind(entity);
                 }
             }
-
         }
     }
 }
