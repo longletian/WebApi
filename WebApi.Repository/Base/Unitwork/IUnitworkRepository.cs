@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using System;
+using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 
@@ -30,10 +31,24 @@ namespace WebApi.Repository.Base.Unitwork
        Task SaveChangeAsync();
 
         /// <summary>
-        /// 开启事务 一般用于dapper
+        /// 开启事务,使用efcore 
         /// </summary>
         /// <returns></returns>
         IDbContextTransaction BeginTransaction();
+
+
+        /// <summary>
+        /// 获取dbconnextion
+        /// </summary>
+        /// <returns></returns>
+        IDbConnection GetDbConnection();
+
+
+        /// <summary>
+        /// 开始事务,一般用于dapper
+        /// </summary>
+        /// <returns></returns>
+        IDbTransaction GetDbTransaction();
         #endregion
     }
 }

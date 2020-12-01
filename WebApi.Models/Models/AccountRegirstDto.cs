@@ -2,7 +2,7 @@
 
 namespace WebApi.Models
 {
-   public class AccountRegirstDto
+    public class AccountRegirstDto
     {
 
         /// <summary>
@@ -13,22 +13,7 @@ namespace WebApi.Models
         /// 账号密码
         /// </summary>
         public string AccountPasswd { get; set; }
-        /// <summary>
-        /// 加密密码
-        /// </summary>
-        public string AccountPasswdEncrypt { get; set; }
-        /// <summary>
-        /// 账号类型
-        /// </summary>
-        public long AccountType { get; set; }
-        /// <summary>
-        /// 账号注册ip
-        /// </summary>
-        public string AccountIp { get; set; }
-        /// <summary>
-        /// 账号状态
-        /// </summary>
-        public long AccountState { get; set; }
+
         /// <summary>
         /// 用户昵称
         /// </summary>

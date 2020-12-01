@@ -53,81 +53,59 @@ namespace WebApi.Repository.Base.Dapper
             return GetDbConnection().Execute(sql, dbParamenter);
         }
 
-        public T FindEntity<T>(object KeyValue) where T : class
-        {
-            throw new NotImplementedException();
-            //return GetDbConnection().Query<T>();
-        }
-
-        public T FindEntity<T>(Expression<Func<T, bool>> condition) where T : class, new()
-        {
-            throw new NotImplementedException();
-            //return GetDbConnection().Execute<T>(condition);
-        }
-
         public T FindEntity<T>(string strSql, object dbParameter = null) where T : class, new()
         {
-            throw new NotImplementedException();
+            return GetDbConnection().Query<T>(strSql, dbParameter).FirstOrDefault();
         }
 
-        public IEnumerable<T> FindList<T>() where T : class, new()
+        public List<T> FindList<T>(string strSql)
+        {
+            return GetDbConnection().Query<T>(strSql).ToList();
+        }
+
+        public List<T> FindList<T>(string strSql, DynamicParameters dbParameter=null)
+        {
+            return GetDbConnection().Query<T>(strSql, dbParameter).ToList();
+        }
+
+        public List<T> FindList<T>(string orderField, int pageSize, int pageIndex, out int total) where T : class, new()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> FindList<T>(Func<T, object> orderby) where T : class, new()
+        public List<T> FindList<T>(Expression<Func<T, bool>> condition, string orderField, int pageSize, int pageIndex, out int total) where T : class, new()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> FindList<T>(Expression<Func<T, bool>> condition) where T : class, new()
+        public List<T> FindList<T>(string strSql, string orderField, int pageSize, int pageIndex, out int total) where T : class
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> FindList<T>(string strSql)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> FindList<T>(string strSql, object dbParameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> FindList<T>(string orderField, int pageSize, int pageIndex, out int total) where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> FindList<T>(Expression<Func<T, bool>> condition, string orderField, int pageSize, int pageIndex, out int total) where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> FindList<T>(string strSql, string orderField, int pageSize, int pageIndex, out int total) where T : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> FindList<T>(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total) where T : class
+        public List<T> FindList<T>(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total) where T : class
         {
             throw new NotImplementedException();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
-
-        }
-        public IEnumerable<T> QueryByProc<T>(string procName)
-        {
-            return GetDbConnection().Query<T>(procName, null, commandType: CommandType.StoredProcedure);
+            GetDbConnection().Dispose();
         }
 
-        public IEnumerable<T> QueryByProc<T>(string procName, object dbParameter)
+        public List<T> QueryByProc<T>(string procName)
         {
-            return GetDbConnection().Query<T>(procName, dbParameter, commandType: CommandType.StoredProcedure);
+            return GetDbConnection().Query<T>(procName, null, commandType: CommandType.StoredProcedure).ToList();
+        }
+
+        public List<T> QueryByProc<T>(string procName, object dbParameter)
+        {
+            return GetDbConnection().Query<T>(procName, dbParameter, commandType: CommandType.StoredProcedure).ToList();
+        }
+
+        public List<T> FindList<T>(string strSql, object dbParameter = null) where T : class, new()
+        {
+            return GetDbConnection().Query<T>(strSql, dbParameter).ToList();
         }
     }
 }

@@ -38,8 +38,6 @@ namespace WebApi.Repository.Base.Unitwork
         public void Commit()
         {
             context.Database.CommitTransaction();
-          
-            //context.Database.BeginTransaction().Commit();
         }
 
         /// <summary>
@@ -65,6 +63,24 @@ namespace WebApi.Repository.Base.Unitwork
         public async Task SaveChangeAsync()
         {
           await  context.SaveChangesAsync();
+        }
+
+        public IDbConnection GetDbConnection()
+        {
+            if (context.Database.GetDbConnection().State == ConnectionState.Closed)
+            {
+                context.Database.GetDbConnection().Open();
+            }
+            return context.Database.GetDbConnection();
+        }
+
+        public IDbTransaction GetDbTransaction()
+        {
+            if (context.Database.GetDbConnection().State == ConnectionState.Closed)
+            {
+                context.Database.GetDbConnection().Open();
+            }
+            return context.Database.GetDbConnection().BeginTransaction();
         }
     }
 }

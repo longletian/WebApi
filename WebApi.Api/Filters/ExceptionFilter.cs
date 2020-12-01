@@ -26,8 +26,6 @@ namespace WebApi.Api.Filters
         /// </summary>
         public void OnException(ExceptionContext context)
         {
-         
-
         }
     }
 }

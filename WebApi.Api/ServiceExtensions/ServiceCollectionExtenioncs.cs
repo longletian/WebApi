@@ -1,34 +1,30 @@
 ﻿using FreeSql;
+using System;
+using System.IO;
+using EasyNetQ;
+using System.Linq;
+using System.Text;
+using WebApi.Models;
+using System.Reflection;
 using WebApi.Tools.Redis;
+using System.Threading.Tasks;
+using System.Security.Claims;
 using WebApi.Common.AppSetting;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
+using StackExchange.Profiling.Storage;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Reflection;
-using System.IO;
-using StackExchange.Profiling.Storage;
-using EasyNetQ;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using WebApi.Common.Authorizations.JwtConfig;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
-using Autofac;
-using WebApi.Models;
 using FluentValidation.AspNetCore;
-using WebApi.Models.Data;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
-
 namespace WebApi.Api.ServiceExtensions
 {
     public static class ServiceCollectionExtenioncs
@@ -371,10 +367,8 @@ namespace WebApi.Api.ServiceExtensions
             });
         }
 
-
         public static void AddAuthenticationService(this IServiceCollection services)
         {
-
             //将身份验证服务添加到DI和身份验证中间件到管道
             //注入身份认证服务
             services.AddAuthentication("Bearer")
@@ -390,7 +384,6 @@ namespace WebApi.Api.ServiceExtensions
                        ValidateAudience = false
                    };
                });
-
             //授权
             services.AddAuthorization(options =>
             {
@@ -402,7 +395,5 @@ namespace WebApi.Api.ServiceExtensions
                 });
             });
         }
-
-
     }
 }

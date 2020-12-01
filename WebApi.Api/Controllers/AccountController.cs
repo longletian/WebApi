@@ -34,18 +34,17 @@ namespace WebApi.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost, Route("regirst")]
-        public IActionResult UserRegirst()
+        public ResponseData AccountRegirst([FromBody] AccountRegirstDto accountRegirstDto)
         {
-            return NotFound();
+            return accountService.AccountrRegirst(accountRegirstDto);
         }
-
 
         /// <summary>
         /// 修改密码
         /// </summary>
         /// <returns></returns>
         [HttpPut, Route("password")]
-        public IActionResult UserChangePassword()
+        public IActionResult AccountChangePassword()
         {
             return NotFound();
         }
@@ -55,7 +54,7 @@ namespace WebApi.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete, Route("{userId}")]
-        public IActionResult UserDelete(int userId)
+        public IActionResult AccountDelete(int userId)
         {
             return NotFound();
         }

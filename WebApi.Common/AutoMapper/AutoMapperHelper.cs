@@ -14,6 +14,7 @@ namespace WebApi.Common.AutoMapper
             {
                 cfg.AddProfile(new UserProfiles());
                 cfg.AddProfile(new AccountProfiles());
+                cfg.AddProfile(new MenuProfilles());
             });
         }
     }
