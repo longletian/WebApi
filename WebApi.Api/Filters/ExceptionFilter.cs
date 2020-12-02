@@ -14,12 +14,11 @@ namespace WebApi.Api.Filters
     {
         private ILogger<ExceptionFilter> logger;
 
-        public ExceptionFilter(ILogger<ExceptionFilter> _logger)
+        public ExceptionFilter(ILogger<ExceptionFilter> logger)
         {
-            logger = _logger;
+            this.logger = logger;
         }
-
-
+        
         /// <summary>
         /// 实现IExceptionFilter的OnException方法
         /// <param name="context">异常上下文</param>

@@ -8,6 +8,7 @@ namespace WebApi.Models
 
         public DataDbContext(DbContextOptions<DataDbContext> options) : base(options)
         {
+            
         }
 
 

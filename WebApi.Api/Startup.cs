@@ -38,28 +38,35 @@ namespace WebApi.Api
             services.AddControllService();
 
             services.AddDataDbContext();
-
-            services.AddMiniProfilerService();
-
+            
             services.AddAutoMapper(typeof(AutoMapperHelper));
-
-            services.AddEasyNetQService();
-
-            //services.AddSignalR();
-
-            services.AddRedisService();
+            
+            // services.AddRedisService();
 
             services.AddCorsService();
-
-            //services.AddAuthenticationService();
-
+            
             services.AddHttpClientService();
 
             services.AddResponseCachingService();
+            
+            services.AddResponseCompressionService();
+
+            // services.AddEasyNetQService();
+            
+            // services.AddMiniProfilerService();
+
+            //services.AddSignalR();
+            
+            //services.AddAuthenticationService();
 
             //services.AddJwtService();
 
-            services.AddResponseCompressionService();
+            // services.AddMiniProfiler(options =>
+            // {
+            //     options.RouteBasePath = "/profile";
+            // }).AddEntityFramework();
+
+     
 
         }
 
@@ -86,6 +93,8 @@ namespace WebApi.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            // app.UseMiniProfiler();
+            
             //使用请求日志中间件
             app.UseSerilogRequestLogging();
 
@@ -97,11 +106,9 @@ namespace WebApi.Api
 
             app.UseSwaggUIConfigure();
 
-            app.UseGrpcWeb();
+            // app.UseGrpcWeb();
 
             app.UseCors();
-
-            app.UseMiniProfiler();
 
             app.UseLogMiddleware();
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
 
 namespace WebApi.IDS4.Config
 {
@@ -62,13 +63,15 @@ namespace WebApi.IDS4.Config
                      PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
 
                      // 支持刷新令牌
-                     //AllowOfflineAccess = true,
+                     AllowOfflineAccess = true,
 
                      AllowedScopes = new List<string>
                     {
                          "api1",
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        //如果要获取refresh_tokens ,必须在scopes中加上OfflineAccess
+                        OidcConstants.StandardScopes.OfflineAccess,
                     }
                  }
              };

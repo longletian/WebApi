@@ -10,12 +10,12 @@ namespace WebApi.Api.Controllers
     {
         private readonly IMenuService menuService;
 
-        public MenuController( IMenuService _menuService)
+        public MenuController(IMenuService menuService)
         {
-            menuService = _menuService;
+            this.menuService = menuService;
         }
 
-        [HttpGet,Route("menu")]
+        [HttpGet,Route("")]
         public ResponseData GetMenuList()
         {
             return menuService.GetMenuList();

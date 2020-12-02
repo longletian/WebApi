@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
-using System.Data.Common;
 using System.Threading.Tasks;
 using WebApi.Models;
 
@@ -9,7 +9,7 @@ namespace WebApi.Repository.Base.Unitwork
 {
     public class UnitworkRepository : IUnitworkRepository
     {
-        private readonly DataDbContext context;
+        private  DataDbContext context;
         public UnitworkRepository(DataDbContext _context)
         {
             context = _context;
@@ -45,7 +45,8 @@ namespace WebApi.Repository.Base.Unitwork
         /// </summary>
         public void Dispose()
         {
-            context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -65,6 +66,10 @@ namespace WebApi.Repository.Base.Unitwork
           await  context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// 获取dbconnection对象
+        /// </summary>
+        /// <returns></returns>
         public IDbConnection GetDbConnection()
         {
             if (context.Database.GetDbConnection().State == ConnectionState.Closed)
@@ -74,6 +79,10 @@ namespace WebApi.Repository.Base.Unitwork
             return context.Database.GetDbConnection();
         }
 
+        /// <summary>
+        /// 获取DbTransaction事务对象
+        /// </summary>
+        /// <returns></returns>
         public IDbTransaction GetDbTransaction()
         {
             if (context.Database.GetDbConnection().State == ConnectionState.Closed)
@@ -81,6 +90,19 @@ namespace WebApi.Repository.Base.Unitwork
                 context.Database.GetDbConnection().Open();
             }
             return context.Database.GetDbConnection().BeginTransaction();
+        }
+        
+        private bool disposed = false;
+        private void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    context.Dispose();
+                }
+            }
+            this.disposed = true;
         }
     }
 }
