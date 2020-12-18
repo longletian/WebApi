@@ -9,7 +9,6 @@ using System.Reflection;
 using WebApi.Tools.Redis;
 using System.Threading.Tasks;
 using System.Security.Claims;
-using WebApi.Common.AppSetting;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +24,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using FluentValidation.AspNetCore;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Common;
+
 namespace WebApi.Api.ServiceExtensions
 {
     public static class ServiceCollectionExtenioncs
@@ -40,16 +41,15 @@ namespace WebApi.Api.ServiceExtensions
                 .UseConnectionString(DataType.MySql, AppSetting.GetConnStrings("MysqlCon"))
                 // 自动同步实体结构到数据库
                 // 注意：不要在生产环境随意开启
-                .UseAutoSyncStructure(true)
+                .UseAutoSyncStructure(false)
                 // 开启延时加载
                 .UseLazyLoading(true)
                 .Build();
 
-            services.AddSingleton(freeSql);
+            services.AddSingleton<IFreeSql>(freeSql);
             //services.AddFreeRepository();
             //services.AddScoped<UnitOfWorkManager>();
         }
-
 
         /// <summary>
         /// 添加控制器数据验证
@@ -58,14 +58,14 @@ namespace WebApi.Api.ServiceExtensions
         public static void AddControllService(this IServiceCollection services)
         {
             services.AddControllers()
-               .AddJsonOptions(option => option.JsonSerializerOptions.PropertyNamingPolicy = null)
-               .AddFluentValidation(fv =>
-               {
-                   //是否同时支持两种验证方式
-                   fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                   //自定义IValidator验证空接口
-                   fv.RegisterValidatorsFromAssemblyContaining<Models.IValidator>();
-               });
+                .AddJsonOptions(option => option.JsonSerializerOptions.PropertyNamingPolicy = null)
+                .AddFluentValidation(fv =>
+                {
+                    //是否同时支持两种验证方式
+                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    //自定义IValidator验证空接口
+                    fv.RegisterValidatorsFromAssemblyContaining<Models.IValidator>();
+                });
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -74,7 +74,7 @@ namespace WebApi.Api.ServiceExtensions
                     var errors = context.ModelState
                         .Values
                         .SelectMany(x => x.Errors
-                               .Select(p => p.ErrorMessage))
+                            .Select(p => p.ErrorMessage))
                         .ToList();
 
                     var result = new
@@ -87,7 +87,6 @@ namespace WebApi.Api.ServiceExtensions
                 };
             });
         }
-
 
         /// <summary>
         /// 注入csredis
@@ -136,7 +135,6 @@ namespace WebApi.Api.ServiceExtensions
                 // 引入Swashbuckle和FluentValidation
                 c.AddFluentValidationRules();
             });
-
         }
 
         /// <summary>
@@ -145,7 +143,9 @@ namespace WebApi.Api.ServiceExtensions
         /// <param name="services"></param>
         public static void AddMiniProfilerService(this IServiceCollection services)
         {
-            if (services == null) { }
+            if (services == null)
+            {
+            }
 
             services.AddMiniProfiler(options =>
             {
@@ -156,7 +156,6 @@ namespace WebApi.Api.ServiceExtensions
                 options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
 
                 options.TrackConnectionOpenClose = true;
-
             });
         }
 
@@ -175,7 +174,6 @@ namespace WebApi.Api.ServiceExtensions
         /// <param name="services"></param>
         public static void AddHttpClientService(this IServiceCollection services)
         {
-
             services.AddHttpClient();
             services.AddHttpClient("github", c =>
             {
@@ -206,10 +204,11 @@ namespace WebApi.Api.ServiceExtensions
             services.AddCors(o => o.AddPolicy("AllowAll", builder =>
             {
                 builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader()
-                       // 允许浏览器应用进行跨域 gRPC-Web 调用
-                       .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    // 允许浏览器应用进行跨域 gRPC-Web 调用
+                    .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding")
+                    .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders());
             }));
         }
 
@@ -223,7 +222,7 @@ namespace WebApi.Api.ServiceExtensions
             {
                 switch (AppSetting.GetConnStrings("DbAllow"))
                 {
-                    case "MSSQL":
+                    case "MsSqlCon":
                         //options.UseSqlServer(AppSetting.GetConnStrings("MSSQLCon"));
                         break;
 
@@ -240,7 +239,6 @@ namespace WebApi.Api.ServiceExtensions
         /// <param name="services"></param>
         public static void AddJwtService(this IServiceCollection services)
         {
-
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.Configure<JwtConfig>(AppSetting.GetSection("Audience"));
@@ -265,9 +263,9 @@ namespace WebApi.Api.ServiceExtensions
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = signingKey,
                     ValidateIssuer = true,
-                    ValidIssuer = jwtConfig.Issuer,//发行人
+                    ValidIssuer = jwtConfig.Issuer, //发行人
                     ValidateAudience = true,
-                    ValidAudience = jwtConfig.Audience,//订阅人
+                    ValidAudience = jwtConfig.Audience, //订阅人
                     // 验证失效时间
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromMinutes(jwtConfig.RefreshTokenExpiresMinutes),
@@ -299,7 +297,6 @@ namespace WebApi.Api.ServiceExtensions
                         return Task.CompletedTask;
                     }
                 };
-
             });
         }
 
@@ -314,7 +311,7 @@ namespace WebApi.Api.ServiceExtensions
                 options.Providers.Add<GzipCompressionProvider>();
                 options.MimeTypes =
                     ResponseCompressionDefaults.MimeTypes.Concat(
-                        new[] { "image/svg+xml" });
+                        new[] {"image/svg+xml"});
             });
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -329,25 +326,34 @@ namespace WebApi.Api.ServiceExtensions
         public static void AddCapEvent(this IServiceCollection services)
         {
             #region cap简介
+
             // CAP 是一个在分布式系统中实现事件总线及最终一致性（分布式事务）
             // 具有轻量级，高性能，易使用等特点。
             // 具有 Event Bus 的所有功能，并且CAP提供了更加简化的方式来处理EventBus中的发布 / 订阅
             // 具有消息持久化的功能
             // 实现了分布式事务中的最终一致性，
-            #endregion
 
+            #endregion
             services.AddCap(x =>
             {
                 x.UseDashboard();
-                //x.UseMySql(AppSetting.GetConnStrings("MysqlCon"));
-                x.UseRabbitMQ(cfg =>
+                string dbAble = AppSetting.GetConnStrings("DbAllow");
+                if (!string.IsNullOrEmpty(dbAble))
                 {
-                    cfg.HostName = AppSetting.GetSection("MQ:Host").ToString();
-                    cfg.VirtualHost = AppSetting.GetSection("MQ:VirtualHost").ToString();
-                    cfg.Port = Convert.ToInt32(AppSetting.GetSection("MQ:Port"));
-                    cfg.UserName = AppSetting.GetSection("MQ:UserName").ToString();
-                    cfg.Password = AppSetting.GetSection("MQ:Password").ToString();
-                });
+                    switch (dbAble)
+                    {
+                        case "MsSqlCon":
+                            //x.UseKafka(AppSetting.GetConnStrings("MysqlCon"));
+                            break;
+                        case "PostgreSql":
+                            x.UsePostgreSql(AppSetting.GetConnStrings("PostgreSqlCon"));
+                            break;
+                        default:
+                            x.UseMySql(AppSetting.GetConnStrings("MysqlCon"));
+                            break;
+                    }
+                }
+                x.UseKafka(AppSetting.GetConnStrings("KafkaCon"));
                 x.FailedRetryInterval = 5;
                 x.FailedRetryCount = 2;
 
@@ -360,10 +366,8 @@ namespace WebApi.Api.ServiceExtensions
                 //    d.CurrentNodePort = 5800;
                 //    d.NodeId = 1;
                 //    d.NodeName = "CAP No.1 Node";
-
                 //});
                 #endregion
-
             });
         }
 
@@ -372,18 +376,18 @@ namespace WebApi.Api.ServiceExtensions
             //将身份验证服务添加到DI和身份验证中间件到管道
             //注入身份认证服务
             services.AddAuthentication("Bearer")
-               //  JWT 认证处理程序添加到DI中以供身份认证服务使用
-               .AddJwtBearer("Bearer", options =>
-               {
-                   // 验证传入令牌以确保它来自受信任的颁发者
-                   options.Authority = "https://localhost:5001";
+                //  JWT 认证处理程序添加到DI中以供身份认证服务使用
+                .AddJwtBearer("Bearer", options =>
+                {
+                    // 验证传入令牌以确保它来自受信任的颁发者
+                    options.Authority = "https://localhost:5001";
 
-                   // 验证token参数
-                   options.TokenValidationParameters = new TokenValidationParameters
-                   {
-                       ValidateAudience = false
-                   };
-               });
+                    // 验证token参数
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+                });
             //授权
             services.AddAuthorization(options =>
             {

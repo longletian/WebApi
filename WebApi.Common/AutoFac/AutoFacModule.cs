@@ -28,10 +28,8 @@ namespace WebApi.Common.AutoFac
             //builder.RegisterGeneric(typeof(NHibernateRepository<>)) .As(typeof(IRepository<>)).InstancePerLifetimeScope();
             //5：程序集注入
             #endregion
-
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services")).Where(a => a.Name.EndsWith("Service")).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository")).Where(a => a.Name.EndsWith("Repository")).AsImplementedInterfaces();
-
             //注册拦截器
             //builder.RegisterType<ValidatorAop>();
             //对目标类型启动动态代理，并注入自定义拦截器拦截

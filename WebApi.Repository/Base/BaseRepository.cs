@@ -1,7 +1,5 @@
 ﻿using Dapper;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +7,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using WebApi.Models;
 using WebApi.Repository.Base.Unitwork;
 
 namespace WebApi.Repository.Base

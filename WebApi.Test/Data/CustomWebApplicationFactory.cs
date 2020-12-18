@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using FakeItEasy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApi.Common.AutoFac;
 using WebApi.Models;
 
 namespace WebApi.Test.Data
@@ -15,9 +17,10 @@ namespace WebApi.Test.Data
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            //配置数据库内存测试
             builder.ConfigureServices(services =>
             {
-                
+
                 var sp = services.BuildServiceProvider();
 
                 using (var scope = sp.CreateScope())
@@ -31,10 +34,19 @@ namespace WebApi.Test.Data
                     }
                     catch (Exception ex)
                     {
-                        
+
                     }
                 }
             });
+            
+            //注入autofac
+            var service = A.Fake<AutoFacModule>();
+            
+            void ConfigureTestContainer(ContainerBuilder builder) {
+                builder.RegisterInstance(service);
+            }
+            
+            builder.ConfigureTestContainer<ContainerBuilder>(ConfigureTestContainer);
         }
 
         protected override IHost CreateHost(IHostBuilder builder)

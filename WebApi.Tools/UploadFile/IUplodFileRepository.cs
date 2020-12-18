@@ -29,7 +29,29 @@ namespace WebApi.Tools.UploadFile
         /// <returns></returns>
         bool UploadFile(string filePath, string uploadPath);
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         List<T> InputExcel<T>(IFormFile file) where T : class, new();
+        
+        /// <summary>
+        /// 文件上传
+        /// </summary>
+        /// <param name="file"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        List<T> InputExcels<T>(IFormFile file) where T : class, new();
+        
+        
+        /// <summary>
+        /// 文
+        /// </summary>
+        /// <param name="file"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        List<T> InputExcels1<T>(IFormFile file) where T : class, new();
     }
 }

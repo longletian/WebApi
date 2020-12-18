@@ -36,7 +36,12 @@ namespace WebApi.Api
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>()
-                    .UseSerilog();
+                    .UseSerilog()
+                    .ConfigureKestrel((context, options) =>
+                    {
+                        //设置应用服务器Kestrel请求体最大为50MB
+                        options.Limits.MaxRequestBodySize = 52428800;
+                    });
             });
 
         #region 配置读取

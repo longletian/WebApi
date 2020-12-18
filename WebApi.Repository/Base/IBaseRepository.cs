@@ -159,7 +159,6 @@ namespace WebApi.Repository.Base
         /// <returns></returns>
         T FindEntity(string strSql, object dbParameter = null);
 
-
         /// <summary>
         /// 查询列表（获取表所有数据）
         /// </summary>
@@ -243,7 +242,6 @@ namespace WebApi.Repository.Base
         /// <returns></returns>
         IEnumerable<T> FindList(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total);
         #endregion
-
 
         #region 数据源查询
         /// <summary>

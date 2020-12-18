@@ -1,7 +1,6 @@
 using Serilog;
 using Autofac;
 using AutoMapper;
-using WebApi.Common.AppSetting;
 using WebApi.Common.AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +11,8 @@ using WebApi.Api.MiddlewareExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Common.AutoFac;
+using WebApi.Common;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace WebApi.Api
 {
@@ -47,6 +48,13 @@ namespace WebApi.Api
             
             services.AddHttpClientService();
 
+            services.Configure<FormOptions>(options =>
+            {
+                //超出设置范围会报InvalidDataException 异常信息
+                //主要是限制缓冲形式中的文件的长度
+                options.MultipartBodyLengthLimit = long.MaxValue;
+            });
+
             services.AddResponseCachingService();
             
             services.AddResponseCompressionService();
@@ -65,9 +73,6 @@ namespace WebApi.Api
             // {
             //     options.RouteBasePath = "/profile";
             // }).AddEntityFramework();
-
-     
-
         }
 
         #region 注入autofac
@@ -106,9 +111,9 @@ namespace WebApi.Api
 
             app.UseSwaggUIConfigure();
 
-            // app.UseGrpcWeb();
-
             app.UseCors();
+
+            //app.UseCap();
 
             app.UseLogMiddleware();
 

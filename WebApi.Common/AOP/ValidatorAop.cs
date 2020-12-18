@@ -1,8 +1,8 @@
-﻿using Castle.DynamicProxy;
-using System;
+﻿using System;
+using WebApi.Models;
+using Castle.DynamicProxy;
 using System.Threading.Tasks;
 using WebApi.Common.BaseHelper.ValidatorHelper;
-using WebApi.Models;
 
 namespace WebApi.Common.AOP
 {

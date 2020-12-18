@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using WebApi.Common.BaseHelper.Md5Helper;
+using WebApi.Common.BaseHelper.EncryptHelper;
 using WebApi.Models;
 using WebApi.Repository.Base.Unitwork;
 using WebApi.Repository.IRepository;

@@ -93,7 +93,7 @@ namespace WebApi.Tools.UploadFile
             return ms;
         }
         /// <summary>
-        /// 导入
+        /// 导入文件读取成数据集
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="sheetName"></param>
@@ -137,75 +137,7 @@ namespace WebApi.Tools.UploadFile
                 return ds;
             }
         }
-
-        private static DataTable ReadExcelFunc(IWorkbook workbook, ISheet sheet)
-        {
-            DataTable dt = new DataTable();
-            //获取列信息
-            IRow cells = sheet.GetRow(sheet.FirstRowNum);
-            int cellsCount = cells.PhysicalNumberOfCells;
-            int emptyCount = 0;
-            int cellIndex = sheet.FirstRowNum;
-            List<string> listColumns = new List<string>();
-            bool isFindColumn = false;
-            while (!isFindColumn)
-            {
-                emptyCount = 0;
-                listColumns.Clear();
-                for (int i = 0; i < cellsCount; i++)
-                {
-                    if (string.IsNullOrEmpty(cells.GetCell(i).StringCellValue))
-                    {
-                        emptyCount++;
-                    }
-                    listColumns.Add(cells.GetCell(i).StringCellValue);
-                }
-                //这里根据逻辑需要，空列超过多少判断
-                if (emptyCount == 0)
-                {
-                    isFindColumn = true;
-                }
-                cellIndex++;
-                cells = sheet.GetRow(cellIndex);
-            }
-
-            foreach (string columnName in listColumns)
-            {
-                if (dt.Columns.Contains(columnName))
-                {
-                    continue;
-                }
-                dt.Columns.Add(columnName, typeof(string));
-            }
-            //开始获取数据
-            int rowsCount = sheet.PhysicalNumberOfRows;
-            cellIndex += 1;
-            DataRow dr = null;
-            for (int i = cellIndex; i < rowsCount; i++)
-            {
-                cells = sheet.GetRow(i);
-                dr = dt.NewRow();
-                for (int j = 0; j < dt.Columns.Count; j++)
-                {
-                    //这里可以判断数据类型
-                    switch (cells.GetCell(j).CellType)
-                    {
-                        case CellType.String:
-                            dr[j] = cells.GetCell(j).StringCellValue;
-                            break;
-                        case CellType.Numeric:
-                            dr[j] = cells.GetCell(j).NumericCellValue.ToString();
-                            break;
-                        case CellType.Unknown:
-                            dr[j] = cells.GetCell(j).StringCellValue;
-                            break;
-                    }
-                }
-                dt.Rows.Add(dr);
-            }
-            return dt;
-        }
-
+     
         /// <summary>
         /// 文件上传
         /// </summary>
@@ -297,6 +229,73 @@ namespace WebApi.Tools.UploadFile
             }
 
             return list;
+        }
+        private static DataTable ReadExcelFunc(IWorkbook workbook, ISheet sheet)
+        {
+            DataTable dt = new DataTable();
+            //获取列信息
+            IRow cells = sheet.GetRow(sheet.FirstRowNum);
+            int cellsCount = cells.PhysicalNumberOfCells;
+            int emptyCount = 0;
+            int cellIndex = sheet.FirstRowNum;
+            List<string> listColumns = new List<string>();
+            bool isFindColumn = false;
+            while (!isFindColumn)
+            {
+                emptyCount = 0;
+                listColumns.Clear();
+                for (int i = 0; i < cellsCount; i++)
+                {
+                    if (string.IsNullOrEmpty(cells.GetCell(i).StringCellValue))
+                    {
+                        emptyCount++;
+                    }
+                    listColumns.Add(cells.GetCell(i).StringCellValue);
+                }
+                //这里根据逻辑需要，空列超过多少判断
+                if (emptyCount == 0)
+                {
+                    isFindColumn = true;
+                }
+                cellIndex++;
+                cells = sheet.GetRow(cellIndex);
+            }
+
+            foreach (string columnName in listColumns)
+            {
+                if (dt.Columns.Contains(columnName))
+                {
+                    continue;
+                }
+                dt.Columns.Add(columnName, typeof(string));
+            }
+            //开始获取数据
+            int rowsCount = sheet.PhysicalNumberOfRows;
+            cellIndex += 1;
+            DataRow dr = null;
+            for (int i = cellIndex; i < rowsCount; i++)
+            {
+                cells = sheet.GetRow(i);
+                dr = dt.NewRow();
+                for (int j = 0; j < dt.Columns.Count; j++)
+                {
+                    //这里可以判断数据类型
+                    switch (cells.GetCell(j).CellType)
+                    {
+                        case CellType.String:
+                            dr[j] = cells.GetCell(j).StringCellValue;
+                            break;
+                        case CellType.Numeric:
+                            dr[j] = cells.GetCell(j).NumericCellValue.ToString();
+                            break;
+                        case CellType.Unknown:
+                            dr[j] = cells.GetCell(j).StringCellValue;
+                            break;
+                    }
+                }
+                dt.Rows.Add(dr);
+            }
+            return dt;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace WebApi.Api.Filters
         {
             this.logger = logger;
         }
-        
+
         /// <summary>
         /// 实现IExceptionFilter的OnException方法
         /// <param name="context">异常上下文</param>

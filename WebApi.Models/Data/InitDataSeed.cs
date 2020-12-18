@@ -10,9 +10,9 @@ namespace WebApi.Models.Data
     /// </summary>
     public static class InitDataSeed
     {
-        public static async Task Initialize(DataDbContext  dataDbContext)
+        public static void Initialize(DataDbContext dataDbContext)
         {
-            dataDbContext.Database.EnsureCreated();
+            //dataDbContext.Database.EnsureCreated();
         }
     }
 }
