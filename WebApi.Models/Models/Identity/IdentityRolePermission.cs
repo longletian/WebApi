@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿
+using FreeSql.DataAnnotations;
 
 namespace WebApi.Models
 {
     /// <summary>
     /// 角色权限关联表
     /// </summary>
-  [Table("case_role_permission")]
-    public class IdentityRolePermission
+    [Table(Name = "case_role_permission")]
+    public class IdentityRolePermission : Entity<long>
     {
-        public long Id { get; set; }
+        public IdentityRolePermission(long permissionId, long roleId)
+        {
+            this.Role = roleId;
+            this.PermissionId = permissionId;
+        }
 
-        /// <summary>
-        /// 权限id
-        /// </summary>
+
         public long PermissionId { get; set; }
 
-        /// <summary>
-        /// 角色id
-        /// </summary>
+        //[Navigate("PermissionId")]
+        //public IdentityPermission IdentityPermission { get; set; }
 
-        public long  RoleId { get; set; }
+        public long Role { get; set; }
 
-
-        //public IdentityPermission  IdentityPermissions { get; set; }
-
-        //public IdentityRole IdentityRoles { get; set; }
-
+        //[Navigate("RoleId")]
+        //public IdentityRole IdentityRole { get; set; }
     }
 }

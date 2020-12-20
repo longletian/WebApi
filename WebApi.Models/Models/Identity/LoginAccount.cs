@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using FreeSql.DataAnnotations;
+using System;
 
 namespace WebApi.Models
 {
     /// <summary>
-    /// 账号登录
+    /// 登录账号表
     /// </summary>
-  [Table("case_login_account")]
-    public class LoginAccount:Entity
+    [Table(Name = "case_login")]
+    public class LoginAccount : Entity<long>
     {
-        [Required]
         /// <summary>
         /// 用户名
         /// </summary>
         public string AccountName { get; set; }
-        [Required]
+
         /// <summary>
         /// 登录类型
         /// </summary>
-        public long LoginType { get; set; }
+        public int LoginType { get; set; }
         /// <summary>
         /// 登录ip
         /// </summary>
@@ -43,6 +39,15 @@ namespace WebApi.Models
         /// 登录时间
         /// </summary>
         public DateTime LoginTime { get; set; }
+
+        /// <summary>
+        /// JWT 登录，保存生成的随机token值。
+        /// </summary>
+        [Column(StringLength = 200)]
+        public string RefreshToken { get; set; }
+
+        //[Navigate("AccountId")]
+        //public virtual AccountModel  AccountModel { get; set; }
 
     }
 }

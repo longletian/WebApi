@@ -25,7 +25,6 @@ namespace WebApi.Api
             Configuration = configuration;
             Env = env;
         }
-
         /// <summary>
         /// ×¢²á·þÎñ
         /// </summary>
@@ -34,15 +33,15 @@ namespace WebApi.Api
         {
             services.AddSingleton(new AppSetting(Configuration, Env));
 
+            services.AddFreeSqlService(Configuration);
+
             services.AddSwaggUIService();
 
             services.AddControllService();
-
-            services.AddDataDbContext();
             
             services.AddAutoMapper(typeof(AutoMapperHelper));
-            
-            // services.AddRedisService();
+
+            services.AddRedisService();
 
             services.AddCorsService();
             

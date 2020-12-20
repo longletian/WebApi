@@ -25,30 +25,66 @@ using FluentValidation.AspNetCore;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Common;
+using FreeSql.Internal;
+using Serilog;
+using Microsoft.Extensions.Configuration;
+using WebApi.Common.Freesql;
 
 namespace WebApi.Api.ServiceExtensions
 {
     public static class ServiceCollectionExtenioncs
     {
+
         /// <summary>
-        /// 注入freesql
+        ///  注入freesql
         /// </summary>
         /// <param name="services"></param>
-        public static void AddFreeSqlService(this IServiceCollection services)
+        /// <param name="configuration"></param>
+        public static void AddFreeSqlService(this IServiceCollection services, IConfiguration configuration)
         {
             IFreeSql freeSql = new FreeSqlBuilder()
-                // 添加连接字符串和类型
-                .UseConnectionString(DataType.MySql, AppSetting.GetConnStrings("MysqlCon"))
-                // 自动同步实体结构到数据库
-                // 注意：不要在生产环境随意开启
-                .UseAutoSyncStructure(false)
-                // 开启延时加载
-                .UseLazyLoading(true)
-                .Build();
+                  //防止sql注入，开启lambda参数化功能 
+                  .UseGenerateCommandParameterWithLambda(true)
+                  .UseConnectionString(configuration)
+                  //定义名称格式
+                  .UseNameConvert(NameConvertType.ToLower)
+                  .UseMonitorCommand(cmd =>
+                  {
+                      Log.Information(cmd.CommandText + ";");
+                  })
+                  .UseAutoSyncStructure(true) //自动同步实体结构到数据库
+                  .Build(); //请务必定义成 Singleton 单例模式
 
-            services.AddSingleton<IFreeSql>(freeSql);
-            //services.AddFreeRepository();
-            //services.AddScoped<UnitOfWorkManager>();
+            //增删改查触发
+            freeSql.Aop.CurdAfter += (s, e) => {
+
+            };
+
+            services.AddSingleton(freeSql);
+            services.AddFreeRepository();
+            services.AddScoped<UnitOfWorkManager>();
+            //全局过滤全部为false(是否删除)
+            freeSql.GlobalFilter.Apply<IDeleteAduitEntity>("IsDeleted", a => a.IsDeleted == false);
+            try
+            {
+                using var objPool = freeSql.Ado.MasterPool.Get();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e + e.StackTrace + e.Message + e.InnerException);
+                return;
+            }
+            //在运行时直接生成表结构
+            try
+            {
+                freeSql.CodeFirst
+                    .SeedData()
+                    .SyncStructure(ReflexHelper.GetTypesByTableAttribute());
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e + e.StackTrace + e.Message + e.InnerException);
+            }
         }
 
         /// <summary>
@@ -210,27 +246,6 @@ namespace WebApi.Api.ServiceExtensions
                     .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding")
                     .WithExposedHeaders(tusdotnet.Helpers.CorsHelper.GetExposedHeaders());
             }));
-        }
-
-        /// <summary>
-        /// 注入dbcontext
-        /// </summary>
-        /// <param name="services"></param>
-        public static void AddDataDbContext(this IServiceCollection services)
-        {
-            services.AddDbContext<DataDbContext>(options =>
-            {
-                switch (AppSetting.GetConnStrings("DbAllow"))
-                {
-                    case "MsSqlCon":
-                        //options.UseSqlServer(AppSetting.GetConnStrings("MSSQLCon"));
-                        break;
-
-                    default:
-                        options.UseMySQL(AppSetting.GetConnStrings("MysqlCon"));
-                        break;
-                }
-            });
         }
 
         /// <summary>

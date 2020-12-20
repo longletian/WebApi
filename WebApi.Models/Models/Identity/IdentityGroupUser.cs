@@ -1,22 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿
+using FreeSql.DataAnnotations;
 
 namespace WebApi.Models
 {
 
-    [Table("case_group_user")]
-   public class IdentityGroupUser
+    /// <summary>
+    /// 用户组和用户关系表
+    /// </summary>
+    [Table(Name = "case_group_user")]
+    public class IdentityGroupUser : Entity<long>
     {
-        //public IdentityUser IdentityUsers { get; set; }
+        public IdentityGroupUser(long userId,long groupId)
+        {
+            this.UserId = userId;
+            this.GroupId = groupId;
+        }
+        public long UserId { get; set; }
 
-        //public IdentityUserGroup IdentityUserGroups { get; set; }
+        public long GroupId { get; set; }
 
-        public long Id { get; set; }
+        //[Navigate("GroupId")]
+        //public IdentityGroup IdentityGroup {get;set;}
 
-        public long   UserId{ get; set; }
-
-        public long  UserGroupId { get; set; }
+        //[Navigate("UserId")]
+        //public IdentityUser IdentityUser { get; set; }
     }
 }
+    

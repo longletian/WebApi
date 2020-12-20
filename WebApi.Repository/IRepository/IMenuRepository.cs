@@ -1,10 +1,9 @@
 ﻿
 using WebApi.Models;
-using WebApi.Repository.Base;
 
-namespace WebApi.Repository.IRepository
+namespace WebApi.Repository
 {
-    public interface IMenuRepository:IBaseRepository<MenuModel>
+    public interface IMenuRepository: IBaseEntityRepository<MenuModel>
     {
 
     }

@@ -1,23 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿
+using FreeSql.DataAnnotations;
 
 namespace WebApi.Models
 {
     /// <summary>
     /// 用户角色关联表
     /// </summary>
-  [Table("case_user_role")]
-    public class IdentityUserRole
+    [Table(Name = "case_user_role")]
+    public class IdentityUserRole : Entity<long>
     {
-        public long Id { get; set; }
+        public IdentityUserRole(long userId, long roleId)
+        {
+            this.UserId = userId;
+            this.RoleId = roleId;
+        }
 
         public long UserId { get; set; }
-        public long  RoleId { get; set; }
 
-        //public IdentityUser IdentityUsers { get; set; }
+        public long RoleId { get; set; }
 
-        //public IdentityRole IdentityRoles { get; set; }
+
+        //[Navigate("RoleId")]
+        //public IdentityRole IdentityRole { get; set; }
+
+        //[Navigate("UserId")]
+        //public IdentityUser IdentityUser { get; set; }
     }
 }

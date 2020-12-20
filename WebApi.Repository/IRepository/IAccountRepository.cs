@@ -1,9 +1,8 @@
 ﻿using WebApi.Models;
-using WebApi.Repository.Base;
 
-namespace WebApi.Repository.IRepository
+namespace WebApi.Repository
 {
-    public interface IAccountRepository : IBaseRepository<AccountModel>
+    public interface IAccountRepository : IBaseEntityRepository<AccountModel>
     {
     }
 }

@@ -3,15 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using WebApi.Repository.Base;
+using WebApi.Repository;
 
-namespace WebApi.Services.Base
+namespace WebApi.Services
 {
    public class BaseService<T> :IBaseService<T> where T:class,new ()
     {
-        public IBaseRepository<T> baseRepository;
+        public IBaseEntityRepository<T> baseRepository;
 
         public void Delete(T entity)
         {
@@ -185,12 +184,12 @@ namespace WebApi.Services.Base
 
         public IEnumerable<T> QueryByProc(string procName)
         {
-            return baseRepository.QueryByProc(procName);
+            throw new NotImplementedException();
         }
 
         public IEnumerable<T> QueryByProc(string procName, object dbParameter)
         {
-            return baseRepository.QueryByProc(procName, dbParameter);
+            throw new NotImplementedException();
         }
 
         public void Update(T entity)

@@ -1,15 +1,12 @@
 ﻿
+using FreeSql;
 using WebApi.Models;
-using WebApi.Repository.Base;
-using WebApi.Repository.Base.Unitwork;
-using WebApi.Repository.IRepository;
 
-
-namespace WebApi.Repository.Repository
+namespace WebApi.Repository
 {
-    public class MenuRepository:BaseRepository<MenuModel>,IMenuRepository
+    public class MenuRepository: BaseEntityRepository<MenuModel>,IMenuRepository
     {
-        public MenuRepository(DataDbContext dataDbContext, IUnitworkRepository unitwork) : base(unitwork, dataDbContext)
+        public MenuRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager)
         {
 
         }

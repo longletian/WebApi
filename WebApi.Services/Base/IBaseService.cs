@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
-using WebApi.Models;
 
-namespace WebApi.Services.Base
+namespace WebApi.Services
 {
     public interface IBaseService<T> where T : class, new()
     {
@@ -242,7 +239,6 @@ namespace WebApi.Services.Base
         /// <returns></returns>
         IEnumerable<T> FindList(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total);
         #endregion
-
 
         #region 数据源查询
         /// <summary>
