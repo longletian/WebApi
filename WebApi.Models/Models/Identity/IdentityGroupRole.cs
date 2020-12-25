@@ -11,10 +11,10 @@ namespace WebApi.Models
     {
         public IdentityGroupRole(long roleId, long groupId)
         {
-            this.Role = roleId;
+            this.RoleId = roleId;
             this.GroupId = groupId;
         }
-        public long Role { get; set; }
+        public long RoleId { get; set; }
 
         public long GroupId { get; set; }
 

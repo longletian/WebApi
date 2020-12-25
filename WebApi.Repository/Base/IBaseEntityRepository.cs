@@ -10,26 +10,39 @@ namespace WebApi.Repository
 
     public interface IBaseEntityRepository<TEntity> : IBaseRepository<TEntity, Guid> where TEntity : class
     {
+
     }
 
     public interface IBaseEntityRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : class
     {
-
         #region 对象实体 添加、修改、删除
 
-        Task InsertAsync(TEntity entity);
+        Task<int> InsertAsync(TEntity entity);
 
-        Task InsertAsync(IEnumerable<TEntity> entities);
+        Task<int> InsertAsync(IEnumerable<TEntity> entities);
 
-        Task DeleteAsync(TEntity entity);
+        /// <summary>
+        /// 返回增加的id
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        long InsertIdentityId(TEntity entity);
 
-        Task DeleteAsync(IEnumerable<TEntity> entities);
+        /// <summary>
+        /// PostgreSQL 特有的功能，执行 Copy 批量导入数据
+        /// </summary>
+        /// <returns></returns>
+        Task InsertPgCopy(IEnumerable<TEntity> entities);
 
-        Task DeleteAsync(Expression<Func<TEntity, bool>> condition);
+        Task<int> DeleteAsync(TEntity entity);
 
-        Task UpdateAsync(TEntity entity);
+        Task<int> DeleteAsync(IEnumerable<TEntity> entities);
 
-        Task UpdateAsync(IEnumerable<TEntity> entities);
+        Task<int> DeleteAsync(Expression<Func<TEntity, bool>> condition);
+
+        Task<int> UpdateAsync(TEntity entity);
+
+        Task<int> UpdateAsync(IEnumerable<TEntity> entities);
 
         #endregion
 
@@ -39,7 +52,7 @@ namespace WebApi.Repository
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        int ExecuteBySql(string sql);
+        //int ExecuteBySql(string sql);
 
         /// <summary>
         /// 执行语句带参数
@@ -47,14 +60,14 @@ namespace WebApi.Repository
         /// <param name="sql"></param>
         /// <param name="dbParamenter"></param>
         /// <returns></returns>
-        int ExecuteBySql(string sql, object dbParamenter);
+        //int ExecuteBySql(string sql, object dbParamenter);
 
         /// <summary>
         /// 执行存储过程
         /// </summary>
         /// <param name="procName">存储过程名称</param>
         /// <returns></returns>
-        TEntity ExecuteByProc(string procName);
+        //TEntity ExecuteByProc(string procName);
 
         /// <summary>
         /// 执行存储过程返回一个对象
@@ -63,14 +76,14 @@ namespace WebApi.Repository
         /// <param name="procName"></param>
         /// <param name="dbParamenter"></param>
         /// <returns></returns>
-        TEntity ExecuteByProc(string procName, object dbParamenter);
+        //TEntity ExecuteByProc(string procName, object dbParamenter);
 
         /// <summary>
         /// 执行存储过程
         /// </summary>
         /// <param name="procName">存储过程名称</param>
         /// <returns></returns>
-        IEnumerable<TEntity> QueryByProc(string procName);
+        //IEnumerable<TEntity> QueryByProc(string procName);
 
         /// <summary>
         /// 执行存储过程
@@ -78,7 +91,7 @@ namespace WebApi.Repository
         /// <param name="procName">存储过程名称</param>
         /// <param name="dbParameter">参数</param>
         /// <returns></returns>
-        IEnumerable<TEntity> QueryByProc(string procName, object dbParameter);
+        //IEnumerable<TEntity> QueryByProc(string procName, object dbParameter);
 
         #endregion
 
@@ -104,8 +117,7 @@ namespace WebApi.Repository
         /// <param name="strSql">sql语句</param>
         /// <param name="dbParameter">参数</param>
         /// <returns></returns>
-        TEntity FindEntity(string strSql, object dbParameter = null);
-
+        TEntity FindEntity(string strSql, Dictionary<string, string> dbParameter = null);
 
         /// <summary>
         /// 查询列表（获取表所有数据）
@@ -114,13 +126,6 @@ namespace WebApi.Repository
         /// <returns></returns>
         IEnumerable<TEntity> FindList();
 
-        /// <summary>
-        /// 查询列表（获取表所有数据）
-        /// </summary>
-        /// <typeparam name="T">类型</typeparam>
-        /// <param name="orderby">排序</param>
-        /// <returns></returns>
-        IEnumerable<TEntity> FindList(Func<TEntity, object> orderby);
         /// <summary>
         /// 查询列表根据表达式
         /// </summary>
@@ -153,7 +158,7 @@ namespace WebApi.Repository
         /// <param name="pageIndex">页码</param>
         /// <param name="total">总共数据条数</param>
         /// <returns></returns>
-        IEnumerable<TEntity> FindList(string orderField, int pageSize, int pageIndex, out int total);
+        IEnumerable<TEntity> FindList(string orderField, int pageSize, int pageIndex);
         /// <summary>
         /// 查询列表(分页)带表达式条件
         /// </summary>
@@ -164,7 +169,7 @@ namespace WebApi.Repository
         /// <param name="pageIndex">页码</param>
         /// <param name="total">总共数据条数</param>
         /// <returns></returns>
-        IEnumerable<TEntity> FindList(Expression<Func<TEntity, bool>> condition, string orderField, int pageSize, int pageIndex, out int total);
+        IEnumerable<TEntity> FindList(Expression<Func<TEntity, bool>> condition, string orderField, int pageSize, int pageIndex, out long total);
 
         /// <summary>
         /// 查询列表(分页)根据sql语句
@@ -176,7 +181,7 @@ namespace WebApi.Repository
         /// <param name="pageIndex">页码</param>
         /// <param name="total">总共数据条数</param>
         /// <returns></returns>
-        IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total);
+        IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out long total);
         /// <summary>
         /// 查询列表(分页)根据sql语句
         /// </summary>
@@ -188,44 +193,44 @@ namespace WebApi.Repository
         /// <param name="pageIndex">页码</param>
         /// <param name="total">总共数据条数</param>
         /// <returns></returns>
-        IEnumerable<TEntity> FindList(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total);
+        IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total, Dictionary<string, string> dict = null);
         #endregion
 
         #region 数据源查询
-        /// <summary>
-        /// 查询数据
-        /// </summary>
-        /// <param name="strSql">sql语句</param>
-        /// <returns></returns>
-        DataTable FindTable(string strSql);
-        /// <summary>
-        /// 查询数据
-        /// </summary>
-        /// <param name="strSql">sql语句</param>
-        /// <param name="dbParameter">参数</param>
-        /// <returns></returns>
-        DataTable FindTable(string strSql, object dbParameter);
-        /// <summary>
-        /// 查询数据
-        /// </summary>
-        /// <param name="strSql">sql语句</param>
-        /// <param name="orderField">排序字段</param>
-        /// <param name="pageSize">每页数据条数</param>
-        /// <param name="pageIndex">页码</param>
-        /// <param name="total">总共数据条数</param>
-        /// <returns></returns>
-        DataTable FindTable(string strSql, string orderField, int pageSize, int pageIndex, out int total);
-        /// <summary>
-        /// 查询数据
-        /// </summary>
-        /// <param name="strSql">sql语句</param>
-        /// <param name="dbParameter">参数</param>
-        /// <param name="orderField">排序字段</param>
-        /// <param name="pageSize">每页数据条数</param>
-        /// <param name="pageIndex">页码</param>
-        /// <param name="total">总共数据条数</param>
-        /// <returns></returns>
-        DataTable FindTable(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total);
+        ///// <summary>
+        ///// 查询数据
+        ///// </summary>
+        ///// <param name="strSql">sql语句</param>
+        ///// <returns></returns>
+        //DataTable FindTable(string strSql);
+        ///// <summary>
+        ///// 查询数据
+        ///// </summary>
+        ///// <param name="strSql">sql语句</param>
+        ///// <param name="dbParameter">参数</param>
+        ///// <returns></returns>
+        //DataTable FindTable(string strSql, object dbParameter);
+        ///// <summary>
+        ///// 查询数据
+        ///// </summary>
+        ///// <param name="strSql">sql语句</param>
+        ///// <param name="orderField">排序字段</param>
+        ///// <param name="pageSize">每页数据条数</param>
+        ///// <param name="pageIndex">页码</param>
+        ///// <param name="total">总共数据条数</param>
+        ///// <returns></returns>
+        //DataTable FindTable(string strSql, string orderField, int pageSize, int pageIndex, out long total);
+        ///// <summary>
+        ///// 查询数据
+        ///// </summary>
+        ///// <param name="strSql">sql语句</param>
+        ///// <param name="dbParameter">参数</param>
+        ///// <param name="orderField">排序字段</param>
+        ///// <param name="pageSize">每页数据条数</param>
+        ///// <param name="pageIndex">页码</param>
+        ///// <param name="total">总共数据条数</param>
+        ///// <returns></returns>
+        //DataTable FindTable(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out long total);
         /// <summary>
         /// 获取查询对象
         /// </summary>
@@ -238,24 +243,8 @@ namespace WebApi.Repository
         /// <param name="strSql">sql语句</param>
         /// <param name="dbParameter">参数</param>
         /// <returns></returns>
-        object FindObject(string strSql, object dbParameter);
+        //object FindObject(string strSql, object dbParameter);
         #endregion
 
-        #region 扩展方法
-        /// <summary>
-        /// 获取数据库表数据
-        /// </summary>
-        /// <typeparam name="T">反序列化类型</typeparam>
-        /// <returns></returns>
-        IEnumerable<TEntity> GetDBTable();
-        /// <summary>
-        /// 获取数据库表字段数据
-        /// </summary>
-        /// <typeparam name="T">反序列化类型</typeparam>
-        /// <param name="tableName">表名</param>
-        /// <returns></returns>
-        IEnumerable<TEntity> GetDBTableFields(string tableName);
-
-        #endregion
     }
 }

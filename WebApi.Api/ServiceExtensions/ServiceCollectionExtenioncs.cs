@@ -28,7 +28,7 @@ using WebApi.Common;
 using FreeSql.Internal;
 using Serilog;
 using Microsoft.Extensions.Configuration;
-using WebApi.Common.Freesql;
+
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -131,7 +131,7 @@ namespace WebApi.Api.ServiceExtensions
         public static void AddRedisService(this IServiceCollection services)
         {
             // 普遍模式
-            var csredis = new CSRedis.CSRedisClient(AppSetting.GetConnStrings("RedisCon").ToString());
+            var csredis = new CSRedis.CSRedisClient(AppSetting.GetConnStrings("CsRedis").ToString());
             // 初始化redisHelper
             RedisHelper.Initialization(csredis);
 
@@ -338,7 +338,8 @@ namespace WebApi.Api.ServiceExtensions
         /// 注入cap
         /// </summary>
         /// <param name="services"></param>
-        public static void AddCapEvent(this IServiceCollection services)
+        /// <param name="configuration"></param>
+        public static void AddCapEvent(this IServiceCollection services,IConfiguration configuration)
         {
             #region cap简介
 
@@ -349,40 +350,12 @@ namespace WebApi.Api.ServiceExtensions
             // 实现了分布式事务中的最终一致性，
 
             #endregion
+
             services.AddCap(x =>
             {
-                x.UseDashboard();
-                string dbAble = AppSetting.GetConnStrings("DbAllow");
-                if (!string.IsNullOrEmpty(dbAble))
-                {
-                    switch (dbAble)
-                    {
-                        case "MsSqlCon":
-                            //x.UseKafka(AppSetting.GetConnStrings("MysqlCon"));
-                            break;
-                        case "PostgreSql":
-                            x.UsePostgreSql(AppSetting.GetConnStrings("PostgreSqlCon"));
-                            break;
-                        default:
-                            x.UseMySql(AppSetting.GetConnStrings("MysqlCon"));
-                            break;
-                    }
-                }
-                x.UseKafka(AppSetting.GetConnStrings("KafkaCon"));
-                x.FailedRetryInterval = 5;
-                x.FailedRetryCount = 2;
-
-                #region 注入Consul
-                //x.UseDiscovery(d =>
-                //{
-                //    d.DiscoveryServerHostName = "localhost";
-                //    d.DiscoveryServerPort = 8500;
-                //    d.CurrentNodeHostName = "localhost";
-                //    d.CurrentNodePort = 5800;
-                //    d.NodeId = 1;
-                //    d.NodeName = "CAP No.1 Node";
-                //});
-                #endregion
+                x.GetCapOptions(configuration);
+                // 失败重试
+                x.FailedRetryCount = 5;
             });
         }
 

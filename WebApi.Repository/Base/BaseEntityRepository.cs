@@ -14,180 +14,127 @@ namespace WebApi.Repository
     /// <typeparam name="TEntityKey"></typeparam>
     public class BaseEntityRepository<TEntity, TEntityKey> : BaseRepository<TEntity, TEntityKey>, IBaseEntityRepository<TEntity, TEntityKey> where TEntity : class
     {
-        private readonly IFreeSql fsql;
-        protected BaseEntityRepository(IFreeSql fsql) : base(fsql, null, null)
+        private readonly IFreeSql freeSql;
+        protected BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager?.Orm, null, null)
         {
-            this.fsql = fsql;
+            this.freeSql = unitOfWorkManager?.Orm;
+        }
+        public Task<int> DeleteAsync(TEntity entity)
+        {
+            //默认根据实体里面的id进行删除
+            return this.freeSql.Delete<TEntity>().Where(entity).ExecuteAffrowsAsync();
         }
 
-        public Task DeleteAsync(TEntity entity)
+        public Task<int> DeleteAsync(IEnumerable<TEntity> entities)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Delete<TEntity>().Where(entities).ExecuteAffrowsAsync();
         }
 
-        public Task DeleteAsync(IEnumerable<TEntity> entities)
+        public Task<int> DeleteAsync(Expression<Func<TEntity, bool>> condition)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Select<TEntity>().Where(condition).ToDelete().ExecuteAffrowsAsync();
         }
 
-        public Task DeleteAsync(Expression<Func<TEntity, bool>> condition)
+        public Task<int> InsertAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Insert<TEntity>(entity).ExecuteAffrowsAsync();
         }
 
-        public TEntity ExecuteByProc(string procName)
+        public long InsertIdentityId(TEntity entity)
         {
-            throw new NotImplementedException();
+            return Convert.ToInt64(this.freeSql.Insert<TEntity>(entity).InsertIdentity());
         }
 
-        public TEntity ExecuteByProc(string procName, object dbParamenter)
+        public Task InsertPgCopy(IEnumerable<TEntity> entities)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Insert<TEntity>(entities).ExecutePgCopyAsync();
         }
 
-        public int ExecuteBySql(string sql)
+        public Task<int> InsertAsync(IEnumerable<TEntity> entities)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Insert<TEntity>(entities).ExecuteAffrowsAsync();
         }
 
-        public int ExecuteBySql(string sql, object dbParamenter)
+        public Task<int> UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Update<TEntity>(entity).ExecuteAffrowsAsync();
+        }
+
+        public Task<int> UpdateAsync(IEnumerable<TEntity> entities)
+        {
+            return this.freeSql.Update<TEntity>().Where(entities).ExecuteAffrowsAsync();
         }
 
         public TEntity FindEntity(object KeyValue)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Select<TEntity>().WhereDynamic(KeyValue).ToOne();
         }
 
         public TEntity FindEntity(Expression<Func<TEntity, bool>> condition)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Select<TEntity>().WhereDynamic(condition).ToOne();
         }
 
-        public TEntity FindEntity(string strSql, object dbParameter = null)
+        public TEntity FindEntity(string strSql, Dictionary<string, string> dbParameter = null)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Select<TEntity>().WithSql(strSql, dbParameter).ToOne();
         }
 
         public IEnumerable<TEntity> FindList()
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TEntity> FindList(Func<TEntity, object> orderby)
-        {
-            throw new NotImplementedException();
+            return this.freeSql.Select<TEntity>().ToList();
         }
 
         public IEnumerable<TEntity> FindList(Expression<Func<TEntity, bool>> condition)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Select<TEntity>().WhereDynamic(condition).ToList();
         }
 
         public IEnumerable<TEntity> FindList(string strSql)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Select<TEntity>().WithSql(strSql).ToList();
         }
 
         public IEnumerable<TEntity> FindList(string strSql, object dbParameter)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Select<TEntity>().WithSql(strSql, dbParameter).ToList();
         }
 
-        public IEnumerable<TEntity> FindList(string orderField, int pageSize, int pageIndex, out int total)
+        public IEnumerable<TEntity> FindList(string orderField, int pageSize, int pageIndex)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Select<TEntity>().Page(pageIndex, pageSize).OrderBy(orderField).ToList();
         }
 
-        public IEnumerable<TEntity> FindList(Expression<Func<TEntity, bool>> condition, string orderField, int pageSize, int pageIndex, out int total)
+        public IEnumerable<TEntity> FindList(Expression<Func<TEntity, bool>> condition, string orderField, int pageSize, int pageIndex, out long total)
         {
-            throw new NotImplementedException();
+            var list = this.freeSql.Select<TEntity>().Page(pageIndex, pageSize).OrderBy(orderField).Where(condition).ToList();
+            total = list.Count;
+            return list;
         }
 
-        public IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total)
+        public IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out long total)
         {
-            throw new NotImplementedException();
+            var list = this.freeSql.Select<TEntity>().Page(pageIndex, pageSize).OrderBy(orderField).WithSql(strSql).ToList();
+            total = list.Count;
+            return list;
         }
 
-        public IEnumerable<TEntity> FindList(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total)
+        public IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total, Dictionary<string, string> dict = null)
         {
-            throw new NotImplementedException();
+            var list = this.freeSql.Select<TEntity>().Page(pageIndex, pageSize).OrderBy(orderField).WithSql(strSql, dict).ToList();
+            total = list.Count;
+            return list;
         }
 
         public object FindObject(string strSql)
         {
-            throw new NotImplementedException();
+            return this.freeSql.Select<object>().WithSql(strSql);
         }
 
-        public object FindObject(string strSql, object dbParameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DataTable FindTable(string strSql)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DataTable FindTable(string strSql, object dbParameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DataTable FindTable(string strSql, string orderField, int pageSize, int pageIndex, out int total)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DataTable FindTable(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TEntity> GetDBTable()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TEntity> GetDBTableFields(string tableName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task InsertAsync(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task InsertAsync(IEnumerable<TEntity> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TEntity> QueryByProc(string procName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TEntity> QueryByProc(string procName, object dbParameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(TEntity entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(IEnumerable<TEntity> entities)
-        {
-            throw new NotImplementedException();
-        }
     }
     public class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, Guid>, IBaseEntityRepository<TEntity> where TEntity :class
     {
-        public BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager?.Orm)
+        public BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager)
         {
             unitOfWorkManager.Binding(this);
         }

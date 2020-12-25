@@ -41,6 +41,8 @@ namespace WebApi.Api
             
             services.AddAutoMapper(typeof(AutoMapperHelper));
 
+            services.AddCapEvent(Configuration);
+
             services.AddRedisService();
 
             services.AddCorsService();
@@ -111,8 +113,6 @@ namespace WebApi.Api
             app.UseSwaggUIConfigure();
 
             app.UseCors();
-
-            //app.UseCap();
 
             app.UseLogMiddleware();
 

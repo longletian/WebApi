@@ -10,7 +10,7 @@ using WebApi.Repository;
 
 namespace WebApi.Services.Service
 {
-    public class MenuService : BaseService<MenuModel>, IMenuService
+    public class MenuService : IMenuService
     {
         private readonly IMenuRepository menuRepository;
         private readonly IMapper mapper;
@@ -53,7 +53,7 @@ SELECT  MenuName,MenuPath,MenuCode,ParentMenuCode,MenuUrl,MenuRemark FROM case_m
             //遍历根节点
             menus?.ForEach(t =>
             {
-                logger.LogInformation("对象",t);
+                logger.LogInformation("对象", t);
                 //设置根节点的子节点列表
                 t.menuList = this.GetChildTree(t, menuViews);
             });

@@ -8,7 +8,7 @@ using WebApi.Services.IService;
 
 namespace WebApi.Services.Service
 {
-   public class AccountService : BaseService<AccountModel>, IAccountService
+   public class AccountService : IAccountService
     {
         private readonly IUserRepository userRepository;
         private readonly IAccountRepository accountRepository;
@@ -20,7 +20,6 @@ namespace WebApi.Services.Service
         {
             this.mapper = mapper;
             this.userRepository = userRepository;
-            baseRepository = accountRepository;
             this.accountRepository = accountRepository;
         }
 

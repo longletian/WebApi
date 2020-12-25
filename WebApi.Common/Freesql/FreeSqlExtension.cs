@@ -8,15 +8,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using WebApi.Models;
+using WebApi.Models.Enums;
 
-namespace WebApi.Common.Freesql
+namespace WebApi.Common
 {
     /// <summary>
     /// 扩展freesql方法
     /// </summary>
     public static class FreeSqlExtension
     {
-
         public static ISelect<T> AsTable<T>(this ISelect<T> @this, params string[] tableNames) where T : class
         {
             tableNames?.ToList().ForEach(tableName =>
@@ -30,12 +30,12 @@ namespace WebApi.Common.Freesql
             return @this;
         }
 
-        /// <summary>
-        ///配置连接字符串
-        /// </summary>
-        /// <param name="this"></param>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
+       /// <summary>
+       /// 配置数据库连接
+       /// </summary>
+       /// <param name="this"></param>
+       /// <param name="configuration"></param>
+       /// <returns></returns>
         public static FreeSqlBuilder UseConnectionString(this FreeSqlBuilder @this, IConfiguration configuration)
         {
             IConfigurationSection dbTypeCode = configuration.GetSection("ConnectionStrings:DefaultDB");
@@ -48,6 +48,28 @@ namespace WebApi.Common.Freesql
 
                 IConfigurationSection configurationSection = configuration.GetSection($"ConnectionStrings:{dataType}");
                 @this.UseConnectionString(dataType, configurationSection.Value);
+                if (configuration.GetSection("ConnectionStrings:BoolOpenSalve").Value == "true")
+                {
+                    string dbStr = configuration.GetSection("ConnectionStrings:SalveDB").Value;
+                    if (!string.IsNullOrEmpty(dbStr))
+                    {
+                        if (dbStr.IndexOf(',') > 0)
+                        {
+                            string[] arrayStr = dbStr.Split(',');
+                            List<string> lists = new List<string>();
+                            for (int i = 0; i < arrayStr.Length; i++)
+                            {
+                                lists.Add(configuration.GetSection($"ConnectionStrings:{arrayStr[i]}").Value);
+                            }
+                            @this.UseSlave(lists.ToArray());
+                        }
+                        else
+                        {
+                            @this.UseSlave(configuration[$"ConnectionStrings:{dbStr}"]);
+                        }
+                    }
+                }
+
             }
             else
             {
@@ -160,27 +182,59 @@ namespace WebApi.Common.Freesql
                     {
                       new IdentityRole{ RoleName="超级管理员",RoleRemark="超级管理员", SortNum=1},
                       new IdentityRole { RoleName="管理员",RoleRemark="管理员", SortNum=2},
-                    });
-            }).Entity<IdentityUser>(e =>
+                });
+            });
+
+            @this.Entity<IdentityUser>(e =>
             {
                 e.HasData(new List<IdentityUser>()
-                   {
-                        new IdentityUser()
-                        {
-                            UserName="admin",
-                            NickName="系统管理员",
-                            CreateTime=DateTime.Now,
-                            UserSex=0,
-                            Email="11143343@qq.com",
-                            BirthDay="1992",
-                            CityCode="1992",
-                            DistrictCode="1992",
-                            ProvinceCode="1992",
-                            RealName="系统管理员",
-                            TelePhone="19912313123",
-                            IsDeleted=false,
-                        }
-                   });
+                 {
+                    new IdentityUser()
+                    {
+                        UserName="admin",
+                        NickName="系统管理员",
+                        CreateTime=DateTime.Now,
+                        UserSex=0,
+                        Email="11143343@qq.com",
+                        BirthDay="1992",
+                        CityCode="1992",
+                        DistrictCode="1992",
+                        ProvinceCode="1992",
+                        RealName="系统管理员",
+                        TelePhone="19912313123",
+                        IsDeleted=false,
+                    }
+                 });
+            });
+            @this.Entity<AccountModel>(e =>
+            {
+                e.HasData(new List<AccountModel>()
+                {
+                    new AccountModel {
+                        AccountName="11143343@qq.com",
+                        AccountPasswd="123456",
+                        AccountPasswdEncrypt="123456",
+                        AccountType=2,
+                        AccountState=1,
+                        Active= UserActive.Active
+                        },
+                    new AccountModel{
+                        AccountName="admin22@qq.com",
+                        AccountPasswd="123456",
+                        AccountPasswdEncrypt="123456",
+                        AccountType=2,
+                        AccountState=1,
+                        Active= UserActive.Active
+                    }
+                });
+            });
+
+            @this.Entity<IdentityUserRole>(e =>
+            {
+                e.HasData(new List<IdentityUserRole>()
+                {
+                new IdentityUserRole(1,1),
+                });
             });
             return @this;
         }
