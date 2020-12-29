@@ -80,6 +80,7 @@ namespace WebApi.Repository
             return this.freeSql.Select<TEntity>().WithSql(strSql, dbParameter).ToOne();
         }
 
+
         public IEnumerable<TEntity> FindList()
         {
             return this.freeSql.Select<TEntity>().ToList();
@@ -131,6 +132,10 @@ namespace WebApi.Repository
             return this.freeSql.Select<object>().WithSql(strSql);
         }
 
+        public Task<int> UpdateAsync(string sql)
+        {
+            return this.freeSql.Select<TEntity>().WithSql(sql).ToUpdate().ExecuteAffrowsAsync();
+        }
     }
     public class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, Guid>, IBaseEntityRepository<TEntity> where TEntity :class
     {

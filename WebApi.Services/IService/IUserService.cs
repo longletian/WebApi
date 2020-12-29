@@ -5,5 +5,6 @@ namespace WebApi.Services.IService
 {
     public interface IUserService :IBaseService<IdentityUser>
     {
+  
     }
 }

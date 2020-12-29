@@ -42,7 +42,6 @@ namespace WebApi.Repository
         /// </summary>
         /// <returns></returns>
         Task InsertPgCopy(IEnumerable<TEntity> entities);
-
         Task<int> DeleteAsync(TEntity entity);
 
         Task<int> DeleteAsync(IEnumerable<TEntity> entities);
@@ -52,6 +51,13 @@ namespace WebApi.Repository
         Task<int> UpdateAsync(TEntity entity);
 
         Task<int> UpdateAsync(IEnumerable<TEntity> entities);
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        Task<int> UpdateAsync(string sql);
 
         #endregion
 

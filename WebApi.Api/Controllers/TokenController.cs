@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WebApi.Common.Authorizations.JwtConfig;
+using WebApi.Models;
+using WebApi.Services.IService;
 
 namespace WebApi.Api.Controllers
 {
@@ -8,10 +10,10 @@ namespace WebApi.Api.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
-        private readonly JwtConfig jwtConfig;
-        public TokenController(IOptions<JwtConfig> _jwtConfig)
+        private readonly IAccountService accountService;
+        public TokenController(IOptions<JwtConfig> _jwtConfig, IAccountService accountService)
         {
-            jwtConfig = _jwtConfig.Value;
+            this.accountService = accountService;
         }
 
         /// <summary>
@@ -24,15 +26,14 @@ namespace WebApi.Api.Controllers
             return NotFound();
         }
 
-
         /// <summary>
         /// 获取accessToken
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route("accesstoken")]
-        public IActionResult GetAccessToken()
+        [HttpPost, Route("token")]
+        public ResponseData GetAccessToken(AccountLoginDto accountLoginDto)
         {
-            return NotFound();
+            return accountService.GetJwtToken(accountLoginDto);
         }
     }
 }

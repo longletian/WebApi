@@ -27,7 +27,7 @@ using WebApi.Common;
 using FreeSql.Internal;
 using Serilog;
 using Microsoft.Extensions.Configuration;
-
+using WebApi.Common.Authorizations.AuthorizationHandler;
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -257,19 +257,18 @@ namespace WebApi.Api.ServiceExtensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
+            // 实体映射
             services.Configure<JwtConfig>(AppSetting.GetSection("Audience"));
 
             JwtConfig jwtConfig = new JwtConfig();
             AppSetting.BindSection("Audience", jwtConfig);
-            var keyByteArray = Encoding.ASCII.GetBytes(jwtConfig.IssuerSigningKey);
-            var signingKey = new SymmetricSecurityKey(keyByteArray);
-
+            
             services.AddAuthentication(o =>
             {
                 //添加JWT Scheme
                 o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
             }).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -277,7 +276,8 @@ namespace WebApi.Api.ServiceExtensions
                     NameClaimType = ClaimTypes.Name,
                     //是否验证SecurityKey
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = signingKey,
+                    //加密key ascii编码
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.IssuerSigningKey)),
                     ValidateIssuer = true,
                     ValidIssuer = jwtConfig.Issuer, //发行人
                     ValidateAudience = true,
@@ -376,16 +376,58 @@ namespace WebApi.Api.ServiceExtensions
                     {
                         ValidateAudience = false
                     };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/hubs/messagehub")))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
             //授权
             services.AddAuthorization(options =>
             {
+                //配置授权
                 options.AddPolicy("ApiScope", policy =>
                 {
                     policy.RequireAuthenticatedUser();
 
                     policy.RequireClaim("scope", "api1");
                 });
+
+                //配置SignalR授权
+                options.AddPolicy("SignalRAuthorizationPolicy", policy =>
+                {
+                    policy.Requirements.Add(new DomainRestrictedRequirement());
+                });
+            });
+        }
+
+        /// <summary>
+        /// 实时 web 功能使服务器端代码可以立即将内容推送到客户端。
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddSignalRService(this IServiceCollection services)
+        {
+            services.AddSignalR(options =>
+            {
+                //如果为，则在 true 集线器方法中引发异常时，
+                //详细的异常消息将返回到客户端。 
+                options.EnableDetailedErrors = true;
+                //如果客户端未收到消息 (在此时间间隔内包含 keep-alive) ，
+                //服务器将认为客户端已断开连接
+                options.ClientTimeoutInterval = TimeSpan.FromMinutes(1);
+                //如果服务器未在此时间间隔内发送消息，
+                //则会自动发送 ping 消息，使连接保持打开状态。
+                options.KeepAliveInterval = TimeSpan.FromMinutes(1);
             });
         }
     }

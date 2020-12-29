@@ -1,12 +1,6 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using Autofac;
-using FakeItEasy;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WebApi.Api;
-using WebApi.Common.AutoFac;
 using WebApi.Models;
 using WebApi.Test.Data;
 using Xunit;

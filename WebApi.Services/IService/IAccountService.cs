@@ -1,5 +1,6 @@
 ﻿
 
+using WebApi.Common.Authorizations.JwtConfig;
 using WebApi.Models;
 
 namespace WebApi.Services.IService
@@ -24,5 +25,12 @@ namespace WebApi.Services.IService
         /// </summary>
         /// <returns></returns>
         ResponseData ChangePassWord(AccountChangePassDto accountChangePassDto);
+
+
+        /// <summary>
+        /// 获取accesstoken
+        /// </summary>
+        /// <returns></returns>
+        ResponseData GetJwtToken(AccountLoginDto accountLoginDto);
     }
 }

@@ -7,5 +7,6 @@ namespace WebApi.Services
 {
     public class UserService : BaseService<IdentityUser>, IUserService
     {
+
     }
 }

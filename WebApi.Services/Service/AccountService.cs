@@ -1,6 +1,12 @@
 ﻿using AutoMapper;
 using FreeSql;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using WebApi.Common;
+using WebApi.Common.Authorizations.JwtConfig;
 using WebApi.Common.BaseHelper.EncryptHelper;
 using WebApi.Models;
 using WebApi.Repository;
@@ -90,6 +96,31 @@ namespace WebApi.Services.Service
             //    return new ResponseData { MsgCode = 200, Message = "修改密码成功" };
             //}
             return new ResponseData { MsgCode = 400, Message = "修改密码失败" };
+        }
+
+        public ResponseData GetJwtToken(AccountLoginDto accountLoginDto)
+        {
+            JwtConfig jwtConfig = new JwtConfig();
+            AppSetting.BindSection<JwtConfig>("Audience", jwtConfig);
+            AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
+            if (accountModel != null)
+            {
+                var claims = new Claim[]{
+                  new Claim(ClaimTypes.Name,accountLoginDto.AccountName)
+                 };
+
+                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.IssuerSigningKey));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var token = new JwtSecurityToken(jwtConfig.Issuer,
+                    jwtConfig.Audience,
+                    claims,
+                    DateTime.Now,
+                    DateTime.Now.AddSeconds(10), creds);
+
+                string SaveToken = new JwtSecurityTokenHandler().WriteToken(token);
+                return new ResponseData { MsgCode = 200, Message = "请求成功", Data = SaveToken };
+            }
+            return  new ResponseData { MsgCode = 400, Message = "请求失败",Data="" };
         }
     }
 }

@@ -53,10 +53,10 @@ namespace WebApi.Api.ConfigureExtensions
         /// <param name="app"></param>
         public static void UseSignalConfigure(this IApplicationBuilder app)
         {
-            //app.UseSignalR(routes =>
-            //{
-            //    routes.MapHub<MessageHub>("/messagehub");
-            //});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<MessageHub>("/messagehub");
+            });
         }
 
         /// <summary>

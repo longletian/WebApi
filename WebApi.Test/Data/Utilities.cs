@@ -6,15 +6,14 @@ namespace WebApi.Test
 {
     public static class Utilities
     {
-        public static void InitializeDbForTests(DataDbContext db)
+        public static void InitializeDbForTests(IFreeSql db)
         {
-            db.MenuModels.AddRange(GetSeedingMessages());
-            db.SaveChanges();
+            db.GetGuidRepository<MenuModel>().Insert(GetSeedingMessages());
         }
 
-        public static void ReinitializeDbForTests(DataDbContext db)
+        public static void ReinitializeDbForTests(IFreeSql db)
         {
-            db.MenuModels.RemoveRange(db.MenuModels);
+            //db.GetGuidRepository<MenuModel>().Delete();
             InitializeDbForTests(db);
         }
 
@@ -22,12 +21,12 @@ namespace WebApi.Test
         {
             return new List<MenuModel>()
             {
-                new MenuModel{ CreateorId = 1,UpdateorId = 1,CreateTime =DateTime.Parse("2020-11-23 15:32:50") ,IsDelete = false,
-                    MenuCode = "hnxy",MenuName = "湖南学院",MenuPath = "hnxy",ParentMenuCode = "",MenuUrl = "/hnxy",MenuRemark = ""},
-                new MenuModel{ CreateorId = 1,UpdateorId = 1,CreateTime =DateTime.Parse("2020-11-23 15:32:50") ,IsDelete = false,
-                    MenuCode = "rjgcx",MenuName = "软件工程系",MenuPath = "rjgcx",ParentMenuCode = "hnxy",MenuUrl = "/rjgcx",MenuRemark = ""},
-                new MenuModel{ CreateorId = 1,UpdateorId = 1,CreateTime =DateTime.Parse("2020-11-23 15:32:50") ,IsDelete = false,
-                    MenuCode = "jzgcx",MenuName = "建筑工程系",MenuPath = "jzgcx",ParentMenuCode = "hnxy",MenuUrl = "/jzgcx",MenuRemark = ""},
+                //new MenuModel{ CreateorId = 1,UpdateorId = 1,CreateTime =DateTime.Parse("2020-11-23 15:32:50") ,IsDelete = false,
+                //    MenuCode = "hnxy",MenuName = "湖南学院",MenuPath = "hnxy",ParentMenuCode = "",MenuUrl = "/hnxy",MenuRemark = ""},
+                //new MenuModel{ CreateorId = 1,UpdateorId = 1,CreateTime =DateTime.Parse("2020-11-23 15:32:50") ,IsDelete = false,
+                //    MenuCode = "rjgcx",MenuName = "软件工程系",MenuPath = "rjgcx",ParentMenuCode = "hnxy",MenuUrl = "/rjgcx",MenuRemark = ""},
+                //new MenuModel{ CreateorId = 1,UpdateorId = 1,CreateTime =DateTime.Parse("2020-11-23 15:32:50") ,IsDelete = false,
+                //    MenuCode = "jzgcx",MenuName = "建筑工程系",MenuPath = "jzgcx",ParentMenuCode = "hnxy",MenuUrl = "/jzgcx",MenuRemark = ""},
              
             };
         }

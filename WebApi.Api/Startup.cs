@@ -15,6 +15,7 @@ using WebApi.Common;
 using Microsoft.AspNetCore.Http.Features;
 using WebApi.Repository;
 using WebApi.Services;
+using WebApi.Common.Authorizations.JwtConfig;
 
 namespace WebApi.Api
 {
@@ -36,6 +37,8 @@ namespace WebApi.Api
             services.AddSingleton(new AppSetting(Configuration, Env));
 
             services.AddFreeSqlService(Configuration);
+
+            services.AddOptions<JwtConfig>(Configuration.GetSection("Audience").ToString());
 
             services.AddSwaggUIService();
 
@@ -64,9 +67,7 @@ namespace WebApi.Api
 
             // services.AddEasyNetQService();
 
-            //services.AddSignalR();
-
-            //services.AddAuthenticationService();
+            services.AddAuthenticationService();
 
             //services.AddJwtService();
 
@@ -92,6 +93,7 @@ namespace WebApi.Api
         {
             //新模块组件注册
             builder.RegisterModule(new AutoFacModule());
+            builder.RegisterModule(new DependencyModule());
         }
 
         #endregion
