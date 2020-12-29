@@ -63,33 +63,35 @@ namespace WebApi.Api
             services.AddResponseCompressionService();
 
             // services.AddEasyNetQService();
-            
-            // services.AddMiniProfilerService();
 
             //services.AddSignalR();
-            
+
             //services.AddAuthenticationService();
 
             //services.AddJwtService();
+
+            #region 查看接口访问速度
+
+            // services.AddMiniProfilerService();
 
             // services.AddMiniProfiler(options =>
             // {
             //     options.RouteBasePath = "/profile";
             // }).AddEntityFramework();
+            #endregion
+
         }
 
         #region 注入autofac
 
-        /// <summary>
+        /// <summary>w
         /// 添加autofa服务 （注意：3.0写法 ）
         /// </summary>
         /// <param name="builder"></param>
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            //新模块组件注册    
+            //新模块组件注册
             builder.RegisterModule(new AutoFacModule());
-            builder.RegisterGeneric(typeof(BaseEntityRepository<,>)).As(typeof(IBaseEntityRepository<,>)).InstancePerLifetimeScope();
-            builder.RegisterGeneric(typeof(BaseService<,>)).As(typeof(IBaseService<,>)).InstancePerLifetimeScope();
         }
 
         #endregion

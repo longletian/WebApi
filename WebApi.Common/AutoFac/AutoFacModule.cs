@@ -55,13 +55,14 @@ namespace WebApi.Common.AutoFac
             cacheType.Add(typeof(LogAop));
 
             // AOP 开关，如果想要打开指定的功能，只需要在 appsettigns.json 对应对应 true 就行。
-            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Api"))
-                .AsImplementedInterfaces()
-                .InstancePerDependency()
-                //引用Autofac.Extras.DynamicProxy;
-                .EnableClassInterceptors()
-                //允许将拦截器服务的列表分配给注册。
-                .InterceptedBy(cacheType.ToArray());
+            //builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services"))
+            //    .Where(a => a.Name.EndsWith("Service"))
+            //    .AsImplementedInterfaces()
+            //    .InstancePerDependency()
+            //    //引用Autofac.Extras.DynamicProxy;
+            //    .EnableClassInterceptors()
+            //    //允许将拦截器服务的列表分配给注册。
+            //    .InterceptedBy(cacheType.ToArray());
         }
 
         /// <summary>

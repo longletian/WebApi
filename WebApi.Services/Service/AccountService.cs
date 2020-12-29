@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FreeSql;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using WebApi.Common.BaseHelper.EncryptHelper;
 using WebApi.Models;
@@ -9,31 +8,34 @@ using WebApi.Services.IService;
 
 namespace WebApi.Services.Service
 {
-    public class AccountService : BaseService<AccountModel, long>, IAccountService
+    public class AccountService : BaseService<AccountModel>, IAccountService
     {
-        private readonly IUserRepository userRepository;
+
         private readonly IFreeSql freeSql;
-        private readonly IBaseEntityRepository<AccountModel, long> baseEntityRepository;
         private readonly IMapper mapper;
+        private readonly IUserRepository userRepository;
+        private readonly IAccountRepository accountRepository;
+
         public AccountService(
             IFreeSql freeSql,
             IUserRepository userRepository,
-            IBaseEntityRepository<AccountModel, long> baseEntityRepository,
-            IMapper mapper)
+            IAccountRepository accountRepository,
+        IMapper mapper)
         {
             this.freeSql = freeSql;
             this.mapper = mapper;
             this.userRepository = userRepository;
-            this.baseEntityRepository = baseEntityRepository;
+            this.accountRepository = accountRepository;
+           
         }
 
         public ResponseData AccountLogin(AccountLoginDto accountLoginDto)
         {
             ResponseData responseData = null;
-            AccountModel accountModel = baseEntityRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName);
+            AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName);
             if (accountModel != null)
             {
-                accountModel = baseEntityRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
+                accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
                 if (accountModel != null)
                 {
                     responseData = new ResponseData { MsgCode = 200, Message = "登录成功" };
@@ -46,7 +48,7 @@ namespace WebApi.Services.Service
         public ResponseData AccountrRegirst(AccountRegirstDto accountRegirstDto)
         {
             //注册用户
-            AccountModel accountModel = baseEntityRepository.FindEntity(c => c.AccountName == accountRegirstDto.AccountName);
+            AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == accountRegirstDto.AccountName);
             if (accountModel != null)
             {
                 return new ResponseData { MsgCode = 400, Message = "账号已注册" };
@@ -59,9 +61,9 @@ namespace WebApi.Services.Service
                 accountModel.AccountPasswdEncrypt = Md5Helper.MD5Encrypt64(accountRegirstDto.AccountPasswd);
                 using (var uow = freeSql.CreateUnitOfWork())
                 {
-                    try 
-                    { 
-                        baseEntityRepository.Insert(accountModel);
+                    try
+                    {
+                        accountRepository.Insert(accountModel);
                         userRepository.Insert(identityUser);
                         uow.Commit();
                         return new ResponseData { MsgCode = 200, Message = "账号注册成功" };
@@ -73,6 +75,7 @@ namespace WebApi.Services.Service
                         return new ResponseData { MsgCode = 400, Message = "账号注册失败" };
                     }
                 }
+                return new ResponseData { MsgCode = 400, Message = "账号注册失败" };
             }
         }
 

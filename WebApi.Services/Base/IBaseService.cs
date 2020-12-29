@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApi.Services
 {
-    public interface IBaseService<TEntity,TKey> where TEntity : class, new()
+    public interface IBaseService<TEntity> where TEntity : class, new()
     {
         #region 对象实体 添加、修改、删除
 

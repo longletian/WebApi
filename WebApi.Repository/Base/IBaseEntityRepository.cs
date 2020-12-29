@@ -8,11 +8,20 @@ using System.Threading.Tasks;
 namespace WebApi.Repository
 {
 
+    /// <summary>
+    /// 继承freesql自封装的IBaseRepository
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     public interface IBaseEntityRepository<TEntity> : IBaseRepository<TEntity, Guid> where TEntity : class
     {
 
     }
 
+    /// <summary>
+    /// 继承freesql自封装的IBaseRepository
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
     public interface IBaseEntityRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : class
     {
         #region 对象实体 添加、修改、删除

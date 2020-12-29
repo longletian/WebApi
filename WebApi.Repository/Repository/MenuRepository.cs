@@ -4,9 +4,9 @@ using WebApi.Models;
 
 namespace WebApi.Repository
 {
-    public class MenuRepository: BaseEntityRepository<MenuModel>,IMenuRepository
+    public class MenuRepository: BaseEntityRepository<MenuModel,long>,IMenuRepository
     {
-        public MenuRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager)
+        public MenuRepository(IFreeSql freeSql) : base(freeSql)
         {
 
         }

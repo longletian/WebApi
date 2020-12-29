@@ -29,7 +29,6 @@ namespace WebApi.Common.AOP
             invocation.ReturnValue = GetReturnValueAsync((dynamic)invocation.ReturnValue);
         }
 
-
         private async Task<BaseResponse<T>> GetParamsErrorValueAsync<T>(BaseResponse<T> result, string message)
         {
             await Task.CompletedTask;

@@ -15,9 +15,9 @@ namespace WebApi.Repository
     public class BaseEntityRepository<TEntity, TEntityKey> : BaseRepository<TEntity, TEntityKey>, IBaseEntityRepository<TEntity, TEntityKey> where TEntity : class
     {
         private readonly IFreeSql freeSql;
-        protected BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager?.Orm, null, null)
+        protected BaseEntityRepository(IFreeSql freeSql) : base(freeSql, null, null)
         {
-            this.freeSql = unitOfWorkManager?.Orm;
+            this.freeSql = freeSql;
         }
         public Task<int> DeleteAsync(TEntity entity)
         {
@@ -72,7 +72,7 @@ namespace WebApi.Repository
 
         public TEntity FindEntity(Expression<Func<TEntity, bool>> condition)
         {
-            return this.freeSql.Select<TEntity>().WhereDynamic(condition).ToOne();
+            return this.freeSql.Select<TEntity>().Where(condition).ToOne();
         }
 
         public TEntity FindEntity(string strSql, Dictionary<string, string> dbParameter = null)
@@ -134,7 +134,7 @@ namespace WebApi.Repository
     }
     public class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, Guid>, IBaseEntityRepository<TEntity> where TEntity :class
     {
-        public BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager)
+        public BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager?.Orm)
         {
             unitOfWorkManager.Binding(this);
         }

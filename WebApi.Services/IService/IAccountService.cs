@@ -4,7 +4,7 @@ using WebApi.Models;
 
 namespace WebApi.Services.IService
 {
-    public interface IAccountService:IBaseService<AccountModel,long>
+    public interface IAccountService:IBaseService<AccountModel>
     {
         /// <summary>
         /// 账号登录

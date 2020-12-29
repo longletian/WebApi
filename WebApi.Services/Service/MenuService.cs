@@ -10,15 +10,13 @@ using WebApi.Repository;
 
 namespace WebApi.Services.Service
 {
-    public class MenuService : BaseService<MenuModel,long>, IMenuService
+    public class MenuService : BaseService<MenuModel>, IMenuService
     {
         private readonly IMapper mapper;
         private readonly ILogger<MenuService> logger;
         private readonly IMenuRepository menuRepository;
-        private readonly IBaseEntityRepository<MenuModel,long> baseEntityRepository;
 
         public MenuService(
-            IBaseEntityRepository<MenuModel,long> baseEntityRepository,
             IMenuRepository menuRepository,
             ILogger<MenuService> logger,
             IMapper mapper
@@ -28,7 +26,6 @@ namespace WebApi.Services.Service
             this.menuRepository = menuRepository;
             this.logger = logger;
             this.mapper = mapper;
-
         }
 
         public ResponseData GetMenuList()

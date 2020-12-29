@@ -3,9 +3,9 @@ using FreeSql;
 using WebApi.Models;
 namespace WebApi.Repository.Repository
 {
-    public class AccountRepository : BaseEntityRepository<AccountModel>, IAccountRepository
+    public class AccountRepository : BaseEntityRepository<AccountModel,long>, IAccountRepository
     {
-        public AccountRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager)
+        public AccountRepository(IFreeSql freeSql) : base(freeSql)
         {
 
         }

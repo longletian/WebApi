@@ -8,11 +8,12 @@ using WebApi.Repository;
 namespace WebApi.Services
 {
 
-    public class BaseService<T, TKey> : IBaseService<T, TKey> where T : class, new()
+    public class BaseService<T> : IBaseService<T> where T : class, new()
     {
         //通过在子类的构造函数中注入，这里是基类，不用构造函数
-        public IBaseEntityRepository<T, TKey> baseRepository;
+        public IBaseEntityRepository<T, long> baseRepository;
 
+        #region 封装方法
         public Task<int> DeleteAsync(T entity)
         {
             return baseRepository.DeleteAsync(entity);
@@ -117,5 +118,8 @@ namespace WebApi.Services
         {
             return baseRepository.UpdateAsync(entities);
         }
+        #endregion
+
+
     }
 }
