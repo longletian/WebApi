@@ -4,7 +4,7 @@ using WebApi.Models;
 
 namespace WebApi.Repository
 {
-    public interface IMenuRepository: IBaseEntityRepository<MenuModel,Guid>
+    public interface IMenuRepository: IBaseEntityRepository<MenuModel>
     {
 
     }

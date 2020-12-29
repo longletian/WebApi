@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using WebApi.Common.AutoFac;
 using WebApi.Common;
 using Microsoft.AspNetCore.Http.Features;
+using WebApi.Repository;
+using WebApi.Services;
 
 namespace WebApi.Api
 {
@@ -86,6 +88,8 @@ namespace WebApi.Api
         {
             //新模块组件注册    
             builder.RegisterModule(new AutoFacModule());
+            builder.RegisterGeneric(typeof(BaseEntityRepository<,>)).As(typeof(IBaseEntityRepository<,>)).InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(BaseService<,>)).As(typeof(IBaseService<,>)).InstancePerLifetimeScope();
         }
 
         #endregion

@@ -16,7 +16,6 @@ using StackExchange.Profiling.Storage;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WebApi.Common.Authorizations.JwtConfig;
 using Microsoft.AspNetCore.Builder;
@@ -34,7 +33,6 @@ namespace WebApi.Api.ServiceExtensions
 {
     public static class ServiceCollectionExtenioncs
     {
-
         /// <summary>
         ///  注入freesql
         /// </summary>
@@ -130,6 +128,8 @@ namespace WebApi.Api.ServiceExtensions
         /// <param name="services"></param>
         public static void AddRedisService(this IServiceCollection services)
         {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
             // 普遍模式
             var csredis = new CSRedis.CSRedisClient(AppSetting.GetConnStrings("CsRedis").ToString());
             // 初始化redisHelper
@@ -139,6 +139,7 @@ namespace WebApi.Api.ServiceExtensions
             services.AddSingleton<IDistributedCache>(
                 new Microsoft.Extensions.Caching.Redis.CSRedisCache(RedisHelper.Instance));
 
+            //单例模式
             services.AddSingleton<ICsRedisRepository, CsRedisRepository>();
         }
 
