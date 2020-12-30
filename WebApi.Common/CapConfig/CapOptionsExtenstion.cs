@@ -11,6 +11,8 @@ namespace WebApi.Common
     {
         public static CapOptions GetCapOptions(this CapOptions @this, IConfiguration Configuration)
         {
+            //发布订阅 发布 消费 确认
+            //至少你要配置一个消息队列和一个事件存储
             IConfigurationSection defaultStorage = Configuration.GetSection("CAP:DefaultStorage");
             IConfigurationSection defaultMessageQueue = Configuration.GetSection("CAP:DefaultMessageQueue");
             if (Enum.TryParse(defaultStorage.Value, out CapStorageType capStorageType))
@@ -50,6 +52,7 @@ namespace WebApi.Common
 
                 switch (capMessageQueueType)
                 {
+
                     case CapMessageQueueType.InMemoryQueue:
                         @this.UseInMemoryStorage();
                         break;

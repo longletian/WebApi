@@ -81,7 +81,7 @@ namespace WebApi.Services.Service
                         return new ResponseData { MsgCode = 400, Message = "账号注册失败" };
                     }
                 }
-                return new ResponseData { MsgCode = 400, Message = "账号注册失败" };
+                //return new ResponseData { MsgCode = 400, Message = "账号注册失败" };
             }
         }
 
@@ -98,17 +98,32 @@ namespace WebApi.Services.Service
             return new ResponseData { MsgCode = 400, Message = "修改密码失败" };
         }
 
+
+        /// <summary>
+        /// 获取jwttoken
+        /// </summary>
+        /// <param name="accountLoginDto"></param>
+        /// <returns></returns>
         public ResponseData GetJwtToken(AccountLoginDto accountLoginDto)
         {
+
+            #region token相关问题
+            //token过期了怎么办?  登录信息已经过期，重新登录或者自动刷新token
+            //如何交换新的token   前端在过期前调用登陆接口刷新token。或者使用SignalR轮询，定期刷新token。
+            //如何强制token失效？ 我们有个ValidAudience（接收人），可以利用这个标准参数，登陆时候生成一个GUID，
+                                  //在数据库/Redis/xxx存一份，然后验证接口的时候再把这个值拿出来去一起校验。
+                                  //如果值变了校验就失败了，当然，重新登陆就会刷新这个值
+            #endregion
+
             JwtConfig jwtConfig = new JwtConfig();
+            //jwt绑定
             AppSetting.BindSection<JwtConfig>("Audience", jwtConfig);
             AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
             if (accountModel != null)
             {
                 var claims = new Claim[]{
-                  new Claim(ClaimTypes.Name,accountLoginDto.AccountName)
+                  new Claim(ClaimTypes.Name,accountLoginDto.AccountName),
                  };
-
                 var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.IssuerSigningKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                 var token = new JwtSecurityToken(jwtConfig.Issuer,
@@ -116,9 +131,8 @@ namespace WebApi.Services.Service
                     claims,
                     DateTime.Now,
                     DateTime.Now.AddSeconds(10), creds);
-
                 string SaveToken = new JwtSecurityTokenHandler().WriteToken(token);
-                return new ResponseData { MsgCode = 200, Message = "请求成功", Data = SaveToken };
+                return new ResponseData { MsgCode = 200, Message = "请求成功", Data = new { token = SaveToken } };
             }
             return  new ResponseData { MsgCode = 400, Message = "请求失败",Data="" };
         }

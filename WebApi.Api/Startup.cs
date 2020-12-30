@@ -1,21 +1,19 @@
 using Serilog;
 using Autofac;
 using AutoMapper;
+using WebApi.Common;
+using WebApi.Common.AutoFac;
 using WebApi.Common.AutoMapper;
+using WebApi.Api.ServiceExtensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using WebApi.Api.ConfigureExtensions;
-using WebApi.Api.ServiceExtensions;
 using WebApi.Api.MiddlewareExtensions;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using WebApi.Common.AutoFac;
-using WebApi.Common;
 using Microsoft.AspNetCore.Http.Features;
-using WebApi.Repository;
-using WebApi.Services;
 using WebApi.Common.Authorizations.JwtConfig;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebApi.Api
 {
@@ -65,11 +63,11 @@ namespace WebApi.Api
             
             services.AddResponseCompressionService();
 
+            services.AddJwtService();
+
             // services.AddEasyNetQService();
 
-            services.AddAuthenticationService();
-
-            //services.AddJwtService();
+            //services.AddAuthenticationService();
 
             #region 查看接口访问速度
 
@@ -95,35 +93,50 @@ namespace WebApi.Api
             builder.RegisterModule(new AutoFacModule());
             builder.RegisterModule(new DependencyModule());
         }
-
         #endregion
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseStaticFiles();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else {
+                app.UseExceptionHandler("/Error");
+                //app.UseHsts();
+            }
 
-            // app.UseMiniProfiler();
-            
-            //使用请求日志中间件
-            app.UseSerilogRequestLogging();
+            app.UseStaticFiles();
 
             app.UseRoutingConfigure();
 
-            app.UseResponseCaching();
+            app.UseCors();
+
+            //认证
+            app.UseAuthentication();
+
+            //授权
+            app.UseAuthorization();
+
+            // app.UseMiniProfiler();
+
+            //使用请求日志中间件
+            app.UseSerilogRequestLogging();
 
             app.UseResponseCompression();
 
-            app.UseSwaggUIConfigure();
+            app.UseResponseCaching();
 
-            app.UseCors();
+            app.UseSwaggUIConfigure();
 
             app.UseLogMiddleware();
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                //禁用整个应用程序的匿名访问
+                //.RequireAuthorization();
+            });
         }
     }
 }

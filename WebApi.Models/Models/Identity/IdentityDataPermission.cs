@@ -8,6 +8,11 @@ namespace WebApi.Models
     [Table(Name="case_file_permission")]
     public class IdentityDataPermission:Entity<long>
     {
+        public IdentityDataPermission()
+        { 
+        
+        }
+
         public IdentityDataPermission(long fileDataId, long permissionId)
         {
             this.FileDataId = fileDataId;

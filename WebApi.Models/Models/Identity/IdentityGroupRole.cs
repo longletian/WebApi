@@ -9,6 +9,12 @@ namespace WebApi.Models
    [Table(Name= "case_group_role")]
     public class IdentityGroupRole:Entity<long>
     {
+
+        public IdentityGroupRole()
+        { 
+        
+        }
+
         public IdentityGroupRole(long roleId, long groupId)
         {
             this.RoleId = roleId;

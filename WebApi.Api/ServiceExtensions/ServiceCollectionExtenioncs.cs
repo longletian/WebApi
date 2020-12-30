@@ -45,7 +45,7 @@ namespace WebApi.Api.ServiceExtensions
                   .UseGenerateCommandParameterWithLambda(true)
                   .UseConnectionString(configuration)
                   //定义名称格式
-                  .UseNameConvert(NameConvertType.ToLower)
+                  .UseNameConvert(NameConvertType.PascalCaseToUnderscoreWithLower)
                   .UseMonitorCommand(cmd =>
                   {
                       Log.Information(cmd.CommandText + ";");

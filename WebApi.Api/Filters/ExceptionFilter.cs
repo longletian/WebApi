@@ -1,7 +1,5 @@
-﻿using Castle.Core.Logging;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace WebApi.Api.Filters
 {
@@ -25,6 +23,7 @@ namespace WebApi.Api.Filters
         /// </summary>
         public void OnException(ExceptionContext context)
         {
+
         }
     }
 }

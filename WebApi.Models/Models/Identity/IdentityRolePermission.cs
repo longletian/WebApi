@@ -9,6 +9,11 @@ namespace WebApi.Models
     [Table(Name = "case_role_permission")]
     public class IdentityRolePermission : Entity<long>
     {
+        public IdentityRolePermission()
+        { 
+        
+        }
+
         public IdentityRolePermission(long permissionId, long roleId)
         {
             this.Role = roleId;

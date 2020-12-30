@@ -10,6 +10,11 @@ namespace WebApi.Models
     [Table(Name = "case_group_user")]
     public class IdentityGroupUser : Entity<long>
     {
+        public IdentityGroupUser()
+        { 
+        
+        }
+
         public IdentityGroupUser(long userId,long groupId)
         {
             this.UserId = userId;

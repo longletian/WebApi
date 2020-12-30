@@ -9,6 +9,11 @@ namespace WebApi.Models
     [Table(Name = "case_menu_permission")]
     public class IdentityMenuPermission : Entity<long>
     {
+        public IdentityMenuPermission()
+        { 
+        
+        }
+
         public IdentityMenuPermission(long menuId, long permissionId)
         {
             this.MenuId = menuId;

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,22 +14,23 @@ namespace WebApi.Api.Common.Middlewares
     /// <summary>
     /// 定义请求管道的中间件
     /// </summary>
-    public class LogMiddleware : IMiddleware
+    public class LogMiddleware
     {
-        private readonly ILogger<LogMiddleware> logger;
+        private RequestDelegate next;
         private readonly IWebHostEnvironment environment;
-
-        public LogMiddleware(ILogger<LogMiddleware> logger, IWebHostEnvironment environment)
+        public LogMiddleware(RequestDelegate next, IWebHostEnvironment environment)
         {
-            this.logger = logger;
+            this.next = next;
             this.environment = environment;
         }
 
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
+                Log.Information("开始触发中间件");
                 await next(context); //调用管道执行下一个中间件
+
             }
             catch (Exception ex)
             {
@@ -38,7 +40,7 @@ namespace WebApi.Api.Common.Middlewares
                 }
                 catch (Exception e)
                 {
-                    logger.LogError(e.Message, "处理异常再出异常");
+                    Log.Error(e.Message, "处理异常再出异常");
                 }
             }
         }
@@ -50,7 +52,7 @@ namespace WebApi.Api.Common.Middlewares
             if (ex != null)
             {
                 var messageEx = $"【异常信息】：{ex.Message}\r\n+{ex.StackTrace}\r\n";
-                logger.LogError(messageEx);
+                Log.Error(messageEx);
                 await JsonHandle(context, ex.Message, ErrorCode.UnknownError, 500);
             }
             else

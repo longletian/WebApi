@@ -34,17 +34,6 @@ namespace WebApi.Api.ConfigureExtensions
         public static void UseRoutingConfigure(this IApplicationBuilder app)
         {
             app.UseRouting();
-            //认证
-            app.UseAuthentication();
-            //授权
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                 //禁用整个应用程序的匿名访问
-                //.RequireAuthorization();
-            });
         }
 
         /// <summary>
@@ -68,39 +57,37 @@ namespace WebApi.Api.ConfigureExtensions
 
             var tusFiles = "";
             app.UseTus(context => 
-                new DefaultTusConfiguration {
-                    //文件存储路径
-                    Store=new TusDiskStore(""),
-                    UrlPath="/files",
-                    //元数据是否允许空值
-                    MetadataParsingStrategy = MetadataParsingStrategy.AllowEmptyValues,
-                    //文件过期后不再更新
-                    Expiration = new AbsoluteExpiration(TimeSpan.FromMinutes(5)),
-                    Events =new tusdotnet.Models.Configuration.Events
+            new DefaultTusConfiguration {
+                //文件存储路径
+                Store=new TusDiskStore(""),
+                UrlPath="/files",
+                //元数据是否允许空值
+                MetadataParsingStrategy = MetadataParsingStrategy.AllowEmptyValues,
+                //文件过期后不再更新
+                Expiration = new AbsoluteExpiration(TimeSpan.FromMinutes(5)),
+                Events =new tusdotnet.Models.Configuration.Events
+                {
+                    //上传完成事件回调
+                    OnFileCompleteAsync = async ctx =>
                     {
-                        //上传完成事件回调
-                        OnFileCompleteAsync = async ctx =>
-                        {
-                            //获取上传文件
-                            var file = await ctx.GetFileAsync();
+                        //获取上传文件
+                        var file = await ctx.GetFileAsync();
 
-                            //获取上传文件元数据
-                            var metadatas = await file.GetMetadataAsync(ctx.CancellationToken);
+                        //获取上传文件元数据
+                        var metadatas = await file.GetMetadataAsync(ctx.CancellationToken);
 
-                            //获取上述文件元数据中的目标文件名称
-                            var fileNameMetadata = metadatas["name"];
+                        //获取上述文件元数据中的目标文件名称
+                        var fileNameMetadata = metadatas["name"];
 
-                            //目标文件名以base64编码，所以这里需要解码
-                            var fileName = fileNameMetadata.GetString(Encoding.UTF8);
+                        //目标文件名以base64编码，所以这里需要解码
+                        var fileName = fileNameMetadata.GetString(Encoding.UTF8);
 
-                            var extensionName = Path.GetExtension(fileName);
+                        var extensionName = Path.GetExtension(fileName);
 
-                            //将上传文件转换为实际目标文件
-                            File.Move(Path.Combine(tusFiles, ctx.FileId), Path.Combine(tusFiles, $"{ctx.FileId}{extensionName}"));
-                        }
+                        //将上传文件转换为实际目标文件
+                        File.Move(Path.Combine(tusFiles, ctx.FileId), Path.Combine(tusFiles, $"{ctx.FileId}{extensionName}"));
                     }
-
-
+                }
             });        
         }
     }

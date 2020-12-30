@@ -11,7 +11,7 @@ namespace WebApi.Api.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IAccountService accountService;
-        public TokenController(IOptions<JwtConfig> _jwtConfig, IAccountService accountService)
+        public TokenController(IAccountService accountService)
         {
             this.accountService = accountService;
         }
@@ -30,8 +30,8 @@ namespace WebApi.Api.Controllers
         /// 获取accessToken
         /// </summary>
         /// <returns></returns>
-        [HttpPost, Route("token")]
-        public ResponseData GetAccessToken(AccountLoginDto accountLoginDto)
+        [HttpPost, Route("")]
+        public ResponseData GetAccessToken([FromBody] AccountLoginDto accountLoginDto)
         {
             return accountService.GetJwtToken(accountLoginDto);
         }

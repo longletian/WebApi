@@ -8,6 +8,11 @@ namespace WebApi.Models
   [Table(Name="case_operate_permission")]
     public class IdentityOperatePermission:Entity<long>
     {
+        public IdentityOperatePermission()
+        {
+
+        }
+
         public IdentityOperatePermission(long operateId, long permissionId)
         {
             this.OperateId = operateId;
