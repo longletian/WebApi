@@ -28,6 +28,7 @@ using FreeSql.Internal;
 using Serilog;
 using Microsoft.Extensions.Configuration;
 using WebApi.Common.Authorizations.AuthorizationHandler;
+using MediatR;
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -429,6 +430,15 @@ namespace WebApi.Api.ServiceExtensions
                 //则会自动发送 ping 消息，使连接保持打开状态。
                 options.KeepAliveInterval = TimeSpan.FromMinutes(1);
             });
+        }
+
+        /// <summary>
+        ///注入MediatR服务
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddMediatRService(this  IServiceCollection services)
+        {
+            services.AddMediatR(Assembly.GetExecutingAssembly());
         }
     }
 }
