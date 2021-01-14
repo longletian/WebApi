@@ -52,6 +52,10 @@ namespace WebApi.Api
             
             services.AddHttpClientService();
 
+            services.AddRabbitmqService();
+
+            services.AddLazyResolutionService();
+
             services.Configure<FormOptions>(options =>
             {
                 //超出设置范围会报InvalidDataException 异常信息
@@ -65,11 +69,14 @@ namespace WebApi.Api
 
             services.AddJwtService();
 
-            // services.AddEasyNetQService();
+            //services.AddEventStoreService();
 
-            //services.AddAuthenticationService();
 
             #region 查看接口访问速度
+
+            //services.AddEasyNetQService();
+
+            //services.AddAuthenticationService();
 
             // services.AddMiniProfilerService();
 

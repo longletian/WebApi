@@ -29,6 +29,7 @@ using Serilog;
 using Microsoft.Extensions.Configuration;
 using WebApi.Common.Authorizations.AuthorizationHandler;
 using MediatR;
+using RabbitMQ.Client;
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -439,6 +440,37 @@ namespace WebApi.Api.ServiceExtensions
         public static void AddMediatRService(this  IServiceCollection services)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
+        }
+
+        /// <summary>
+        /// 注入rabbitmq
+        /// </summary>
+        public static void AddRabbitmqService(this IServiceCollection services)
+        {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            RabbitmqOptions options = new RabbitmqOptions();
+            AppSetting.BindSection("RabbitMQ", options);
+            if (options != null&&options.Enabled) {
+                services.AddSingleton<IRabbitmqConnection, RabbitmqConnection>();
+            }
+        }
+
+        /// <summary>
+        /// 延迟加载，注入（避免循环注入）
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static void AddLazyResolutionService(this IServiceCollection services)
+        {
+            services.AddTransient(typeof(Lazy<>), typeof(LazilyResolved<>));
+        }
+
+        /// <summary>
+        /// 注入eventstore
+        /// </summary>
+        public static void AddEventStoreService()
+        { 
+        
         }
     }
 }

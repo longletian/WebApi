@@ -3,7 +3,6 @@ using Autofac;
 using System;
 using System.Linq;
 using System.Reflection;
-using WebApi.Common.Dependency;
 
 namespace WebApi.Common.AutoFac
 {

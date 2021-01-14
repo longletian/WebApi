@@ -19,6 +19,7 @@ namespace WebApi.Repository
         {
             this.freeSql = freeSql;
         }
+  
         public Task<int> DeleteAsync(TEntity entity)
         {
             //默认根据实体里面的id进行删除
@@ -80,7 +81,6 @@ namespace WebApi.Repository
             return this.freeSql.Select<TEntity>().WithSql(strSql, dbParameter).ToOne();
         }
 
-
         public IEnumerable<TEntity> FindList()
         {
             return this.freeSql.Select<TEntity>().ToList();
@@ -137,6 +137,7 @@ namespace WebApi.Repository
             return this.freeSql.Select<TEntity>().WithSql(sql).ToUpdate().ExecuteAffrowsAsync();
         }
     }
+
     public class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, Guid>, IBaseEntityRepository<TEntity> where TEntity :class
     {
         public BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager?.Orm)

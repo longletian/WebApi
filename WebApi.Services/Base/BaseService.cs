@@ -119,7 +119,5 @@ namespace WebApi.Services
             return baseRepository.UpdateAsync(entities);
         }
         #endregion
-
-
     }
 }

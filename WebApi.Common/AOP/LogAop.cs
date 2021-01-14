@@ -54,8 +54,7 @@ namespace WebApi.Common.AOP
         {
             if (ex != null)
             {
-                var messageEx = dataIntercept +
-             $"【异常信息】：{ex.Message}\r\n+{ex.StackTrace}\r\n";
+                var messageEx = dataIntercept + $"【异常信息】：{ex.Message}\r\n+{ex.StackTrace}\r\n";
                 logger.LogError(messageEx);
             }
         }

@@ -81,7 +81,6 @@ namespace WebApi.Services.Service
                         return new ResponseData { MsgCode = 400, Message = "账号注册失败" };
                     }
                 }
-                //return new ResponseData { MsgCode = 400, Message = "账号注册失败" };
             }
         }
 
