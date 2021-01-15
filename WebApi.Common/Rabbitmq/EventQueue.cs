@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace WebApi.Common
 {
     internal sealed class EventQueue

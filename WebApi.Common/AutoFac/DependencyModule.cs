@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace WebApi.Common.AutoFac
+namespace WebApi.Common
 {
     public  class DependencyModule : Autofac.Module 
     {

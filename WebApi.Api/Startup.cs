@@ -2,7 +2,6 @@ using Serilog;
 using Autofac;
 using AutoMapper;
 using WebApi.Common;
-using WebApi.Common.AutoFac;
 using WebApi.Common.AutoMapper;
 using WebApi.Api.ServiceExtensions;
 using Microsoft.AspNetCore.Builder;
@@ -54,8 +53,6 @@ namespace WebApi.Api
 
             services.AddRabbitmqService();
 
-            services.AddLazyResolutionService();
-
             services.Configure<FormOptions>(options =>
             {
                 //超出设置范围会报InvalidDataException 异常信息
@@ -69,8 +66,7 @@ namespace WebApi.Api
 
             services.AddJwtService();
 
-            //services.AddEventStoreService();
-
+            services.AddEventStoreService();
 
             #region 查看接口访问速度
 

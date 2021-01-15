@@ -12,7 +12,6 @@ namespace WebApi.Common
         private readonly IConnection connection;
         private readonly IModel channel;
         private object lockObjects = new object();
-
         public RabbitmqConnection(IOptions<RabbitmqOptions> options)
         {
             try

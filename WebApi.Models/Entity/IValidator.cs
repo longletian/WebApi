@@ -9,5 +9,6 @@ namespace WebApi.Models
     /// </summary>
     public interface IValidator
     {
+
     }
 }

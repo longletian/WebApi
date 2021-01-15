@@ -12,16 +12,19 @@ namespace WebApi.Common
         private readonly IConnection connection;
         private readonly IModel channel;
 
-        public RabbitmqEventBus(IConnection connection, IModel channel,IEventHandlerExecutionContext context, ILogger<RabbitmqEventBus> logger) : base(context)
+        public RabbitmqEventBus(IConnection connection, IModel channel, ILogger<RabbitmqEventBus> logger, IEventHandlerExecutionContext context) : base(context)
         {
             this.connection = connection;
             this.channel = channel;
             this.logger = logger;
         }
+
         public override Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
         }
+
+
 
         public override void Subscribe<TEvent, TEventHandler>()
         {

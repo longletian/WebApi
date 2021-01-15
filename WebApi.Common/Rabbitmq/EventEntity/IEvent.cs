@@ -7,5 +7,8 @@ namespace WebApi.Common
     // 事件模型
     public interface IEvent: INotification
     {
+        Guid Id { get; }
+
+        DateTime CreateDateTime { get; }
     }
 }

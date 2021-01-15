@@ -25,7 +25,7 @@ namespace WebApi.Common
         bool CanHandle(IEvent @event);
     }
 
-    public interface IEventHandler<T> : INotificationHandler<T>, IEventHandler where T : IEvent
+    public interface IEventHandler<in T> : INotificationHandler<T>, IEventHandler where T : IEvent
     {
 
     }

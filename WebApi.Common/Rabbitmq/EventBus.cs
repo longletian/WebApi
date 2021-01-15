@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,6 +22,7 @@ namespace WebApi.Common
             return Task.Factory.StartNew(() => eventQueue.Push(@event));
         }
 
+
         public override void Subscribe<TEvent, TEventHandler>()
         {
             if (!this.eventHandlerExecutionContext.HandlerRegistered<TEvent, TEventHandler>())
@@ -32,6 +32,7 @@ namespace WebApi.Common
         }
 
         private async void EventQueue_EventPushed(object sender, EventProcessedEventArgs e)
-           => await eventHandlerExecutionContext.HandleEventAsync(e.Event);
+            => await eventHandlerExecutionContext.HandleMessageAsync(e.Event);
+
     }
 }

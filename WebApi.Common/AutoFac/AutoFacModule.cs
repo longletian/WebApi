@@ -4,12 +4,10 @@ using Autofac.Extras.DynamicProxy;
 using WebApi.Common.AOP;
 using System;
 using System.Collections.Generic;
+using WebApi.Models;
 
-namespace WebApi.Common.AutoFac
+namespace WebApi.Common
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class AutoFacModule : Autofac.Module
     {
         /// <summary>
@@ -38,6 +36,10 @@ namespace WebApi.Common.AutoFac
             //      .InstancePerDependency()
             //      .EnableInterfaceInterceptors().InterceptedBy(typeof(ValidatorAop));
             #endregion
+
+
+            // 延迟加载，注入（避免循环注入）
+            builder.RegisterGeneric(typeof(Lazy<>)).As(typeof(LazilyResolved<>)).AsImplementedInterfaces().SingleInstance();
 
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository"))
                 .Where(a => a.Name.EndsWith("Repository"))

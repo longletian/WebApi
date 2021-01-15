@@ -1,5 +1,4 @@
-﻿
-namespace WebApi.Common
+﻿namespace WebApi.Common
 {
     /// <summary>
     /// 定义订阅接口

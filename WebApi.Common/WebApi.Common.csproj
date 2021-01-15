@@ -21,9 +21,8 @@
 		<PackageReference Include="EasyNetQ" Version="5.2.2" />
 		<PackageReference Include="EventStore.Client" Version="20.10.0" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.31.0" />
-		<PackageReference Include="MediatR" Version="9.0.0" />
-		<PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="7.0.0" />
-		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+		<PackageReference Include="MediatR" Version="8.1.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.8" />
 		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.1" />
@@ -43,6 +42,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\WebApi.Models\WebApi.Models.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="MediatR\" />
 	</ItemGroup>
 
 </Project>

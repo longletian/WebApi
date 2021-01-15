@@ -456,21 +456,13 @@ namespace WebApi.Api.ServiceExtensions
         }
 
         /// <summary>
-        /// 延迟加载，注入（避免循环注入）
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        public static void AddLazyResolutionService(this IServiceCollection services)
-        {
-            services.AddTransient(typeof(Lazy<>), typeof(LazilyResolved<>));
-        }
-
-        /// <summary>
         /// 注入eventstore
         /// </summary>
-        public static void AddEventStoreService()
-        { 
-        
+        public static void AddEventStoreService(this IServiceCollection services)
+        {
+            var options = new EventStoreOption();
+            AppSetting.BindSection("EventStoresOptions", options);
+            services.AddSingleton<IMongoStore, MongoStore>();
         }
     }
 }

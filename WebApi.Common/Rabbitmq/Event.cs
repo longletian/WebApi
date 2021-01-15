@@ -1,16 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace WebApi.Common
 {
     /// <summary>
     /// 定义事件模型
     /// </summary>
-    public abstract class Event : IEvent
+    public class Event : IEvent
     {
-        public virtual Guid Id { get; } = Guid.NewGuid();
+        public Event()
+        {
+            Id = Guid.NewGuid();
+            CreateDateTime = DateTime.UtcNow;
+        }
 
-        public virtual DateTime CreatedUtc { get; } = DateTime.UtcNow;
+
+        [JsonConstructor]
+        public Event(Guid id,DateTime createDateTime)
+        {
+            Id = id;
+            CreateDateTime = createDateTime;
+        }
+
+
+        [JsonProperty]
+        public Guid Id { get; }
+
+
+        [JsonProperty]
+        public DateTime CreateDateTime { get; }
     }
 }
