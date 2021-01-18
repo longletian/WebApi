@@ -1,22 +1,26 @@
-﻿using System;
+﻿using EventStore.ClientAPI;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace WebApi.Common
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IEventStore
+    public interface IEventStores
     {
+        /// <summary>
+        /// 返回连接对象
+        /// </summary>
+        /// <returns></returns>
+        IEventStoreConnection GetEventStoreConnection();
+
         /// <summary>
         ///  添加事件
         /// </summary>
         /// <param name="event"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task EventSave(IEvent @event, CancellationToken cancellationToken = default);
+        Task EventSave(Event @event, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 获取事件
@@ -25,6 +29,6 @@ namespace WebApi.Common
         /// <param name="version"></param>
         /// <param name="createdUtc"></param>
         /// <returns></returns>
-        Task<IEnumerable<StreamState>> GetEvents(Guid aggregateId, int? version = null, DateTime? createdUtc = null);
+        Task<List<ResolvedEvent>> GetEvents(Guid aggregateId);
     }
 }

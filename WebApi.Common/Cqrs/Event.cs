@@ -6,14 +6,13 @@ namespace WebApi.Common
     /// <summary>
     /// 定义事件模型
     /// </summary>
-    public class Event : IEvent
+    public abstract class Event: EventMessage,IEvent
     {
         public Event()
         {
             Id = Guid.NewGuid();
             CreateDateTime = DateTime.UtcNow;
         }
-
 
         [JsonConstructor]
         public Event(Guid id,DateTime createDateTime)

@@ -24,10 +24,11 @@ namespace WebApi.Common
         /// <param name="event"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public abstract Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent;
+        public abstract Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : Event;
+
 
         public abstract void Subscribe<TEvent, TEventHandler>()
-            where TEvent : IEvent
+            where TEvent : Event
             where TEventHandler : IEventHandler<TEvent>;
     }
 }

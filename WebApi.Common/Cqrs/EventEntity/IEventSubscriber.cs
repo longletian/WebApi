@@ -11,7 +11,7 @@
         /// <typeparam name="TEvent">事件模型</typeparam>
         /// <typeparam name="TEventHandler">事件处理</typeparam>
         void Subscribe<TEvent, TEventHandler>()
-            where TEvent : IEvent
+            where TEvent : Event
             where TEventHandler : IEventHandler<TEvent>;
 
     }

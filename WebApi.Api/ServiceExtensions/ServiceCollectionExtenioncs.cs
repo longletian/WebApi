@@ -362,6 +362,10 @@ namespace WebApi.Api.ServiceExtensions
             });
         }
 
+        /// <summary>
+        /// 注入IdServer4授权
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddAuthenticationService(this IServiceCollection services)
         {
             //将身份验证服务添加到DI和身份验证中间件到管道
@@ -460,9 +464,12 @@ namespace WebApi.Api.ServiceExtensions
         /// </summary>
         public static void AddEventStoreService(this IServiceCollection services)
         {
-            var options = new EventStoreOption();
-            AppSetting.BindSection("EventStoresOptions", options);
-            services.AddSingleton<IMongoStore, MongoStore>();
+            //var options = new EventStoreOption();
+            //AppSetting.BindSection("EventStoresOptions", options);
+            //services.AddSingleton<IMongoStore, MongoStore>();
+
+            services.AddSingleton<IEventStores, EventStores>();
+
         }
     }
 }

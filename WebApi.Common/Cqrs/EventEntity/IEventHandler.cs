@@ -15,17 +15,17 @@ namespace WebApi.Common
         /// <param name="event"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<bool> HandleAsync(IEvent @event, CancellationToken cancellationToken = default(CancellationToken));
+        Task<bool> HandleAsync(Event @event, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// 可否处理
         /// </summary>
         /// <param name="event"></param>
         /// <returns></returns>
-        bool CanHandle(IEvent @event);
+        bool CanHandle(Event @event);
     }
 
-    public interface IEventHandler<in T> : INotificationHandler<T>, IEventHandler where T : IEvent
+    public interface IEventHandler<in T> : INotificationHandler<T>, IEventHandler where T : Event
     {
 
     }

@@ -16,6 +16,6 @@ namespace WebApi.Common
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default(CancellationToken))
-            where TEvent : IEvent;
+            where TEvent : Event;
     }
 }
