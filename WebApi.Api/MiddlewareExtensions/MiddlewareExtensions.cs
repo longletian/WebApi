@@ -7,7 +7,7 @@ namespace WebApi.Api.MiddlewareExtensions
     /// <summary>
     /// 扩展中间件
     /// </summary>
-    public static  class MiddlewareExtensions
+    public static class MiddlewareExtensions
     {
 
         /// <summary>

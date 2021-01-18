@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebApi.Common.AutoFac;
-using WebApi.Models;
+using Serilog;
+using WebApi.Common;
 
 namespace WebApi.Test.Data
 {
@@ -34,7 +34,7 @@ namespace WebApi.Test.Data
                     }
                     catch (Exception ex)
                     {
-
+                        Log.Error(ex.Message);
                     }
                 }
             });

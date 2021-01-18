@@ -127,7 +127,7 @@ namespace WebApi.Api
             app.UseSerilogRequestLogging();
 
             app.UseResponseCompression();
-
+             
             app.UseResponseCaching();
 
             app.UseSwaggUIConfigure();

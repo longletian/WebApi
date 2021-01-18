@@ -2,9 +2,14 @@
 using System;
 using System.IO;
 using EasyNetQ;
+using MediatR;
+using Serilog;
 using System.Linq;
 using System.Text;
+using WebApi.Tools;
 using WebApi.Models;
+using WebApi.Common;
+using FreeSql.Internal;
 using System.Reflection;
 using WebApi.Tools.Redis;
 using System.Threading.Tasks;
@@ -23,13 +28,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using FluentValidation.AspNetCore;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Common;
-using FreeSql.Internal;
-using Serilog;
 using Microsoft.Extensions.Configuration;
 using WebApi.Common.Authorizations.AuthorizationHandler;
-using MediatR;
-using RabbitMQ.Client;
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -467,9 +467,16 @@ namespace WebApi.Api.ServiceExtensions
             //var options = new EventStoreOption();
             //AppSetting.BindSection("EventStoresOptions", options);
             //services.AddSingleton<IMongoStore, MongoStore>();
-
             services.AddSingleton<IEventStores, EventStores>();
+        }
 
+        /// <summary>
+        /// 注入mongodb
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddMongodbService(this IServiceCollection services)
+        {
+            services.AddSingleton(typeof(IMongoRepository<>), typeof(MongoRepository<>));
         }
     }
 }
