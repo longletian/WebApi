@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http.Features;
 using WebApi.Common.Authorizations.JwtConfig;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace WebApi.Api
 {
@@ -33,9 +34,9 @@ namespace WebApi.Api
         {
             services.AddSingleton(new AppSetting(Configuration, Env));
 
-            services.AddFreeSqlService(Configuration);
+            services.AddCommonService();
 
-            services.AddOptions<JwtConfig>(Configuration.GetSection("Audience").ToString());
+            services.AddFreeSqlService(Configuration);
 
             services.AddSwaggUIService();
 
@@ -53,15 +54,6 @@ namespace WebApi.Api
 
             services.AddRabbitmqService();
 
-            services.Configure<FormOptions>(options =>
-            {
-                //超出设置范围会报InvalidDataException 异常信息
-                //主要是限制缓冲形式中的文件的长度
-                options.MultipartBodyLengthLimit = long.MaxValue;
-            });
-
-            services.AddResponseCachingService();
-            
             services.AddResponseCompressionService();
 
             services.AddJwtService();
@@ -136,6 +128,8 @@ namespace WebApi.Api
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<GreeterService>();
+
                 endpoints.MapControllers();
                 //禁用整个应用程序的匿名访问
                 //.RequireAuthorization();

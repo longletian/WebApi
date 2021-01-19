@@ -1,4 +1,6 @@
-﻿using IdentityModel.Client;
+﻿using Grpc.Net.Client;
+using GrpcService;
+using IdentityModel.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,8 +13,13 @@ namespace WebApi
     {
         static async Task Main(string[] args)
         {
+             TestGrpc();
+            //await TestToken();
+            Console.ReadKey();
+        }
 
-            // discover endpoints from metadata
+        public static async Task TestToken()
+        {
             var client = new HttpClient();
 
             var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001");
@@ -55,7 +62,18 @@ namespace WebApi
                 var content = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(JArray.Parse(content));
             }
-            Console.ReadKey();
+        }
+
+        public static void TestGrpc()
+        {
+            var channel = GrpcChannel.ForAddress("https://localhost:6001");
+            var client = new Greeter.GreeterClient(channel);
+
+            var response = client.SayHello(
+                new HelloRequest { Name = "World" });
+
+            Console.WriteLine(response.Message);
+
         }
     }
 }

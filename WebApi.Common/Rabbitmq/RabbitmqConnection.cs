@@ -12,17 +12,19 @@ namespace WebApi.Common
         private readonly IConnection connection;
         private readonly IModel channel;
         private object lockObjects = new object();
+        private RabbitmqOptions option;
         public RabbitmqConnection(IOptions<RabbitmqOptions> options)
         {
             try
             {
+                this.option = options.Value;
                 var factory = new ConnectionFactory()
                 {
-                    HostName = options.Value.HostName,
-                    UserName = options.Value.UserName,
-                    Password = options.Value.Password,
-                    Port = options.Value.Port,
-                    VirtualHost=options.Value.VirtualHost,
+                    HostName = option.HostName,
+                    UserName = option.UserName,
+                    Password = option.Password,
+                    Port = option.Port,
+                    VirtualHost= option.VirtualHost,
                 };
                 this.connection = factory.CreateConnection();
                 this.channel = connection.CreateModel();

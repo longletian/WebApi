@@ -19,8 +19,7 @@ namespace WebApi.Services.Service
         public MenuService(
             IMenuRepository menuRepository,
             ILogger<MenuService> logger,
-            IMapper mapper
-            )
+            IMapper mapper)
         {
             this.mapper = mapper;
             this.menuRepository = menuRepository;

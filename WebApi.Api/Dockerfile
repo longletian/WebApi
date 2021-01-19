@@ -9,9 +9,9 @@ WORKDIR /src
 COPY ["WebApi.Api/WebApi.Api.csproj", "WebApi.Api/"]
 COPY ["WebApi.Services/WebApi.Services.csproj", "WebApi.Services/"]
 COPY ["WebApi.Tools/WebApi.Tools.csproj", "WebApi.Tools/"]
-COPY ["WebApi.Models/WebApi.Models.csproj", "WebApi.Models/"]
 COPY ["WebApi.Repository/WebApi.Repository.csproj", "WebApi.Repository/"]
 COPY ["WebApi.Common/WebApi.Common.csproj", "WebApi.Common/"]
+COPY ["WebApi.Models/WebApi.Models.csproj", "WebApi.Models/"]
 RUN dotnet restore "WebApi.Api/WebApi.Api.csproj"
 COPY . .
 WORKDIR "/src/WebApi.Api"

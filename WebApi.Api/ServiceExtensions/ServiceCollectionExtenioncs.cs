@@ -30,6 +30,8 @@ using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebApi.Common.Authorizations.AuthorizationHandler;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace WebApi.Api.ServiceExtensions
 {
@@ -223,15 +225,6 @@ namespace WebApi.Api.ServiceExtensions
             });
             // 注入IHttpClientFactory _httpClientFactory
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-        }
-
-        /// <summary>
-        /// 注入responserCache
-        /// </summary>
-        /// <param name="services"></param>
-        public static void AddResponseCachingService(this IServiceCollection services)
-        {
-            services.AddResponseCaching();
         }
 
         /// <summary>
@@ -452,6 +445,7 @@ namespace WebApi.Api.ServiceExtensions
         public static void AddRabbitmqService(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
+            services.Configure<RabbitmqOptions>(AppSetting.GetSection("RabbitMQ"));
             RabbitmqOptions options = new RabbitmqOptions();
             AppSetting.BindSection("RabbitMQ", options);
             if (options != null&&options.Enabled) {
@@ -477,6 +471,30 @@ namespace WebApi.Api.ServiceExtensions
         public static void AddMongodbService(this IServiceCollection services)
         {
             services.AddSingleton(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+        }
+
+
+        public  static  void  AddCommonService(this  IServiceCollection services)
+        {
+            services.AddOptions<JwtConfig>(AppSetting.GetSection("Audience").ToString());
+
+            // 配置kestrel
+            services.Configure<KestrelServerOptions>(AppSetting.GetSection("Kestrel"));
+
+            // 延迟加载，注入（避免循环注入）
+            services.AddTransient(typeof(Lazy<>),typeof(LazilyResolved<>));
+
+            services.AddGrpc();
+
+            services.Configure<FormOptions>(options =>
+            {
+                //超出设置范围会报InvalidDataException 异常信息
+                //主要是限制缓冲形式中的文件的长度
+                options.MultipartBodyLengthLimit = long.MaxValue;
+            });
+
+            //注入responserCache
+            services.AddResponseCaching();
         }
     }
 }

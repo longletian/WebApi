@@ -38,8 +38,6 @@ namespace WebApi.Common
             #endregion
 
 
-            // 延迟加载，注入（避免循环注入）
-            builder.RegisterGeneric(typeof(Lazy<>)).As(typeof(LazilyResolved<>)).AsImplementedInterfaces().SingleInstance();
 
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository"))
                 .Where(a => a.Name.EndsWith("Repository"))

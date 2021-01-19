@@ -16,7 +16,6 @@ namespace WebApi.Services.Service
 {
     public class AccountService : BaseService<AccountModel>, IAccountService
     {
-
         private readonly IFreeSql freeSql;
         private readonly IMapper mapper;
         private readonly IUserRepository userRepository;
@@ -26,7 +25,7 @@ namespace WebApi.Services.Service
             IFreeSql freeSql,
             IUserRepository userRepository,
             IAccountRepository accountRepository,
-        IMapper mapper)
+            IMapper mapper)
         {
             this.freeSql = freeSql;
             this.mapper = mapper;
