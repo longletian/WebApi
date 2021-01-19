@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using WebApi.Api.Common.Middlewares;
 
-namespace WebApi.Api.MiddlewareExtensions
+namespace WebApi.Api
 {
 
     /// <summary>

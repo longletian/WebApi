@@ -33,7 +33,7 @@ using WebApi.Common.Authorizations.AuthorizationHandler;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Http.Features;
 
-namespace WebApi.Api.ServiceExtensions
+namespace WebApi.Api
 {
     public static class ServiceCollectionExtenioncs
     {

@@ -9,7 +9,7 @@ using tusdotnet.Models.Expiration;
 using tusdotnet.Stores;
 using WebApi.Tools.SignalR;
 
-namespace WebApi.Api.ConfigureExtensions
+namespace WebApi.Api
 {
     public static class ConfigureExtensions
     {
