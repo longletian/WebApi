@@ -36,9 +36,9 @@ namespace WebApi.Common
        /// <param name="this"></param>
        /// <param name="configuration"></param>
        /// <returns></returns>
-        public static FreeSqlBuilder UseConnectionString(this FreeSqlBuilder @this, IConfiguration configuration)
+        public static FreeSqlBuilder UseConnectionString(this FreeSqlBuilder @this)
         {
-            IConfigurationSection dbTypeCode = configuration.GetSection("ConnectionStrings:DefaultDB");
+            IConfigurationSection dbTypeCode = AppSetting.GetSection("ConnectionStrings:DefaultDB");
             if (Enum.TryParse(dbTypeCode.Value, out DataType dataType))
             {
                 if (!Enum.IsDefined(typeof(DataType), dataType))
@@ -46,11 +46,11 @@ namespace WebApi.Common
                     Log.Error($"数据库配置ConnectionStrings:DefaultDB:{dataType}无效");
                 }
 
-                IConfigurationSection configurationSection = configuration.GetSection($"ConnectionStrings:{dataType}");
+                IConfigurationSection configurationSection = AppSetting.GetSection($"ConnectionStrings:{dataType}");
                 @this.UseConnectionString(dataType, configurationSection.Value);
-                if (configuration.GetSection("ConnectionStrings:BoolOpenSalve").Value == "true")
+                if (AppSetting.GetSection("ConnectionStrings:BoolOpenSalve").Value == "true")
                 {
-                    string dbStr = configuration.GetSection("ConnectionStrings:SalveDB").Value;
+                    string dbStr = AppSetting.GetSection("ConnectionStrings:SalveDB").Value;
                     if (!string.IsNullOrEmpty(dbStr))
                     {
                         if (dbStr.IndexOf(',') > 0)
@@ -59,17 +59,16 @@ namespace WebApi.Common
                             List<string> lists = new List<string>();
                             for (int i = 0; i < arrayStr.Length; i++)
                             {
-                                lists.Add(configuration.GetSection($"ConnectionStrings:{arrayStr[i]}").Value);
+                                lists.Add(AppSetting.GetSection($"ConnectionStrings:{arrayStr[i]}").Value);
                             }
                             @this.UseSlave(lists.ToArray());
                         }
                         else
                         {
-                            @this.UseSlave(configuration[$"ConnectionStrings:{dbStr}"]);
+                            @this.UseSlave(AppSetting.GetSection($"ConnectionStrings:{dbStr}").ToString());
                         }
                     }
                 }
-
             }
             else
             {

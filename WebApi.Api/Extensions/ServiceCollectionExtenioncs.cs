@@ -32,6 +32,7 @@ using Microsoft.Extensions.Configuration;
 using WebApi.Common.Authorizations.AuthorizationHandler;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Http.Features;
+using System.Net.Http;
 
 namespace WebApi.Api
 {
@@ -47,7 +48,7 @@ namespace WebApi.Api
             IFreeSql freeSql = new FreeSqlBuilder()
                   //防止sql注入，开启lambda参数化功能 
                   .UseGenerateCommandParameterWithLambda(true)
-                  .UseConnectionString(configuration)
+                  .UseConnectionString()
                   //定义名称格式
                   .UseNameConvert(NameConvertType.PascalCaseToUnderscoreWithLower)
                   .UseMonitorCommand(cmd =>
@@ -168,8 +169,6 @@ namespace WebApi.Api
                         Url = new Uri("https://twitter.com/spboyer"),
                     }
                 });
-
-                // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
@@ -486,6 +485,21 @@ namespace WebApi.Api
 
             services.AddGrpc();
 
+            //注册 gRPC 客户端
+            services.AddGrpcClient<GreeterService>(o =>
+            {
+                o.Address = new Uri("https://localhost:5001");
+            }).ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var handler = new HttpClientHandler();
+                //handler.ClientCertificates.Add();
+                return handler;
+            });
+            // 添加客户端在进行 gRPC 调用时将使用的 Interceptor 实例。
+            //.AddInterceptor()
+            //配置 gRPC 客户端的基础通道
+            //.ConfigureChannel();
+            
             services.Configure<FormOptions>(options =>
             {
                 //超出设置范围会报InvalidDataException 异常信息

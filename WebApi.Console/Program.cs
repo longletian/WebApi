@@ -1,4 +1,5 @@
-﻿using Grpc.Net.Client;
+﻿using Grpc.Core;
+using Grpc.Net.Client;
 using GrpcService;
 using IdentityModel.Client;
 using Newtonsoft.Json;
@@ -70,10 +71,21 @@ namespace WebApi
             var client = new Greeter.GreeterClient(channel);
 
             var response = client.SayHello(
-                new HelloRequest { Name = "World" });
-
+                 new HelloRequest { Name = "World" });
             Console.WriteLine(response.Message);
+        }
 
+
+        public static async void TestFromServer()
+        {
+            var channel = GrpcChannel.ForAddress("https://localhost:6001");
+            var client = new Greeter.GreeterClient(channel);
+            using var response = client.StreamingFromServer(new HelloRequest { Name = "World" });
+            await foreach (var responses in response.ResponseStream.ReadAllAsync())
+            {
+                Console.WriteLine("Greeting: " + responses.Message);
+                // "Greeting: Hello World" is written multiple times
+            }
         }
     }
 }

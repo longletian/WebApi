@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Http.Features;
-using WebApi.Common.Authorizations.JwtConfig;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace WebApi.Api
 {
@@ -123,11 +120,16 @@ namespace WebApi.Api
 
             app.UseLogMiddleware();
 
+            app.UseGrpcWeb();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                // 配置跨域
+                endpoints.MapGrpcService<GreeterService>()
+                .EnableGrpcWeb()
+                .RequireCors("AllowAll");
 
-                endpoints.MapControllers();
+            endpoints.MapControllers();
                 //禁用整个应用程序的匿名访问
                 //.RequireAuthorization();
             });
