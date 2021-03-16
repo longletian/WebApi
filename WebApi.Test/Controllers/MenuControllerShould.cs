@@ -16,6 +16,7 @@ namespace WebApi.Test.Controllers
             _factory = factory;
         }
 
+
         [Fact]
         public async Task MenuListTest()
         {

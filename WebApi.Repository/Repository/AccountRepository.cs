@@ -10,6 +10,7 @@ namespace WebApi.Repository.Repository
     {
         public AccountRepository(IFreeSql freeSql) : base(freeSql)
         {
+
         }
 
         public Task ChangePasswordAsync(string userName, string newpassword)

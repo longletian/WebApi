@@ -5,8 +5,8 @@ namespace WebApi.Models
     /// <summary>
     /// 功能权限关联表
     /// </summary>
-  [Table(Name="case_operate_permission")]
-    public class IdentityOperatePermission:Entity<long>
+    [Table(Name = "case_operate_permission")]
+    public class IdentityOperatePermission : Entity<long>
     {
         public IdentityOperatePermission()
         {

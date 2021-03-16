@@ -36,7 +36,7 @@ namespace WebApi.Models
         public string Brower { get; set; }
 
         /// <summary>
-        /// 登录时间
+        /// 最近登录时间
         /// </summary>
         public DateTime LoginTime { get; set; }
 

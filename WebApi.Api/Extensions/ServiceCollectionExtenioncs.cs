@@ -33,62 +33,15 @@ using WebApi.Common.Authorizations.AuthorizationHandler;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Http.Features;
 using System.Net.Http;
+using System.Configuration;
+using WebApi.Tools.Mongodb;
+using Microsoft.Extensions.Options;
 
 namespace WebApi.Api
 {
     public static class ServiceCollectionExtenioncs
     {
-        /// <summary>
-        ///  注入freesql
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="configuration"></param>
-        public static void AddFreeSqlService(this IServiceCollection services, IConfiguration configuration)
-        {
-            IFreeSql freeSql = new FreeSqlBuilder()
-                  //防止sql注入，开启lambda参数化功能 
-                  .UseGenerateCommandParameterWithLambda(true)
-                  .UseConnectionString()
-                  //定义名称格式
-                  .UseNameConvert(NameConvertType.PascalCaseToUnderscoreWithLower)
-                  .UseMonitorCommand(cmd =>
-                  {
-                      Log.Information(cmd.CommandText + ";");
-                  })
-                  .UseAutoSyncStructure(true) //自动同步实体结构到数据库
-                  .Build(); //请务必定义成 Singleton 单例模式
-
-            //增删改查触发
-            freeSql.Aop.CurdAfter += (s, e) => {
-
-            };
-
-            services.AddSingleton(freeSql);
-            services.AddFreeRepository();
-            services.AddScoped<UnitOfWorkManager>();
-            //全局过滤全部为false(是否删除)
-            freeSql.GlobalFilter.Apply<IDeleteAduitEntity>("IsDeleted", a => a.IsDeleted == false);
-            try
-            {
-                using var objPool = freeSql.Ado.MasterPool.Get();
-            }
-            catch (Exception e)
-            {
-                Log.Error(e + e.StackTrace + e.Message + e.InnerException);
-                return;
-            }
-            //在运行时直接生成表结构
-            try
-            {
-                freeSql.CodeFirst
-                    .SeedData()
-                    .SyncStructure(ReflexHelper.GetTypesByTableAttribute());
-            }
-            catch (Exception e)
-            {
-                Log.Logger.Error(e + e.StackTrace + e.Message + e.InnerException);
-            }
-        }
+       
 
         /// <summary>
         /// 添加控制器数据验证
@@ -185,6 +138,7 @@ namespace WebApi.Api
         {
             if (services == null)
             {
+
             }
 
             services.AddMiniProfiler(options =>
@@ -469,10 +423,17 @@ namespace WebApi.Api
         /// <param name="services"></param>
         public static void AddMongodbService(this IServiceCollection services)
         {
+
+            services.Configure<MongoStoreDatabaseSettings>(AppSetting.GetSection("MongoDbSettings"));
+            services.AddSingleton<IMongoStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<MongoStoreDatabaseSettings>>().Value);
             services.AddSingleton(typeof(IMongoRepository<>), typeof(MongoRepository<>));
         }
 
-
+        /// <summary>
+        /// 公共服务
+        /// </summary>
+        /// <param name="services"></param>
         public  static  void  AddCommonService(this  IServiceCollection services)
         {
             services.AddOptions<JwtConfig>(AppSetting.GetSection("Audience").ToString());
@@ -509,6 +470,67 @@ namespace WebApi.Api
 
             //注入responserCache
             services.AddResponseCaching();
+        }
+
+        /// <summary>
+        /// 添加内存缓存 
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddCacheService(this IServiceCollection services)
+        {
+            // 分布式内存缓存，将项存储在内存中
+            //services.AddDistributedMemoryCache();
+        }
+        /// <summary>
+        ///  注入freesql
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        public static void AddFreeSqlService(this IServiceCollection services, IConfiguration configuration)
+        {
+            IFreeSql freeSql = new FreeSqlBuilder()
+               //防止sql注入，开启lambda参数化功能 
+               .UseGenerateCommandParameterWithLambda(true)
+               .UseConnectionString()
+               //定义名称格式
+               .UseNameConvert(NameConvertType.PascalCaseToUnderscoreWithLower)
+               .UseMonitorCommand(cmd =>
+               {
+                   Log.Information(cmd.CommandText + ";");
+               })
+               .UseAutoSyncStructure(true) //自动同步实体结构到数据库
+               .Build(); //请务必定义成 Singleton 单例模式
+
+            //增删改查触发
+            freeSql.Aop.CurdAfter += (s, e) => {
+
+            };
+
+            services.AddSingleton(freeSql);
+            services.AddFreeRepository();
+            services.AddScoped<UnitOfWorkManager>();
+            //全局过滤全部为false(是否删除)
+            freeSql.GlobalFilter.Apply<IDeleteAduitEntity>("IsDeleted", a => a.IsDeleted == false);
+            try
+            {
+                using var objPool = freeSql.Ado.MasterPool.Get();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e + e.StackTrace + e.Message + e.InnerException);
+                return;
+            }
+            //在运行时直接生成表结构
+            try
+            {
+                freeSql.CodeFirst
+                    .SeedData()
+                    .SyncStructure(ReflexHelper.GetTypesByTableAttribute());
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e + e.StackTrace + e.Message + e.InnerException);
+            }
         }
     }
 }

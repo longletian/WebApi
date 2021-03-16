@@ -7,6 +7,9 @@ using System.Net.Http;
 
 namespace WebApi.Common
 {
+    /// <summary>
+    /// rabbitmq初始化类
+    /// </summary>
     public class RabbitmqConnection : IRabbitmqConnection
     {
         private readonly IConnection connection;
@@ -18,6 +21,7 @@ namespace WebApi.Common
             try
             {
                 this.option = options.Value;
+                // 创建连接工厂
                 var factory = new ConnectionFactory()
                 {
                     HostName = option.HostName,
@@ -26,12 +30,16 @@ namespace WebApi.Common
                     Port = option.Port,
                     VirtualHost= option.VirtualHost,
                 };
+                // 创建连接
                 this.connection = factory.CreateConnection();
+
+                // 创建通道
                 this.channel = connection.CreateModel();
             }
             catch (Exception ex)
             {
                 Log.Error("rabbitmq连接异常", ex.Message);
+                this.Dispose();
             }
            
         }
@@ -59,6 +67,8 @@ namespace WebApi.Common
             {
                 this.connection.Close();
                 this.connection.Dispose();
+                this.channel.Close();
+                this.channel.Dispose();
             }
             catch (Exception)
             {
@@ -85,7 +95,6 @@ namespace WebApi.Common
                           Log.Warning(ex, "RabbitMQ Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
                       }
                     );
-
                 policy.Execute(() =>
                 {
 

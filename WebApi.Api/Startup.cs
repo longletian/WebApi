@@ -38,7 +38,9 @@ namespace WebApi.Api
             
             services.AddAutoMapper(typeof(AutoMapperHelper));
 
-            services.AddCapEvent(Configuration);
+            //services.AddCapEvent(Configuration);
+
+            services.AddMongodbService();
 
             services.AddRedisService();
 
@@ -67,7 +69,6 @@ namespace WebApi.Api
             //     options.RouteBasePath = "/profile";
             // }).AddEntityFramework();
             #endregion
-
         }
 
         #region ×¢Èëautofac

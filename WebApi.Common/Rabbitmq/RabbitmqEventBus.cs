@@ -24,8 +24,6 @@ namespace WebApi.Common
             throw new System.NotImplementedException();
         }
 
-
-
         public override void Subscribe<TEvent, TEventHandler>()
         {
             throw new System.NotImplementedException();

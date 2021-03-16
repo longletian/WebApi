@@ -34,13 +34,18 @@
 	</ItemGroup>	
 	
   <ItemGroup>
+    <Content Update="appsettings_log.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="appsettings.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
+  </ItemGroup>	
+	
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_3log_1json__JsonSchema="https://json.schemastore.org/appsettings" /></VisualStudio></ProjectExtensions>
 
 
 </Project>

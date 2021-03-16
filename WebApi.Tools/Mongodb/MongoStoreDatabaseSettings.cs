@@ -1,7 +1,9 @@
 ﻿
+using WebApi.Tools.Mongodb;
+
 namespace WebApi.Tools
 {
-    public class MongoOptions
+    public class MongoStoreDatabaseSettings: IMongoStoreDatabaseSettings
     {
         public string CollectionName { get; set; }
 

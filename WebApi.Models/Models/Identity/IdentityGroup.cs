@@ -28,12 +28,6 @@ namespace WebApi.Models
         public string ParentGroupCode { get; set; }
 
         /// <summary>
-        /// 用户组父名称
-        /// </summary>
-        [Column(StringLength = 60)]
-        public string ParentGroupName { get; set; }
-
-        /// <summary>
         /// 用户组排序
         /// </summary>
         public long GroupSort { get; set; }

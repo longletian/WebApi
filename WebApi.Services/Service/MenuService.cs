@@ -33,6 +33,7 @@ namespace WebApi.Services.Service
             //先获取所有的组查询应该更加仔细，权限应该和导航分开
             string sql = @"
 SELECT  MenuName,MenuPath,MenuCode,ParentMenuCode,MenuUrl,MenuRemark FROM case_menu";
+            
             //using (IDbConnection connection = unitworkRepository.GetDbConnection())
             //{
             //    //dapper查询

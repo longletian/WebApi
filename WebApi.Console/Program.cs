@@ -12,7 +12,7 @@ namespace WebApi
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
              TestGrpc();
             //await TestToken();

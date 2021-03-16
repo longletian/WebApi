@@ -1,7 +1,4 @@
-﻿
-
-using WebApi.Common.Authorizations.JwtConfig;
-using WebApi.Models;
+﻿using WebApi.Models;
 
 namespace WebApi.Services.IService
 {
