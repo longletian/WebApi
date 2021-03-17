@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WebApi.Models;
-using WebApi.Repository.Base;
-using WebApi.Repository.Base.Unitwork;
-using WebApi.Repository.IRepository;
+﻿using WebApi.Models;
 
-namespace WebApi.Repository.Repository
+namespace WebApi.Repository
 {
-  public  class UserRepository:BaseRepository<IdentityUser>,IUserRepository
+    public class UserRepository : BaseEntityRepository<IdentityUser, long>, IUserRepository
     {
-        public UserRepository(IUnitworkRepository _unitOfWork, DataDbContext dataDbContext) : base(_unitOfWork, dataDbContext)
-        { 
+        public UserRepository(IFreeSql freeSql) : base(freeSql)
+        {
 
         }
     }

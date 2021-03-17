@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
-using Renci.SshNet.Security.Cryptography;
 using RestSharp;
 
 namespace WebApi.Common.BaseHelper.DingTalkHelper

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebApi.Common.HttpClient
+namespace WebApi.Common
 {
     public interface IHttpClientRequest
     {

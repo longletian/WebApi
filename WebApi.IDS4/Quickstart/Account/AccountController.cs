@@ -234,9 +234,6 @@ namespace IdentityServerHost.Quickstart.UI
         }
 
 
-        /*****************************************/
-        /* helper APIs for the AccountController */
-        /*****************************************/
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
@@ -244,7 +241,6 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 var local = context.IdP == IdentityServer4.IdentityServerConstants.LocalIdentityProvider;
 
-                // this is meant to short circuit the UI and only trigger the one external IdP
                 var vm = new LoginViewModel
                 {
                     EnableLocalLogin = local,

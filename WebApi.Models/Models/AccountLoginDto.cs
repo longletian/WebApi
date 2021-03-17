@@ -1,7 +1,5 @@
 ﻿
 using FluentValidation;
-using WebApi.Models.Data;
-
 namespace WebApi.Models
 {
     public class AccountLoginDto

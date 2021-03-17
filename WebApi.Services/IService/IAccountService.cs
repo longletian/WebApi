@@ -1,10 +1,8 @@
-﻿
-
-using WebApi.Models;
+﻿using WebApi.Models;
 
 namespace WebApi.Services.IService
 {
-    public interface IAccountService
+    public interface IAccountService:IBaseService<AccountModel>
     {
         /// <summary>
         /// 账号登录
@@ -24,5 +22,12 @@ namespace WebApi.Services.IService
         /// </summary>
         /// <returns></returns>
         ResponseData ChangePassWord(AccountChangePassDto accountChangePassDto);
+
+
+        /// <summary>
+        /// 获取accesstoken
+        /// </summary>
+        /// <returns></returns>
+        ResponseData GetJwtToken(AccountLoginDto accountLoginDto);
     }
 }

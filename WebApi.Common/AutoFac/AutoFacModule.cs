@@ -2,13 +2,12 @@
 using System.Reflection;
 using Autofac.Extras.DynamicProxy;
 using WebApi.Common.AOP;
+using System;
+using System.Collections.Generic;
+using WebApi.Models;
 
-
-namespace WebApi.Common.AutoFac
+namespace WebApi.Common
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class AutoFacModule : Autofac.Module
     {
         /// <summary>
@@ -27,9 +26,7 @@ namespace WebApi.Common.AutoFac
             //4：泛型注入
             //builder.RegisterGeneric(typeof(NHibernateRepository<>)) .As(typeof(IRepository<>)).InstancePerLifetimeScope();
             //5：程序集注入
-            #endregion
-            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services")).Where(a => a.Name.EndsWith("Service")).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository")).Where(a => a.Name.EndsWith("Repository")).AsImplementedInterfaces();
+
             //注册拦截器
             //builder.RegisterType<ValidatorAop>();
             //对目标类型启动动态代理，并注入自定义拦截器拦截
@@ -38,7 +35,29 @@ namespace WebApi.Common.AutoFac
             //        .AsImplementedInterfaces()
             //      .InstancePerDependency()
             //      .EnableInterfaceInterceptors().InterceptedBy(typeof(ValidatorAop));
+            #endregion
 
+
+
+            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository"))
+                .Where(a => a.Name.EndsWith("Repository"))
+                .AsImplementedInterfaces()
+                .InstancePerDependency();
+
+
+            var cacheType = new List<Type>();
+                builder.RegisterType<LogAop>();
+                cacheType.Add(typeof(LogAop));
+
+            // AOP 开关，如果想要打开指定的功能，只需要在 appsettigns.json 对应对应 true 就行。
+            builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services"))
+                .Where(a => a.Name.EndsWith("Service"))
+                .AsImplementedInterfaces()
+                .InstancePerDependency()
+                //引用Autofac.Extras.DynamicProxy;
+                .EnableClassInterceptors()
+                //允许将拦截器服务的列表分配给注册。
+                .InterceptedBy(cacheType.ToArray());
         }
 
         /// <summary>

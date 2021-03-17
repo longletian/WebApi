@@ -1,28 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using FreeSql.DataAnnotations;
 
 namespace WebApi.Models
 {
-    /// <summary>
-    /// 权限表
-    /// </summary>
-   [Table("case_permission")]
-    public class IdentityPermission : Entity
-    {
-        //public IdentityPermission()
-        //{
-        //    IdentityRolePermissionList = new List<IdentityRolePermission>();
-        //}
-
-        [Required]
+    [Table(Name = "case_permission")]
+    public class IdentityPermission:Entity<long>
+    { 
         /// <summary>
         /// 权限code
         /// </summary>
         public string PermissionCode { get; set; }
-        [Required]
         /// <summary>
         /// 权限名称
         /// </summary>
@@ -35,13 +21,40 @@ namespace WebApi.Models
         /// 权限备注
         /// </summary>
         public string PermissionRemark { get; set; }
-
         /// <summary>
         /// 权限排序
         /// </summary>
-        public long SortNum { get; set; }
+        public int SortNum { get; set; }
+
+        ///// <summary>
+        ///// 一个角色对应权限
+        ///// </summary>
+        //[Navigate(ManyToMany = typeof(IdentityRolePermission))]
+        //public virtual ICollection<IdentityRole> IdentityPermissions { get; set; }
+
+        ////[Navigate("PermissionId")]
+        //public virtual ICollection<IdentityRolePermission> IdentityRolePermissions { get; set; }
 
 
-        //public ICollection<IdentityRolePermission> IdentityRolePermissionList { get; set; }
+        //[Navigate(ManyToMany = typeof(IdentityMenuPermission))]
+        //public virtual ICollection<MenuModel>  MenuModels { get; set; }
+
+        ////[Navigate("PermissionId")]
+        //public virtual ICollection<IdentityMenuPermission> IdentityMenuPermissions { get; set; }
+
+
+        //[Navigate(ManyToMany = typeof(IdentityDataPermission))]
+        //public virtual ICollection<FileDataModel>  FileDataModels { get; set; }
+
+        ////[Navigate("PermissionId")]
+        //public virtual ICollection<IdentityDataPermission>   IdentityDataPermissions { get; set; }
+
+
+        //[Navigate(ManyToMany = typeof(IdentityOperatePermission))]
+        //public virtual ICollection<OperateModel>  OperateModels { get; set; }
+
+        ////[Navigate("PermissionId")]
+        //public virtual ICollection<IdentityOperatePermission>  IdentityOperatePermissions { get; set; }
+
     }
 }

@@ -7,7 +7,7 @@ namespace WebApi.Common.Authorizations.JwtConfig
     public class JwtConfig
     {
         /// <summary>
-        /// 
+        /// 签发人
         /// </summary>
         public string Issuer { get; set; }
 

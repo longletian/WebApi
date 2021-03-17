@@ -28,7 +28,7 @@ namespace WebApi.Api.Controllers
             return NotFound();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet,Route("identity")]
         public IActionResult Get()
         {
