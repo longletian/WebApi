@@ -19,47 +19,55 @@ namespace WebApi.Services.Service
     {
         private readonly IFreeSql freeSql;
         private readonly IMapper mapper;
+        private readonly IMenuService menuService;
         private JwtConfig jwtConfig;
         private readonly IUserRepository userRepository;
         private readonly IAccountRepository accountRepository;
+        private readonly IBaseEntityRepository<LoginAccount>  loginRepository;
 
         public AccountService(
             IFreeSql freeSql,
+            IMapper mapper,
+            IMenuService menuService,
             IUserRepository userRepository,
             IAccountRepository accountRepository,
-            IMapper mapper,
+            IBaseEntityRepository<LoginAccount> loginRepository,
             IOptions<JwtConfig> jwtConfig)
         {
-            this.freeSql = freeSql;
             this.mapper = mapper;
+            this.freeSql = freeSql;
             this.jwtConfig = jwtConfig.Value;
             this.userRepository = userRepository;
+            this.loginRepository = loginRepository;
             this.accountRepository = accountRepository;
         }
 
         public ResponseData AccountLogin(AccountLoginDto accountLoginDto)
         {
-            ResponseData responseData = null;
-            string AccessToken = "";
+            string accessToken = "";
             AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName);
             if (accountModel != null)
             {
                 accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
                 if (accountModel != null)
                 {
-                    var claims = new[] {
-                        new Claim(ClaimTypes.Name,accountLoginDto.AccountName )
+                    accessToken = GetJwtAccessToken(accountLoginDto);
+                    LoginAccount loginAccount = new LoginAccount()
+                    {
+                        AccountName = accountModel.AccountName,
+                        RefreshToken = accessToken,
                     };
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.IssuerSigningKey));
-                    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                    var token = new JwtSecurityToken(
-                        issuer: jwtConfig.Issuer,
-                        audience: jwtConfig.Audience,
-                        claims: claims,
-                        expires: DateTime.Now.AddMinutes(2),
-                        signingCredentials: creds);
-                    AccessToken = new JwtSecurityTokenHandler().WriteToken(token);
-                    responseData = new ResponseData { MsgCode = 200, Message = "登录成功", Data = new { token = AccessToken } };
+                    loginRepository.Insert(loginAccount);
+                    UserModelDto userModelDto = new UserModelDto()
+                    {
+                        AccountName = accountModel.AccountName,
+                        AccessToken = accessToken,
+                        Id = accountModel.Id,
+                        MenuViewDtos = this.menuService.GetMenuList()
+                    };
+
+
+                    return new ResponseData { MsgCode = 200, Message = "登录成功", Data = new { token = accessToken } };
                 }
                 return new ResponseData { MsgCode = 400, Message = "账号密码不正确" };
             }
@@ -112,7 +120,6 @@ namespace WebApi.Services.Service
             return new ResponseData { MsgCode = 400, Message = "修改密码失败" };
         }
 
-
         /// <summary>
         /// 获取jwttoken
         /// </summary>
@@ -120,7 +127,6 @@ namespace WebApi.Services.Service
         /// <returns></returns>
         public ResponseData GetJwtToken(AccountLoginDto accountLoginDto)
         {
-
             #region token相关问题
             //token过期了怎么办?  登录信息已经过期，重新登录或者自动刷新token
             //如何交换新的token   前端在过期前调用登陆接口刷新token。或者使用SignalR轮询，定期刷新token。
@@ -145,6 +151,23 @@ namespace WebApi.Services.Service
                 return new ResponseData { MsgCode = 200, Message = "请求成功", Data = new { token = SaveToken } };
             }
             return new ResponseData { MsgCode = 400, Message = "请求失败", Data = "" };
+        }
+
+
+        private string GetJwtAccessToken(AccountLoginDto accountLoginDto)
+        {
+            var claims = new[] {
+                        new Claim(ClaimTypes.Name,accountLoginDto.AccountName )
+                    };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.IssuerSigningKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                issuer: jwtConfig.Issuer,
+                audience: jwtConfig.Audience,
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(2),
+                signingCredentials: creds);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

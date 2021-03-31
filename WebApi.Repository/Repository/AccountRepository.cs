@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WebApi.Models;
 namespace WebApi.Repository.Repository
 {
-    public class AccountRepository : BaseEntityRepository<AccountModel,long>, IAccountRepository
+    public class AccountRepository : BaseEntityRepository<AccountModel>, IAccountRepository
     {
         public AccountRepository(IFreeSql freeSql) : base(freeSql)
         {

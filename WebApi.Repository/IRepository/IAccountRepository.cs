@@ -3,7 +3,7 @@ using WebApi.Models;
 
 namespace WebApi.Repository
 {
-    public interface IAccountRepository : IBaseEntityRepository<AccountModel, long>
+    public interface IAccountRepository : IBaseEntityRepository<AccountModel>
     {
         /// <summary>
         /// 验证用户密码是否正确

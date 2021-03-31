@@ -30,7 +30,6 @@ namespace WebApi.Api.Common.Middlewares
             {
                 Log.Information("开始触发中间件");
                 await next(context); //调用管道执行下一个中间件
-
             }
             catch (Exception ex)
             {
@@ -60,7 +59,6 @@ namespace WebApi.Api.Common.Middlewares
                 //判断是不是开发环境
                 if (environment.IsDevelopment())
                 {
-
                 }
                 else
                 {

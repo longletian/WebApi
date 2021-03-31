@@ -16,6 +16,10 @@ namespace WebApi.Models
         /// <summary>
         /// 权限父用户组id
         /// </summary>
+        //public string ParentPermissionId { get; set; }
+        /// <summary>
+        /// 权限父用户组Code
+        /// </summary>
         public string ParentPermissionCode { get; set; }
         /// <summary>
         /// 权限备注

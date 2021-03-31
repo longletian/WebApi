@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WebApi.Repository
@@ -12,14 +13,16 @@ namespace WebApi.Repository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityKey"></typeparam>
-    public class BaseEntityRepository<TEntity, TEntityKey> : BaseRepository<TEntity, TEntityKey>, IBaseEntityRepository<TEntity, TEntityKey> where TEntity : class
+    public class BaseEntityRepository<TEntity> : BaseRepository<TEntity,Guid>, IBaseEntityRepository<TEntity> where TEntity : class
     {
+        #region MyRegion
         private readonly IFreeSql freeSql;
+
         protected BaseEntityRepository(IFreeSql freeSql) : base(freeSql, null, null)
         {
             this.freeSql = freeSql;
         }
-  
+
         public Task<int> DeleteAsync(TEntity entity)
         {
             //默认根据实体里面的id进行删除
@@ -136,13 +139,45 @@ namespace WebApi.Repository
         {
             return this.freeSql.Select<TEntity>().WithSql(sql).ToUpdate().ExecuteAffrowsAsync();
         }
+        #endregion
+
     }
 
-    public class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, Guid>, IBaseEntityRepository<TEntity> where TEntity :class
+    public class BaseEntityRepository<TEntity, TKey> : BaseEntityRepository<TEntity>, IBaseEntityRepository<TEntity, TKey> where TEntity : class
     {
         public BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager?.Orm)
         {
             unitOfWorkManager.Binding(this);
+        }
+
+        public int Delete(TKey id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TEntity Find(TKey id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TEntity Get(TKey id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }

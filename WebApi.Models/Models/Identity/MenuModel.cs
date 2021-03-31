@@ -19,6 +19,11 @@ namespace WebApi.Models
         /// </summary>
         public string MenuName { get; set; }
         /// <summary>
+        /// 父菜单id
+        /// </summary>
+        //public string ParentMenuId { get; set; }
+
+        /// <summary>
         /// 父菜单编码
         /// </summary>
         public string ParentMenuCode { get; set; }

@@ -16,7 +16,7 @@ namespace WebApi.Models
 
         public IdentityRolePermission(long permissionId, long roleId)
         {
-            this.Role = roleId;
+            this.RoleId = roleId;
             this.PermissionId = permissionId;
         }
 
@@ -26,7 +26,7 @@ namespace WebApi.Models
         //[Navigate("PermissionId")]
         //public IdentityPermission IdentityPermission { get; set; }
 
-        public long Role { get; set; }
+        public long RoleId { get; set; }
 
         //[Navigate("RoleId")]
         //public IdentityRole IdentityRole { get; set; }

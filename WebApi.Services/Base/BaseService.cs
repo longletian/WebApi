@@ -11,7 +11,7 @@ namespace WebApi.Services
     public class BaseService<T> : IBaseService<T> where T : class, new()
     {
         //通过在子类的构造函数中注入，这里是基类，不用构造函数
-        public IBaseEntityRepository<T, long> baseRepository;
+        public IBaseEntityRepository<T> baseRepository;
 
         #region 封装方法
         public Task<int> DeleteAsync(T entity)

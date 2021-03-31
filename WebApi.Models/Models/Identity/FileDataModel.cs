@@ -4,7 +4,7 @@ using WebApi.Models;
 namespace WebApi.Model
 {
     /// <summary>
-    /// 数据权限
+    /// 数据权限(文件操作方面的)
     /// </summary>
     [Table(Name = "case_filedata")]
     public class FileDataModel : FullEntity

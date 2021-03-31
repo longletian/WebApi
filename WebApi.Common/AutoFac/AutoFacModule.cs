@@ -37,8 +37,6 @@ namespace WebApi.Common
             //      .EnableInterfaceInterceptors().InterceptedBy(typeof(ValidatorAop));
             #endregion
 
-
-
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository"))
                 .Where(a => a.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces()

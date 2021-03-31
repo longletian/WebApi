@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Caching.CSRedis" Version="3.6.5" />
     <PackageReference Include="CSRedisCore" Version="3.6.5" />
+    <PackageReference Include="FreeRedis" Version="0.3.0" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.31.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.8" />
     <PackageReference Include="MongoDB.Driver" Version="2.11.5" />
@@ -16,6 +17,10 @@
 
   <ItemGroup>
     <Folder Include="Grpc\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebApi.Common\WebApi.Common.csproj" />
   </ItemGroup>
 
 </Project>

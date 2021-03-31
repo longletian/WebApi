@@ -6,9 +6,24 @@ namespace WebApi.Models
     public class IdentityRole:FullEntity
     {
         /// <summary>
+        /// 角色code
+        /// </summary>
+        //public string RoleCode { get; set; }
+
+        /// <summary>
         /// 角色名称
         /// </summary>
         public string RoleName { get; set; }
+
+        /// <summary>
+        /// 角色父组id
+        /// </summary>
+        //public string ParentRoleId { get; set; }
+
+        /// <summary>
+        /// 角色父组Code
+        /// </summary>
+        //public string ParentRoleCode { get; set; }
 
         /// <summary>
         /// 角色备注

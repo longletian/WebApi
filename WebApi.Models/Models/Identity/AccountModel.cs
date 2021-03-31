@@ -32,18 +32,8 @@ namespace WebApi.Models
         public string AccountIp { get; set; }
 
         /// <summary>
-        /// 激活状态
-        /// </summary>
-        public UserActive Active { get; set; } = UserActive.Active;
-
-        /// <summary>
         /// 账号状态
         /// </summary>
-        public long AccountState { get; set; }
-
-        public bool IsActive()
-        {
-            return Active == UserActive.Active;
-        }
+        public int AccountState { get; set; }
     }
 }

@@ -21,6 +21,8 @@ namespace WebApi.Models
         /// </summary>
         [Column(StringLength =20)]
         public string GroupCode { get; set; }
+
+        //public string ParentGroupId { get; set; }
         /// <summary>
         /// 用户组父code
         /// </summary>

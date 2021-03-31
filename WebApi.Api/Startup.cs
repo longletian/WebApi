@@ -30,7 +30,7 @@ namespace WebApi.Api
 
             services.AddCommonService();
 
-            services.AddFreeSqlService(Configuration);
+            services.AddFreeSqlService();
 
             services.AddSwaggUIService();
 

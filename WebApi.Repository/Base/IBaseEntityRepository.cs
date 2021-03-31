@@ -14,16 +14,6 @@ namespace WebApi.Repository
     /// <typeparam name="TEntity"></typeparam>
     public interface IBaseEntityRepository<TEntity> : IBaseRepository<TEntity, Guid> where TEntity : class
     {
-
-    }
-
-    /// <summary>
-    /// 继承freesql自封装的IBaseRepository
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    public interface IBaseEntityRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : class
-    {
         #region 对象实体 添加、修改、删除
 
         Task<int> InsertAsync(TEntity entity);
@@ -260,6 +250,14 @@ namespace WebApi.Repository
         /// <returns></returns>
         //object FindObject(string strSql, object dbParameter);
         #endregion
+    }
 
+    /// <summary>
+    /// 继承freesql自封装的IBaseRepository
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    public interface IBaseEntityRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : class
+    {
     }
 }

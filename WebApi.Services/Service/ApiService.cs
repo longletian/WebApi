@@ -8,16 +8,13 @@ namespace WebApi.Services.Service
 {
     public class ApiService :BaseService<ApiModel>, IApiService
     {
-        private readonly IFreeSql freeSql;
         private readonly IMapper mapper;
-        private readonly IBaseEntityRepository<ApiModel,long> baseApiRepository;
+        private readonly IBaseEntityRepository<ApiModel> baseApiRepository;
 
         public ApiService(
-            IFreeSql freeSql,
             IMapper mapper,
-            IBaseEntityRepository<ApiModel, long> baseApiRepository)
+            IBaseEntityRepository<ApiModel> baseApiRepository)
         {
-            this.freeSql = freeSql;
             this.mapper = mapper;
             base.baseRepository = baseApiRepository;
             this.baseApiRepository = baseApiRepository;
@@ -35,8 +32,8 @@ namespace WebApi.Services.Service
 
         public ResponseData GetApiList()
         {
-            throw new System.NotImplementedException();
-        }
+            var result = this.baseApiRepository.Orm.Select<ApiModel>().Page(1, 10).ToList();
+            return new ResponseData { MsgCode = 200, Message = "请求成功", Data = new { dataNum = result.Count, dataList = result }         }
 
         public ResponseData UploadApiService()
         {

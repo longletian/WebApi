@@ -2,7 +2,7 @@
 
 namespace WebApi.Repository
 {
-    public interface IMenuRepository: IBaseEntityRepository<MenuModel,long>
+    public interface IMenuRepository: IBaseEntityRepository<MenuModel>
     {
 
     }

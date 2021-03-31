@@ -41,8 +41,6 @@ namespace WebApi.Api
 {
     public static class ServiceCollectionExtenioncs
     {
-       
-
         /// <summary>
         /// 添加控制器数据验证
         /// </summary>
@@ -88,17 +86,20 @@ namespace WebApi.Api
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            // 普遍模式
-            var csredis = new CSRedis.CSRedisClient(AppSetting.GetConnStrings("CsRedis").ToString());
-            // 初始化redisHelper
-            RedisHelper.Initialization(csredis);
+            //// 普遍模式
+            //var csredis = new CSRedis.CSRedisClient(AppSetting.GetConnStrings("CsRedis").ToString());
+            //// 初始化redisHelper
+            //RedisHelper.Initialization(csredis);
 
-            // 注入Mvc分布式缓存CsRedisCache
-            services.AddSingleton<IDistributedCache>(
-                new Microsoft.Extensions.Caching.Redis.CSRedisCache(RedisHelper.Instance));
+            //// 注入Mvc分布式缓存CsRedisCache
+            //services.AddSingleton<IDistributedCache>(
+            //    new Microsoft.Extensions.Caching.Redis.CSRedisCache(RedisHelper.Instance));
 
-            //单例模式
-            services.AddSingleton<ICsRedisRepository, CsRedisRepository>();
+            ////单例模式
+            //services.AddSingleton<ICsRedisRepository, CsRedisRepository>();
+
+            //freeredis注册服务
+            services.AddSingleton<ICacheBase, CacheBase>();
         }
 
         /// <summary>
@@ -486,7 +487,7 @@ namespace WebApi.Api
         /// </summary>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
-        public static void AddFreeSqlService(this IServiceCollection services, IConfiguration configuration)
+        public static void AddFreeSqlService(this IServiceCollection services)
         {
             IFreeSql freeSql = new FreeSqlBuilder()
                //防止sql注入，开启lambda参数化功能 

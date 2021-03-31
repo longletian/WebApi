@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using WebApi.Models;
-
 using WebApi.Services.IService;
 using WebApi.Repository;
 
@@ -14,52 +13,56 @@ namespace WebApi.Services.Service
     {
         private readonly IMapper mapper;
         private readonly ILogger<MenuService> logger;
-        private readonly IMenuRepository menuRepository;
-
+        private readonly IBaseEntityRepository<MenuModel> menuRepository;
         public MenuService(
-            IMenuRepository menuRepository,
+            IMapper mapper,
             ILogger<MenuService> logger,
-            IMapper mapper)
+            IBaseEntityRepository<MenuModel> menuRepository)
         {
             this.mapper = mapper;
-            this.menuRepository = menuRepository;
             this.logger = logger;
-            this.mapper = mapper;
+            this.menuRepository = menuRepository;
+            base.baseRepository = menuRepository;
         }
 
+        public ResponseData EditMenuInfo()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ResponseData GetMenuInfoById(int Id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// 获取全部的导航信息
+        /// </summary>
+        /// <returns></returns>
         public ResponseData GetMenuList()
         {
-            ResponseData responseData = null;
             //先获取所有的组查询应该更加仔细，权限应该和导航分开
-            string sql = @"
-SELECT  MenuName,MenuPath,MenuCode,ParentMenuCode,MenuUrl,MenuRemark FROM case_menu";
-            
-            //using (IDbConnection connection = unitworkRepository.GetDbConnection())
-            //{
-            //    //dapper查询
-            //    List<MenuDto> menu = connection.Query<MenuDto>(sql).ToList();
-            //    //泛型映射
-            //    List<MenuViewDto> menuViews = mapper.Map<List<MenuDto>, List<MenuViewDto>>(menu);
-            //    var result = this.CreateTree(menuViews);
-            //    responseData = new ResponseData {MsgCode = 200, Message = "成功", Data = result};
-            //}
-            return responseData;
+            List<MenuModel> menu = menuRepository.FindList().ToList();
+            List<MenuViewDto> menuViews = mapper.Map<List<MenuModel>, List<MenuViewDto>>(menu);
+            var result = this.CreateTree(menuViews);
+            return new ResponseData { MsgCode = 200, Message = "成功", Data = result };
         }
 
         private List<MenuViewDto> CreateTree(List<MenuViewDto> menuViews)
         {
             // 获取根节点
-            List<MenuViewDto> menus = menuViews?.Where(p => p.ParentMenuCode is null).ToList();
-            // if (menus.Count > 0)
-            // {
-            //遍历根节点
-            menus?.ForEach(t =>
+            List<MenuViewDto> menus = menuViews?.Where(p => string.IsNullOrEmpty(p.ParentMenuCode)).ToList();
+            if (menus?.Count > 0)
             {
-                logger.LogInformation("对象", t);
-                //设置根节点的子节点列表
-                t.menuList = this.GetChildTree(t, menuViews);
-            });
-            // }
+                //遍历根节点
+                menus.ForEach(t =>
+                {
+                    logger.LogInformation("对象", t);
+                    //设置根节点的子节点列表
+                    t.menuList = this.GetChildTree(t, menuViews);
+                });
+            }
             return menus;
         }
 
@@ -85,7 +88,6 @@ SELECT  MenuName,MenuPath,MenuCode,ParentMenuCode,MenuUrl,MenuRemark FROM case_m
                     }
                 }
             }
-
             return menus;
         }
     }

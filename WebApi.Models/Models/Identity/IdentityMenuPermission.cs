@@ -4,7 +4,7 @@ namespace WebApi.Models
 {
 
     /// <summary>
-    /// 菜单权限关联表
+    /// 菜单权限关联表(菜单操作方面)
     /// </summary>
     [Table(Name = "case_menu_permission")]
     public class IdentityMenuPermission : Entity<long>
