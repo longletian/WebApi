@@ -9,7 +9,7 @@ namespace WebApi.Tools
 {
     public class CacheBase:ICacheBase
     {
-        private static RedisClient redisClient;
+        private static readonly RedisClient redisClient;
         static CacheBase()
         {
             redisClient = new Lazy<RedisClient>(() =>

@@ -40,6 +40,7 @@ namespace WebApi.Services.Service
             this.userRepository = userRepository;
             this.loginRepository = loginRepository;
             this.accountRepository = accountRepository;
+            this.menuService = menuService;
         }
 
         public ResponseData AccountLogin(AccountLoginDto accountLoginDto)
@@ -63,10 +64,8 @@ namespace WebApi.Services.Service
                         AccountName = accountModel.AccountName,
                         AccessToken = accessToken,
                         Id = accountModel.Id,
-                        MenuViewDtos = this.menuService.GetMenuList()
+                        MenuViewDtos = this.menuService.GetMenuListById(accountModel.Id)
                     };
-
-
                     return new ResponseData { MsgCode = 200, Message = "登录成功", Data = new { token = accessToken } };
                 }
                 return new ResponseData { MsgCode = 400, Message = "账号密码不正确" };

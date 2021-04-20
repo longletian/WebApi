@@ -13,12 +13,11 @@ namespace WebApi.Repository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityKey"></typeparam>
-    public class BaseEntityRepository<TEntity> : BaseRepository<TEntity,Guid>, IBaseEntityRepository<TEntity> where TEntity : class
+    public class BaseEntityRepository<TEntity> : BaseRepository<TEntity>, IBaseEntityRepository<TEntity> where TEntity : class
     {
         #region MyRegion
         private readonly IFreeSql freeSql;
-
-        protected BaseEntityRepository(IFreeSql freeSql) : base(freeSql, null, null)
+        protected BaseEntityRepository(IFreeSql freeSql) : base(freeSql, null,null)
         {
             this.freeSql = freeSql;
         }
@@ -143,41 +142,11 @@ namespace WebApi.Repository
 
     }
 
-    public class BaseEntityRepository<TEntity, TKey> : BaseEntityRepository<TEntity>, IBaseEntityRepository<TEntity, TKey> where TEntity : class
-    {
-        public BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager?.Orm)
-        {
-            unitOfWorkManager.Binding(this);
-        }
-
-        public int Delete(TKey id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> DeleteAsync(TKey id, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntity Find(TKey id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntity Get(TKey id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //public class BaseEntityRepository<TEntity, TKey> : BaseEntityRepository<TEntity>, IBaseEntityRepository<TEntity> where TEntity : class
+    //{
+    //    public BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager?.Orm)
+    //    {
+    //        unitOfWorkManager.Binding(this);
+    //    }
+    //}
 }

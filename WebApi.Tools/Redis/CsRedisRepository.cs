@@ -1,11 +1,14 @@
-﻿        using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebApi.Tools.Redis
 {
-    public class CsRedisRepository : RedisHelper,ICsRedisRepository
+    /// <summary>
+    /// 注意这只适应于操作单个redis数据库的形式
+    /// </summary>
+    public class CsRedisRepository : RedisHelper, ICsRedisRepository
     {
         #region set
 
@@ -78,12 +81,12 @@ namespace WebApi.Tools.Redis
         {
             return SetNxAsync(cacheKey, value);
         }
-      
+
         /// <summary>
         /// 移除指定数据缓存(异步)
         /// </summary>
         /// <param name="cacheKey">键</param>
-        public long  Remove(params string[] cacheKey)
+        public long Remove(params string[] cacheKey)
         {
             return Del(cacheKey);
         }
@@ -134,7 +137,7 @@ namespace WebApi.Tools.Redis
 
         public bool HashSet<T>(string cacheKey, Dictionary<string, T> valuePairs)
         {
-           return  RedisHelper.HMSet(cacheKey, valuePairs);
+            return RedisHelper.HMSet(cacheKey, valuePairs);
         }
 
         public Task<bool> HashSetAsync<T>(string cacheKey, Dictionary<string, T> valuePairs)
@@ -220,7 +223,7 @@ namespace WebApi.Tools.Redis
             return RedisHelper.HValsAsync<T>(cacheKey).Result.ToList();
         }
 
-        public bool HashExistKey(string cacheKey,string  field)
+        public bool HashExistKey(string cacheKey, string field)
         {
             return RedisHelper.HExists(cacheKey, field);
         }
@@ -265,7 +268,7 @@ namespace WebApi.Tools.Redis
         }
         public long ListPush(string cacheKey, params string[] values)
         {
-            return RedisHelper.LPush(cacheKey,values);
+            return RedisHelper.LPush(cacheKey, values);
         }
 
         public Task<List<T>> ListPushAsync<T>(string cacheKey, T value)
@@ -279,6 +282,6 @@ namespace WebApi.Tools.Redis
         }
         #endregion
 
-    
+
     }
 }

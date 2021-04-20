@@ -24,5 +24,13 @@ namespace WebApi.Services.IService
         /// </summary>
         /// <returns></returns>
         ResponseData EditMenuInfo();
+
+        /// <summary>
+        /// 获取导航条数据通过用户id
+        /// </summary>
+        /// <param name="userId">用户ID</param>
+        /// <returns></returns>
+        List<MenuViewDto> GetMenuListById(long userId);
+
     }
 }
