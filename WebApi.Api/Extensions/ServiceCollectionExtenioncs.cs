@@ -36,6 +36,7 @@ using System.Net.Http;
 using System.Configuration;
 using WebApi.Tools.Mongodb;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace WebApi.Api
 {
@@ -123,6 +124,24 @@ namespace WebApi.Api
                         Url = new Uri("https://twitter.com/spboyer"),
                     }
                 });
+
+                // 开启加权小锁
+                c.OperationFilter<AddResponseHeadersFilter>();
+                c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+
+                // 在header中添加token，传递到后台
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
+
+
+                // Jwt Bearer 认证，必须是 oauth2
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Description = "JWT授权(数据将在请求头中进行传输) 直接在下框中输入Bearer {token}（注意两者之间是一个空格）\"",
+                    Name = "Authorization",//jwt默认的参数名称
+                    In = ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
+                    Type = SecuritySchemeType.ApiKey
+                });
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
@@ -231,9 +250,11 @@ namespace WebApi.Api
                     ValidIssuer = jwtConfig.Issuer, //发行人
                     ValidateAudience = true,
                     ValidAudience = jwtConfig.Audience, //订阅人
-                    // 验证失效时间
+                    // 是否验证token有效期
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromMinutes(jwtConfig.RefreshTokenExpiresMinutes),
+                    // 缓冲过期时间，总的有效时间等于这个时间加上jwt的过期时间，如果不配置，默认是5分钟
+                    //ClockSkew = TimeSpan.FromMinutes(jwtConfig.RefreshTokenExpiresMinutes),
+                    ClockSkew=TimeSpan.FromSeconds(1),
                     RequireExpirationTime = true,
                 };
                 options.Events = new JwtBearerEvents

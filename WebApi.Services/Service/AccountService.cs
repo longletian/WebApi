@@ -20,23 +20,23 @@ namespace WebApi.Services.Service
 {
     public class AccountService : BaseService<AccountModel>, IAccountService
     {
-        private readonly IFreeSql freeSql;
+        private readonly UnitOfWorkManager freeSql;
         private readonly IMapper mapper;
         private readonly IMenuService menuService;
         private readonly ICacheBase cacheBase;
         private JwtConfig jwtConfig;
         private readonly IUserRepository userRepository;
         private readonly IAccountRepository accountRepository;
-        private readonly IBaseEntityRepository<LoginAccount> loginRepository;
+        //private readonly IBaseEntityRepository<LoginAccount> loginRepository;
 
         public AccountService(
-            IFreeSql freeSql,
+            UnitOfWorkManager freeSql,
             IMapper mapper,
             ICacheBase cacheBase,
             IMenuService menuService,
             IUserRepository userRepository,
             IAccountRepository accountRepository,
-            IBaseEntityRepository<LoginAccount> loginRepository,
+            //IBaseEntityRepository<LoginAccount> loginRepository,
             IOptions<JwtConfig> jwtConfig)
         {
             this.mapper = mapper;
@@ -44,7 +44,8 @@ namespace WebApi.Services.Service
             this.cacheBase = cacheBase;
             this.jwtConfig = jwtConfig.Value;
             this.userRepository = userRepository;
-            this.loginRepository = loginRepository;
+            this.menuService = menuService;
+            //this.loginRepository = loginRepository;
             this.accountRepository = accountRepository;
         }
 
@@ -63,12 +64,12 @@ namespace WebApi.Services.Service
                         AccountName = accountModel.AccountName,
                         RefreshToken = accessToken,
                     };
-                    loginRepository.Insert(loginAccount);
+                    //loginRepository.Insert(loginAccount);
                     UserModelDto userModelDto = new UserModelDto()
                     {
                         AccountName = accountModel.AccountName,
                         AccessToken = accessToken,
-                        Id = accountModel.Id,
+                        Id = Guid.NewGuid(),
                         MenuViewDtos = this.menuService.CreateTreeData()
                     };
 
@@ -94,7 +95,7 @@ namespace WebApi.Services.Service
                 IdentityUser identityUser = mapper.Map<AccountRegirstDto, IdentityUser>(accountRegirstDto);
                 accountModel = this.mapper.Map<AccountRegirstDto, AccountModel>(accountRegirstDto);
                 accountModel.AccountPasswdEncrypt = Md5Helper.MD5Encrypt64(accountRegirstDto.AccountPasswd);
-                using (var uow = freeSql.CreateUnitOfWork())
+                using (var uow = freeSql.Orm.CreateUnitOfWork())
                 {
                     try
                     {
@@ -149,10 +150,10 @@ namespace WebApi.Services.Service
 
                 TokenDto tokenDto = null;
                 TokenReturnDto accessTokenReturnDto = GetJwtToken(claims, TokenType.AccessToken);
-                cacheBase.Write("accessToken", accessTokenReturnDto);
+                cacheBase.Write("accessToken", accessTokenReturnDto, 6);
 
                 TokenReturnDto refreshTokenReturnDto = GetJwtToken(claims, TokenType.RefreshToken);
-                cacheBase.Write("refreToken", refreshTokenReturnDto);
+                cacheBase.Write("refreshToken", refreshTokenReturnDto, 6);
 
                 tokenDto = new TokenDto
                 {
@@ -175,38 +176,46 @@ namespace WebApi.Services.Service
         {
             // 首先先验证刷新token是否过期（一般是不会过期的，token肯定是过期的）
             // 过期需要传之前的token和刷新token过来
-            TokenReturnDto oldAccessToken = cacheBase.Read<TokenReturnDto>("accessToken");
-            TokenReturnDto oldRefreshToken = cacheBase.Read<TokenReturnDto>("refreshToken");
+            TokenReturnDto oldAccessToken = cacheBase.Read<TokenReturnDto>("accessToken", 6);
+            TokenReturnDto oldRefreshToken = cacheBase.Read<TokenReturnDto>("refreshToken", 6);
+
+            //需要验证accesstoken是否过期的问题（防止恶意调用）
             // 验证token是有效的
-            if (refreshToken == oldRefreshToken?.Token)
+            if (token == oldAccessToken?.Token && refreshToken == oldRefreshToken?.Token)
             {
-                if (DateTime.Compare(oldRefreshToken.ExpireTime, DateTime.Now) > 0)
+                // 判断token是否过期
+                // 假设accesstoken过期了，再去判断refreshtoken是否过期的问题
+                if (DateTime.Compare(DateTime.Now, oldAccessToken.ExpireTime) > 0)
                 {
-                    ClaimsPrincipal claimsPrincipal = GetPrincipalFromAccessToken(token);
-                    var claims = new Claim[]{
+                    // 判断token是否过期
+                    if (DateTime.Compare(DateTime.Now, oldRefreshToken.ExpireTime) > 0)
+                    {
+                        ClaimsPrincipal claimsPrincipal = GetPrincipalFromAccessToken(token);
+                        var claims = new Claim[]{
                         new Claim(ClaimTypes.Name,claimsPrincipal.Claims.First((item)=>item.Type==ClaimTypes.Name)?.Value)
                     };
-                    TokenReturnDto accessTokenDto = GetJwtToken(claims, TokenType.AccessToken);
-                    oldRefreshToken.ExpireTime = DateTime.Now.Add(TimeSpan.FromMinutes(jwtConfig.RefreshTokenExpiresMinutes));
-                    cacheBase.Write<TokenReturnDto>("refreshToken", oldRefreshToken);
+                        TokenReturnDto accessTokenDto = GetJwtToken(claims, TokenType.AccessToken);
+                        oldRefreshToken.ExpireTime = Convert.ToDateTime(DateTime.Now.Add(TimeSpan.FromMinutes(jwtConfig.RefreshTokenExpiresMinutes)).ToString("yyyy-MM-dd HH:mm:ss"));
+                        cacheBase.Write<TokenReturnDto>("refreshToken", oldRefreshToken, 6);
 
-                    TokenDto tokenDto = new TokenDto
+                        TokenDto tokenDto = new TokenDto
+                        {
+                            AccessExpireTime = accessTokenDto.ExpireTime,
+                            AccessToken = accessTokenDto.Token,
+                            RefreshExpireTime = oldRefreshToken.ExpireTime,
+                            RefreshToken = oldRefreshToken.Token
+                        };
+                        return new ResponseData { MsgCode = 200, Message = "请求成功", Data = tokenDto };
+                    }
+                    else
                     {
-                        AccessExpireTime = accessTokenDto.ExpireTime,
-                        AccessToken = accessTokenDto.Token,
-                        RefreshExpireTime = oldRefreshToken.ExpireTime,
-                        RefreshToken=oldRefreshToken.Token
-                    };
-                    return new ResponseData { MsgCode = 200, Message = "请求成功", Data = tokenDto };
-                }
-                else
-                {
-                    new ResponseData { Message = "请重新登录", MsgCode = 404 };
+                        return new ResponseData { Message = "请重新登录", MsgCode = 404 };
+                    }
                 }
             }
-            return new ResponseData { Message = "token参数有误", MsgCode = 404 };
-
+            return new ResponseData { Message = "请勿恶意请求", MsgCode = 404 };
         }
+
 
         /// <summary>
         /// 根据token获取信息
@@ -224,7 +233,7 @@ namespace WebApi.Services.Service
                     ValidateIssuer = false,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.IssuerSigningKey)),
-                    ValidateLifetime = false
+                    ValidateLifetime = true
                 }, out SecurityToken validatedToken);
             }
             catch (Exception)
@@ -253,7 +262,7 @@ namespace WebApi.Services.Service
             TokenReturnDto tokenReturnDto = new TokenReturnDto()
             {
                 Id = Guid.NewGuid(),
-                ExpireTime = expires,
+                ExpireTime = Convert.ToDateTime(expires.ToString("yyyy-MM-dd HH:mm:ss")),
                 Token = Token
             };
             return tokenReturnDto;

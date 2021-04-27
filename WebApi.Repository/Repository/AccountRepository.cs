@@ -8,7 +8,7 @@ namespace WebApi.Repository.Repository
 {
     public class AccountRepository : BaseEntityRepository<AccountModel>, IAccountRepository
     {
-        public AccountRepository(IFreeSql freeSql) : base(freeSql)
+        public AccountRepository(UnitOfWorkManager unitOfWork) : base(unitOfWork)
         {
 
         }

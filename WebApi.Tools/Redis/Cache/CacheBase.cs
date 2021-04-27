@@ -9,12 +9,12 @@ namespace WebApi.Tools
 {
     public class CacheBase:ICacheBase
     {
-        private static readonly RedisClient redisClient;
-        static CacheBase()
+        private  readonly RedisClient redisClient;
+        public CacheBase()
         {
             redisClient = new Lazy<RedisClient>(() =>
             {
-                var r = new RedisClient(AppSetting.GetConnStrings("RedisCon"));
+                var r = new RedisClient("127.0.0.1:6379,password=,defaultDatabase=2");
                 r.Serialize = obj => JsonConvert.SerializeObject(obj);
                 r.Deserialize = (json, type) => JsonConvert.DeserializeObject(json, type);
                 return r;

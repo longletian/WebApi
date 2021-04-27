@@ -6,7 +6,7 @@ namespace WebApi.Repository
 {
     public class MenuRepository: BaseEntityRepository<MenuModel>,IMenuRepository
     {
-        public MenuRepository(IFreeSql freeSql) : base(freeSql)
+        public MenuRepository(UnitOfWorkManager unitOfWork) : base(unitOfWork)
         {
 
         }

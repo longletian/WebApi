@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FreeSql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WebApi.Models;
@@ -7,7 +8,7 @@ namespace WebApi.Repository
 {
     public class RoleRepository : BaseEntityRepository<IdentityRole>, IRoleRepository
     {
-        public RoleRepository(IFreeSql freeSql) : base(freeSql)
+        public RoleRepository(UnitOfWorkManager unitOfWork) : base(unitOfWork)
         {
 
         }

@@ -3,7 +3,7 @@ using System;
 namespace WebApi.Models
 {
     [Serializable]
-    public class Entity : Entity<Guid>
+    public class Entity : Entity<long>
     {
 
     }
@@ -65,7 +65,7 @@ namespace WebApi.Models
     }
 
     [Serializable]
-    public class FullEntity : FullEntity<Guid>
+    public class FullEntity : FullEntity<long>
     {
 
     }

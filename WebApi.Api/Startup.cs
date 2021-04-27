@@ -38,7 +38,7 @@ namespace WebApi.Api
             
             services.AddAutoMapper(typeof(AutoMapperHelper));
 
-            services.AddCapEvent(Configuration);
+            //services.AddCapEvent(Configuration);
 
             //services.AddMongodbService();
 
@@ -119,9 +119,9 @@ namespace WebApi.Api
 
             app.UseSwaggUIConfigure();
 
-            app.UseLogMiddleware();
+            //app.UseLogMiddleware();
 
-            app.UseGrpcWeb();
+            //app.UseGrpcWeb();
 
             app.UseEndpoints(endpoints =>
             {

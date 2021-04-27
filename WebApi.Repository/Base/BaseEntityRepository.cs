@@ -13,13 +13,13 @@ namespace WebApi.Repository
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEntityKey"></typeparam>
-    public class BaseEntityRepository<TEntity> : BaseRepository<TEntity>, IBaseEntityRepository<TEntity> where TEntity : class
+    public abstract class BaseEntityRepository<TEntity, TKey> : BaseRepository<TEntity, TKey> ,IBaseEntityRepository<TEntity, TKey> where TEntity : class
     {
         #region MyRegion
         private readonly IFreeSql freeSql;
-        protected BaseEntityRepository(IFreeSql freeSql) : base(freeSql, null,null)
+        protected BaseEntityRepository(UnitOfWorkManager unitofworkmanager) : base(unitofworkmanager?.Orm,null)
         {
-            this.freeSql = freeSql;
+            this.freeSql = unitofworkmanager?.Orm;
         }
 
         public Task<int> DeleteAsync(TEntity entity)
@@ -68,9 +68,9 @@ namespace WebApi.Repository
             return this.freeSql.Update<TEntity>().Where(entities).ExecuteAffrowsAsync();
         }
 
-        public TEntity FindEntity(object KeyValue)
+        public TEntity FindEntity(object keyvalue)
         {
-            return this.freeSql.Select<TEntity>().WhereDynamic(KeyValue).ToOne();
+            return this.freeSql.Select<TEntity>().WhereDynamic(keyvalue).ToOne();
         }
 
         public TEntity FindEntity(Expression<Func<TEntity, bool>> condition)
@@ -78,9 +78,9 @@ namespace WebApi.Repository
             return this.freeSql.Select<TEntity>().Where(condition).ToOne();
         }
 
-        public TEntity FindEntity(string strSql, Dictionary<string, string> dbParameter = null)
+        public TEntity FindEntity(string strsql, Dictionary<string, string> dbparameter = null)
         {
-            return this.freeSql.Select<TEntity>().WithSql(strSql, dbParameter).ToOne();
+            return this.freeSql.Select<TEntity>().WithSql(strsql, dbparameter).ToOne();
         }
 
         public IEnumerable<TEntity> FindList()
@@ -93,45 +93,45 @@ namespace WebApi.Repository
             return this.freeSql.Select<TEntity>().WhereDynamic(condition).ToList();
         }
 
-        public IEnumerable<TEntity> FindList(string strSql)
+        public IEnumerable<TEntity> FindList(string strsql)
         {
-            return this.freeSql.Select<TEntity>().WithSql(strSql).ToList();
+            return this.freeSql.Select<TEntity>().WithSql(strsql).ToList();
         }
 
-        public IEnumerable<TEntity> FindList(string strSql, object dbParameter)
+        public IEnumerable<TEntity> FindList(string strsql, object dbparameter)
         {
-            return this.freeSql.Select<TEntity>().WithSql(strSql, dbParameter).ToList();
+            return this.freeSql.Select<TEntity>().WithSql(strsql, dbparameter).ToList();
         }
 
-        public IEnumerable<TEntity> FindList(string orderField, int pageSize, int pageIndex)
+        public IEnumerable<TEntity> FindList(string orderfield, int pagesize, int pageindex)
         {
-            return this.freeSql.Select<TEntity>().Page(pageIndex, pageSize).OrderBy(orderField).ToList();
+            return this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).ToList();
         }
 
-        public IEnumerable<TEntity> FindList(Expression<Func<TEntity, bool>> condition, string orderField, int pageSize, int pageIndex, out long total)
+        public IEnumerable<TEntity> FindList(Expression<Func<TEntity, bool>> condition, string orderfield, int pagesize, int pageindex, out long total)
         {
-            var list = this.freeSql.Select<TEntity>().Page(pageIndex, pageSize).OrderBy(orderField).Where(condition).ToList();
+            var list = this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).Where(condition).ToList();
             total = list.Count;
             return list;
         }
 
-        public IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out long total)
+        public IEnumerable<TEntity> FindList(string strsql, string orderfield, int pagesize, int pageindex, out long total)
         {
-            var list = this.freeSql.Select<TEntity>().Page(pageIndex, pageSize).OrderBy(orderField).WithSql(strSql).ToList();
+            var list = this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).WithSql(strsql).ToList();
             total = list.Count;
             return list;
         }
 
-        public IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total, Dictionary<string, string> dict = null)
+        public IEnumerable<TEntity> FindList(string strsql, string orderfield, int pagesize, int pageindex, out int total, Dictionary<string, string> dict = null)
         {
-            var list = this.freeSql.Select<TEntity>().Page(pageIndex, pageSize).OrderBy(orderField).WithSql(strSql, dict).ToList();
+            var list = this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).WithSql(strsql, dict).ToList();
             total = list.Count;
             return list;
         }
 
-        public object FindObject(string strSql)
+        public object FindObject(string strsql)
         {
-            return this.freeSql.Select<object>().WithSql(strSql);
+            return this.freeSql.Select<object>().WithSql(strsql);
         }
 
         public Task<int> UpdateAsync(string sql)
@@ -142,11 +142,12 @@ namespace WebApi.Repository
 
     }
 
-    //public class BaseEntityRepository<TEntity, TKey> : BaseEntityRepository<TEntity>, IBaseEntityRepository<TEntity> where TEntity : class
-    //{
-    //    public BaseEntityRepository(UnitOfWorkManager unitOfWorkManager) : base(unitOfWorkManager?.Orm)
-    //    {
-    //        unitOfWorkManager.Binding(this);
-    //    }
-    //}
+
+    public abstract class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, long> where TEntity : class, new()
+    {
+        public BaseEntityRepository(UnitOfWorkManager unitofworkmanager) : base(unitofworkmanager)
+        {
+            unitofworkmanager.Binding(this);
+        }
+    }
 }
