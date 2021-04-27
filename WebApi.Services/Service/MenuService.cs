@@ -67,6 +67,18 @@ namespace WebApi.Services.Service
             return new ResponseData { MsgCode = 200, Message = "成功", Data = result };
         }
 
+        /// <summary>
+        ///  获取导航条数据通过用户id
+        /// </summary>
+        /// <returns></returns>
+        public List<MenuViewDto> GetMenuListById(long userId)
+        {
+            //先获取所有的组查询应该更加仔细，权限应该和导航分开
+            List<MenuModel> menu = menuRepository.FindList().ToList();
+            List<MenuViewDto> menuViews = mapper.Map<List<MenuModel>, List<MenuViewDto>>(menu);
+            return this.CreateTree(menuViews);
+        }
+
         private List<MenuViewDto> CreateTree(List<MenuViewDto> menuViews)
         {
             // 获取根节点
