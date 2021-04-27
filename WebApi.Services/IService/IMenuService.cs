@@ -25,12 +25,13 @@ namespace WebApi.Services.IService
         /// <returns></returns>
         ResponseData EditMenuInfo();
 
+
         /// <summary>
-        /// 获取导航条数据通过用户id
+        /// 获取树
         /// </summary>
-        /// <param name="userId">用户ID</param>
+        /// <param name="menuViews"></param>
         /// <returns></returns>
-        List<MenuViewDto> GetMenuListById(long userId);
+        List<MenuViewDto> CreateTreeData(List<MenuViewDto> menuViews=null);
 
     }
 }

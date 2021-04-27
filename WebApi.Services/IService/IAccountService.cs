@@ -29,5 +29,12 @@ namespace WebApi.Services.IService
         /// </summary>
         /// <returns></returns>
         ResponseData GetJwtToken(AccountLoginDto accountLoginDto);
+
+
+        /// <summary>
+        ///  获取accesstoken通过refreshToken
+        /// </summary>
+        /// <returns></returns>
+        ResponseData GetTokenByRefresh(string token, string refreshToken);
     }
 }

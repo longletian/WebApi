@@ -20,17 +20,17 @@ namespace WebApi.Api.Controllers
         /// 刷新token
         /// </summary>
         /// <returns></returns>
-        [HttpGet, Route("refreshtoken")]
-        public IActionResult GetRefreshToken()
+        [HttpPost, Route("refreshtoken")]
+        public ResponseData GetRefreshToken(string accesstoken, string refreshToken)
         {
-            return NotFound();
+            return accountService.GetTokenByRefresh(accesstoken, refreshToken);
         }
 
         /// <summary>
         /// 获取accessToken
         /// </summary>
         /// <returns></returns>
-        [HttpPost, Route("")]
+        [HttpPost, Route("login")]
         public ResponseData GetAccessToken([FromBody] AccountLoginDto accountLoginDto)
         {
             return accountService.GetJwtToken(accountLoginDto);

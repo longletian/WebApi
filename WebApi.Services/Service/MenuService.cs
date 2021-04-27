@@ -35,6 +35,24 @@ namespace WebApi.Services.Service
             throw new System.NotImplementedException();
         }
 
+        public List<MenuViewDto> CreateTreeData(List<MenuViewDto> menuViewData = null)
+        {
+            if (menuViewData != null && menuViewData?.Count() > 0)
+            {
+                var result = this.CreateTree(menuViewData);
+                return result;
+            }
+            else
+            {
+                //先获取所有的组查询应该更加仔细，权限应该和导航分开
+                List<MenuModel> menu = menuRepository.FindList().ToList();
+                List<MenuViewDto> menuViews = mapper.Map<List<MenuModel>, List<MenuViewDto>>(menu);
+                var result = this.CreateTree(menuViews);
+                return result;
+            }
+        }
+
+
 
         /// <summary>
         /// 获取全部的导航信息
