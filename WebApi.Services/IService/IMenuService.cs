@@ -24,5 +24,14 @@ namespace WebApi.Services.IService
         /// </summary>
         /// <returns></returns>
         ResponseData EditMenuInfo();
+
+
+        /// <summary>
+        /// 获取树
+        /// </summary>
+        /// <param name="menuViews"></param>
+        /// <returns></returns>
+        List<MenuViewDto> CreateTreeData(List<MenuViewDto> menuViews=null);
+
     }
 }

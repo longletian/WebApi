@@ -4,14 +4,17 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using WebApi.Common;
 using WebApi.Common.Authorizations.JwtConfig;
 using WebApi.Common.BaseHelper.EncryptHelper;
 using WebApi.Models;
+using WebApi.Models.Enums;
 using WebApi.Repository;
 using WebApi.Services.IService;
+using WebApi.Tools;
 
 namespace WebApi.Services.Service
 {
@@ -20,14 +23,16 @@ namespace WebApi.Services.Service
         private readonly IFreeSql freeSql;
         private readonly IMapper mapper;
         private readonly IMenuService menuService;
+        private readonly ICacheBase cacheBase;
         private JwtConfig jwtConfig;
         private readonly IUserRepository userRepository;
         private readonly IAccountRepository accountRepository;
-        private readonly IBaseEntityRepository<LoginAccount>  loginRepository;
+        private readonly IBaseEntityRepository<LoginAccount> loginRepository;
 
         public AccountService(
             IFreeSql freeSql,
             IMapper mapper,
+            ICacheBase cacheBase,
             IMenuService menuService,
             IUserRepository userRepository,
             IAccountRepository accountRepository,
@@ -36,6 +41,7 @@ namespace WebApi.Services.Service
         {
             this.mapper = mapper;
             this.freeSql = freeSql;
+            this.cacheBase = cacheBase;
             this.jwtConfig = jwtConfig.Value;
             this.userRepository = userRepository;
             this.loginRepository = loginRepository;
@@ -51,7 +57,7 @@ namespace WebApi.Services.Service
                 accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
                 if (accountModel != null)
                 {
-                    accessToken = GetJwtAccessToken(accountLoginDto);
+                    //accessToken = GetJwtAccessToken(accountLoginDto);
                     LoginAccount loginAccount = new LoginAccount()
                     {
                         AccountName = accountModel.AccountName,
@@ -63,7 +69,7 @@ namespace WebApi.Services.Service
                         AccountName = accountModel.AccountName,
                         AccessToken = accessToken,
                         Id = accountModel.Id,
-                        MenuViewDtos = this.menuService.GetMenuList()
+                        MenuViewDtos = this.menuService.CreateTreeData()
                     };
 
 
@@ -138,36 +144,128 @@ namespace WebApi.Services.Service
             if (accountModel != null)
             {
                 var claims = new Claim[]{
-                  new Claim(ClaimTypes.Name,accountLoginDto.AccountName),
-                 };
-                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.IssuerSigningKey));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                var token = new JwtSecurityToken(jwtConfig.Issuer,
-                    jwtConfig.Audience,
-                    claims,
-                    DateTime.Now,
-                    DateTime.Now.AddSeconds(10), creds);
-                string SaveToken = new JwtSecurityTokenHandler().WriteToken(token);
-                return new ResponseData { MsgCode = 200, Message = "请求成功", Data = new { token = SaveToken } };
+                  new Claim(ClaimTypes.Name,accountLoginDto.AccountName)
+                };
+
+                TokenDto tokenDto = null;
+                TokenReturnDto accessTokenReturnDto = GetJwtToken(claims, TokenType.AccessToken);
+                cacheBase.Write("accessToken", accessTokenReturnDto);
+
+                TokenReturnDto refreshTokenReturnDto = GetJwtToken(claims, TokenType.RefreshToken);
+                cacheBase.Write("refreToken", refreshTokenReturnDto);
+
+                tokenDto = new TokenDto
+                {
+                    AccessExpireTime = accessTokenReturnDto.ExpireTime,
+                    RefreshExpireTime = refreshTokenReturnDto.ExpireTime,
+                    AccessToken = accessTokenReturnDto.Token,
+                    RefreshToken = refreshTokenReturnDto.Token
+                };
+
+                return new ResponseData { MsgCode = 200, Message = "请求成功", Data = tokenDto };
             }
             return new ResponseData { MsgCode = 400, Message = "请求失败", Data = "" };
         }
 
-
-        private string GetJwtAccessToken(AccountLoginDto accountLoginDto)
+        /// <summary>
+        ///  获取accesstoken通过refreshToken(双层处理)
+        /// </summary>
+        /// <returns></returns>
+        public ResponseData GetTokenByRefresh(string token, string refreshToken)
         {
-            var claims = new[] {
-                        new Claim(ClaimTypes.Name,accountLoginDto.AccountName )
+            // 首先先验证刷新token是否过期（一般是不会过期的，token肯定是过期的）
+            // 过期需要传之前的token和刷新token过来
+            TokenReturnDto oldAccessToken = cacheBase.Read<TokenReturnDto>("accessToken");
+            TokenReturnDto oldRefreshToken = cacheBase.Read<TokenReturnDto>("refreshToken");
+            // 验证token是有效的
+            if (refreshToken == oldRefreshToken?.Token)
+            {
+                if (DateTime.Compare(oldRefreshToken.ExpireTime, DateTime.Now) > 0)
+                {
+                    ClaimsPrincipal claimsPrincipal = GetPrincipalFromAccessToken(token);
+                    var claims = new Claim[]{
+                        new Claim(ClaimTypes.Name,claimsPrincipal.Claims.First((item)=>item.Type==ClaimTypes.Name)?.Value)
                     };
+                    TokenReturnDto accessTokenDto = GetJwtToken(claims, TokenType.AccessToken);
+                    oldRefreshToken.ExpireTime = DateTime.Now.Add(TimeSpan.FromMinutes(jwtConfig.RefreshTokenExpiresMinutes));
+                    cacheBase.Write<TokenReturnDto>("refreshToken", oldRefreshToken);
+
+                    TokenDto tokenDto = new TokenDto
+                    {
+                        AccessExpireTime = accessTokenDto.ExpireTime,
+                        AccessToken = accessTokenDto.Token,
+                        RefreshExpireTime = oldRefreshToken.ExpireTime,
+                        RefreshToken=oldRefreshToken.Token
+                    };
+                    return new ResponseData { MsgCode = 200, Message = "请求成功", Data = tokenDto };
+                }
+                else
+                {
+                    new ResponseData { Message = "请重新登录", MsgCode = 404 };
+                }
+            }
+            return new ResponseData { Message = "token参数有误", MsgCode = 404 };
+
+        }
+
+        /// <summary>
+        /// 根据token获取信息
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public ClaimsPrincipal GetPrincipalFromAccessToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                return handler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.IssuerSigningKey)),
+                    ValidateLifetime = false
+                }, out SecurityToken validatedToken);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private TokenReturnDto GetJwtToken(Claim[] claims, TokenType tokenType)
+        {
+            var now = DateTime.Now;
+            var expires = now.Add(TimeSpan.FromMinutes(tokenType.Equals(TokenType.AccessToken) ? jwtConfig.AccessTokenExpiresMinutes : jwtConfig.RefreshTokenExpiresMinutes));
+            string audience = tokenType.Equals(TokenType.AccessToken) ? jwtConfig.Audience : jwtConfig.RefreshTokenAudience;
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.IssuerSigningKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
+
+            var jwtSecurityToken = new JwtSecurityToken(
                 issuer: jwtConfig.Issuer,
-                audience: jwtConfig.Audience,
+                audience: audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(2),
+                expires: expires,
                 signingCredentials: creds);
-            return new JwtSecurityTokenHandler().WriteToken(token);
+
+            string Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+            TokenReturnDto tokenReturnDto = new TokenReturnDto()
+            {
+                Id = Guid.NewGuid(),
+                ExpireTime = expires,
+                Token = Token
+            };
+            return tokenReturnDto;
+        }
+
+        /// <summary>
+        /// 验证token是否过期
+        /// </summary>
+        /// <returns></returns>
+        private bool IsValidateTokenExpire(string redisToken)
+        {
+            return true;
         }
     }
 }

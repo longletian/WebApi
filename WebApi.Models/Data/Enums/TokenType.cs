@@ -3,15 +3,9 @@
     /*
      * 令牌类型静态类
      */
-    public class TokenType
+    public enum TokenType
     {
-        /// <summary>
-        /// access token
-        /// </summary>
-        public static string Access = "access";
-        /// <summary>
-        /// refresh token
-        /// </summary>
-        public static string Refresh = "refresh";
+        AccessToken = 1,
+        RefreshToken = 2
     }
 }
