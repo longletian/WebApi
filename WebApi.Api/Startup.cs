@@ -38,9 +38,9 @@ namespace WebApi.Api
             
             services.AddAutoMapper(typeof(AutoMapperHelper));
 
-            //services.AddCapEvent(Configuration);
+            services.AddCapEvent(Configuration);
 
-            services.AddMongodbService();
+            //services.AddMongodbService();
 
             services.AddRedisService();
 

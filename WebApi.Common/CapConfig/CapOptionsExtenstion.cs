@@ -29,8 +29,8 @@ namespace WebApi.Common
                         @this.UseInMemoryStorage();
                         break;
                     case CapStorageType.Mysql:
-                        IConfigurationSection mySql = Configuration.GetSection($"ConnectionStrings:MySql");
-                        @this.UseMySql(mySql.Value);
+                        string mySqlCon = Configuration.GetConnectionString("PostgreSQL");
+                        @this.UsePostgreSql(mySqlCon);
                         break;
                     default:
                         break;

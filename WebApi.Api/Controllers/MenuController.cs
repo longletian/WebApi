@@ -20,8 +20,5 @@ namespace WebApi.Api.Controllers
         {
             return menuService.GetMenuList();
         }
-
-
-
     }
 }
