@@ -11,9 +11,9 @@ namespace WebApi.Common.Polly
     public class PollyHelper
     {
         // 重试（Retry）
-        public void PollyRetry(Exception exception, int retryNum) {
-            //Policy.Handle<Exception>()
-                //.RetryAsync(with => with.RetryCount(3));
+        public static void PollyRetry(Exception exception, int retryNum) {
+            Policy.Handle<Exception>()
+                .RetryAsync(with => with.RetryCount(3));
 
         }
         // 断路（Circuit-breaker）

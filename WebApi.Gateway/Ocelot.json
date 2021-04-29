@@ -1,0 +1,78 @@
+{
+  //全局配置
+  "GlobalConfiguration": {
+    // 指定服务发现配置(全局配置)
+    "ServiceDiscoveryProvider": {
+      "Scheme": "http",
+      //Consul启动的主机
+      "Host": "localhost",
+      //Consul启动的Http端口
+      "Port": "4000",
+      //Consul这种服务发现
+      "Type": "Consul",
+      //主要网关对外暴露的地址
+      "BaseUrl": ""
+    }
+  },
+  //配置路由(当Routes为空时，动态匹配路由)
+  "Routes": [
+    {
+      // 上游请求路径
+      "UpstreamPathTemplate": "/OcelotTest1/{url}",
+      // 上游请求方式
+      "UpstreamHttpMethod": [ "Get" ],
+      // 下游请求路径
+      "DownstreamPathTemplate": "/api/service1/{url}",
+      // 指定下游是http还是https
+      "DownstreamScheme": "http",
+      "UseServiceDiscovery": true,
+      // 指定匹配优先级
+      "Prioirty": 1,
+      "Key": "Service1",
+      // 匹配路由大小写
+      "RouteIsCaseSensitive": true,
+      // 指定下游的host和端口
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 50585
+        }
+      ],
+      //服务名
+      "ServiceName": "",
+      // 负载均衡算法
+      "LoadBalancerOptions": ""
+    },
+    {
+      // 上游请求路径
+      "UpstreamPathTemplate": "/OcelotTest2/{url}",
+      // 上游请求方式
+      "UpstreamHttpMethod": [ "Get" ],
+      // 下游请求路径
+      "DownstreamPathTemplate": "/api/service2/{url}",
+      // 指定下游是http还是https
+      "DownstreamScheme": "http",
+      // 指定匹配优先级
+      "Prioirty": 1,
+      // 路由聚合
+      "Key": "Service2",
+      // 匹配路由大小写
+      "RouteIsCaseSensitive": true,
+      // 指定下游的host和端口
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 50585
+        }
+      ]
+    }
+  ],
+  "Aggregates": [
+    {
+      "RouteKeys": [
+        "Service1",
+        "Service2"
+      ]
+    }
+  ]
+}
