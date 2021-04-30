@@ -13,7 +13,7 @@ namespace WebApi.Common.Polly
         // 重试（Retry）
         public static void PollyRetry(Exception exception, int retryNum) {
             Policy.Handle<Exception>()
-                .RetryAsync(with => with.RetryCount(3));
+                .RetryAsync(3);
 
         }
         // 断路（Circuit-breaker）
