@@ -92,23 +92,23 @@ namespace WebApi.Common.Polly
         /// <summary>
         /// 回退
         /// </summary>
-        private AsyncFallbackPolicy<HttpResponseMessage> FallbackPolicy
-        {
-            get
-            {
-                HttpStatusCode[] retryStatus =
-                {
-                    HttpStatusCode.NotFound,
-                    HttpStatusCode.ServiceUnavailable,
-                    HttpStatusCode.RequestTimeout
-                };
-                //return Policy.HandleResult<HttpResponseMessage>()
-                //    .FallbackAsync(() =>
-                //    {
+        //private AsyncFallbackPolicy<HttpResponseMessage> FallbackPolicy
+        //{
+            //get
+            //{
+            //    HttpStatusCode[] retryStatus =
+            //    {
+            //        HttpStatusCode.NotFound,
+            //        HttpStatusCode.ServiceUnavailable,
+            //        HttpStatusCode.RequestTimeout
+            //    };
+            //    //return Policy.HandleResult<HttpResponseMessage>()
+            //    //    .FallbackAsync(() =>
+            //    //    {
 
-                //    });
-            }
-        }
+            //    //    });
+            //}
+        //}
 
 
         /// <summary>
