@@ -14,6 +14,7 @@ namespace WebApi.Tools
         {
             redisClient = new Lazy<RedisClient>(() =>
             {
+                //注意必须是ip 
                 var r = new RedisClient("127.0.0.1:6379,password=,defaultDatabase=2");
                 r.Serialize = obj => JsonConvert.SerializeObject(obj);
                 r.Deserialize = (json, type) => JsonConvert.DeserializeObject(json, type);

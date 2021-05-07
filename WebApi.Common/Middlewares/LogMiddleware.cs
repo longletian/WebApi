@@ -16,7 +16,7 @@ namespace WebApi.Api.Common.Middlewares
     /// </summary>
     public class LogMiddleware
     {
-        private RequestDelegate next;
+        private readonly RequestDelegate next;
         private readonly IWebHostEnvironment environment;
         public LogMiddleware(RequestDelegate next, IWebHostEnvironment environment)
         {
