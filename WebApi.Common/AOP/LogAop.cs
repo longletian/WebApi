@@ -13,6 +13,9 @@ using WebApi.Models;
 
 namespace WebApi.Common.AOP
 {
+    /// <summary>
+    /// aop切面编程（自定义拦截器）
+    /// </summary>
     public class LogAop : IInterceptor
     {
         private readonly IHttpContextAccessor accessor;

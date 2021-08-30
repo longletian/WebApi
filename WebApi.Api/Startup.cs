@@ -41,7 +41,7 @@ namespace WebApi.Api
 
             //services.AddCapEvent(Configuration);
 
-            //services.AddMongodbService();
+            services.AddMongodbService();
 
             services.AddRedisService();
 
