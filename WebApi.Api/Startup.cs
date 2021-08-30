@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace WebApi.Api
 {
@@ -62,12 +63,12 @@ namespace WebApi.Api
 
             //services.AddAuthenticationService();
 
-            // services.AddMiniProfilerService();
+            services.AddMiniProfilerService();
 
-            // services.AddMiniProfiler(options =>
-            // {
-            //     options.RouteBasePath = "/profile";
-            // }).AddEntityFramework();
+            //services.AddMiniProfiler(options =>
+            //{
+            //    options.RouteBasePath = "/profile";
+            //}).AddEntityFramework();
             #endregion
         }
 
@@ -93,22 +94,21 @@ namespace WebApi.Api
             }
             else {
                 app.UseExceptionHandler("/Error");
-                //app.UseHsts();
             }
+
+            app.UseSwaggUIConfigure(() => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApi.Api.index.html"));
+
+            app.UseCors();
 
             app.UseStaticFiles();
 
             app.UseRoutingConfigure();
-
-            app.UseCors();
 
             //认证
             app.UseAuthentication();
 
             //授权
             app.UseAuthorization();
-
-            // app.UseMiniProfiler();
 
             //使用请求日志中间件
             app.UseSerilogRequestLogging();
@@ -117,7 +117,7 @@ namespace WebApi.Api
              
             app.UseResponseCaching();
 
-            app.UseSwaggUIConfigure();
+            app.UseMiniProfiler();
 
             //app.UseLogMiddleware();
 

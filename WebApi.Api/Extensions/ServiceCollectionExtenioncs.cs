@@ -37,6 +37,7 @@ using System.Configuration;
 using WebApi.Tools.Mongodb;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Filters;
+using WebApi.Api.Filters;
 
 namespace WebApi.Api
 {
@@ -58,6 +59,7 @@ namespace WebApi.Api
                     fv.RegisterValidatorsFromAssemblyContaining<Models.IValidator>();
                 });
 
+            //统一验证错误返回
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (context) =>
@@ -77,6 +79,12 @@ namespace WebApi.Api
                     return new BadRequestObjectResult(result);
                 };
             });
+
+            //注入全局异常捕获
+            //services.AddMvc((p)=> {
+            //    p.Filters.Add(typeof(ExceptionFilter));
+            //}).SetCompatibilityVersion (CompatibilityVersion.Version_3_0);
+
         }
 
         /// <summary>
@@ -156,20 +164,15 @@ namespace WebApi.Api
         /// <param name="services"></param>
         public static void AddMiniProfilerService(this IServiceCollection services)
         {
-            if (services == null)
-            {
-
-            }
-
             services.AddMiniProfiler(options =>
             {
                 options.RouteBasePath = "/profiler";
 
-                (options.Storage as MemoryCacheStorage).CacheDuration = TimeSpan.FromMinutes(60);
+                (options.Storage as MemoryCacheStorage).CacheDuration = TimeSpan.FromMinutes(10);
 
-                options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
+                //options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
 
-                options.TrackConnectionOpenClose = true;
+                //options.TrackConnectionOpenClose = true;
             });
         }
 
@@ -507,7 +510,6 @@ namespace WebApi.Api
         ///  注入freesql
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="configuration"></param>
         public static void AddFreeSqlService(this IServiceCollection services)
         {
             IFreeSql freeSql = new FreeSqlBuilder()

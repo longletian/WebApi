@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StackExchange.Profiling;
 using System.Collections.Generic;
 using System.Linq;
 using WebApi.Models;
@@ -23,7 +24,10 @@ namespace WebApi.Api.Controllers
         [HttpPost, Route("login")]
         public ResponseData AccountLogin([FromBody] AccountLoginDto accountLoginDto)
         {
-            return accountService.AccountLogin(accountLoginDto);
+            using (MiniProfiler.Current.Step("开始加载数据："))
+            {
+                return accountService.AccountLogin(accountLoginDto);
+            }
         }
 
         /// <summary>

@@ -45,8 +45,8 @@ namespace WebApi.Services.Service
             this.jwtConfig = jwtConfig.Value;
             this.userRepository = userRepository;
             this.menuService = menuService;
-            //this.loginRepository = loginRepository;
             this.accountRepository = accountRepository;
+            //this.loginRepository = loginRepository;
         }
 
         public ResponseData AccountLogin(AccountLoginDto accountLoginDto)
@@ -58,7 +58,7 @@ namespace WebApi.Services.Service
                 accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
                 if (accountModel != null)
                 {
-                    //accessToken = GetJwtAccessToken(accountLoginDto);
+                    accessToken = GetJwtToken(accountLoginDto).Data.ToString();
                     LoginAccount loginAccount = new LoginAccount()
                     {
                         AccountName = accountModel.AccountName,

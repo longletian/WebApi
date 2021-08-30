@@ -3,8 +3,9 @@ using Autofac;
 using System;
 using System.Linq;
 using System.Reflection;
+using WebApi.Common;
 
-namespace WebApi.Common
+namespace WebApi.Api
 {
     public  class DependencyModule : Autofac.Module 
     {

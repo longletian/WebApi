@@ -8,6 +8,7 @@ using Castle.DynamicProxy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using StackExchange.Profiling;
 using WebApi.Models;
 
 namespace WebApi.Common.AOP
@@ -22,6 +23,7 @@ namespace WebApi.Common.AOP
             IWebHostEnvironment _environment)
         {
             this.logger = logger;
+            this.environment = _environment;
             this.accessor = _accessor;
         }
 
@@ -40,6 +42,8 @@ namespace WebApi.Common.AOP
                 $"【携带的参数有】： {string.Join(", ", invocation.Arguments.Select(a => (a ?? "").ToString()).ToArray())} \r\n";
             try
             {
+                MiniProfiler.Current.Step($"执行Service方法：{invocation.Method.Name}() -> ");
+
                 //在被拦截的方法执行完毕后 继续执行当前方法，注意是被拦截的是异步的
                 invocation.Proceed();
             }

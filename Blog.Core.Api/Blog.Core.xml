@@ -1,0 +1,366 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApi.Api</name>
+    </assembly>
+    <members>
+        <member name="M:WebApi.Api.Controllers.AccountController.AccountLogin(WebApi.Models.AccountLoginDto)">
+            <summary>
+            登陆接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.AccountController.AccountRegirst(WebApi.Models.AccountRegirstDto)">
+            <summary>
+            注册接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.AccountController.AccountChangePassword">
+            <summary>
+            修改密码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.AccountController.AccountDelete(System.Int32)">
+            <summary>
+            删除用户
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.TokenController.GetRefreshToken(System.String,System.String)">
+            <summary>
+            刷新token
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.TokenController.GetAccessToken(WebApi.Models.AccountLoginDto)">
+            <summary>
+            获取accessToken
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.UserController.UserLogin">
+            <summary>
+            登陆接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.UserController.UserRegirst">
+            <summary>
+            注册接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.UserController.UserChangePassword">
+            <summary>
+            修改密码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Controllers.UserController.UserDelete(System.Int32)">
+            <summary>
+            删除用户
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.ConfigureExtensions.UseSwaggUIConfigure(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.Func{System.IO.Stream})">
+            <summary>
+            swagger-ui
+            </summary>
+            <param name="app"></param>
+            <param name="streamHtml"></param>
+        </member>
+        <member name="M:WebApi.Api.ConfigureExtensions.UseRoutingConfigure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            路由配置
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:WebApi.Api.ConfigureExtensions.UseSignalConfigure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            使用实时通讯
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:WebApi.Api.ConfigureExtensions.UseTusConfiguration(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            断点续传
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="T:WebApi.Api.MiddlewareExtensions">
+            <summary>
+            扩展中间件
+            </summary>
+        </member>
+        <member name="M:WebApi.Api.MiddlewareExtensions.UseLogMiddleware(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+             <summary>
+            异常中间件
+             </summary>
+             <param name="app"></param>
+             <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddControllService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            添加控制器数据验证
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddRedisService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入csredis
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddSwaggUIService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入swaggerui
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddMiniProfilerService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入miniprofile
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddEasyNetQService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入EasyNetQ
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddHttpClientService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入httpclient
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddCorsService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入跨域
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddJwtService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入jwt
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddResponseCompressionService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入响应压缩
+            </summary>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddCapEvent(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            注入cap
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddAuthenticationService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入IdServer4授权
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddSignalRService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            实时 web 功能使服务器端代码可以立即将内容推送到客户端。
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddMediatRService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+             <summary>
+            注入MediatR服务
+             </summary>
+             <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddRabbitmqService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入rabbitmq
+            </summary>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddEventStoreService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入eventstore
+            </summary>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddMongodbService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入mongodb
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddCommonService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            公共服务
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddCacheService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            添加内存缓存 
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.ServiceCollectionExtenioncs.AddFreeSqlService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+             注入freesql
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:WebApi.Api.Filters.ExceptionFilter">
+            <summary>
+            IExceptionFilter接口，接口只提供了一个方法OnException，主要的参数为ExceptionContext类，
+            基本上就是通过ExceptionContext类来获取相关错误信息，以及进行对应的HTTP请求和响应操作。
+            FilterAttribute抽象类,可以作为特性使用的全局操作过滤器
+            1、Filter过滤器是基于当前Http请求的，也就是接口层面的，颗粒度比较大；
+            2、而AOP是基于服务切面的，是 Service 层的请求，颗粒度比较小；
+            </summary>
+        </member>
+        <member name="M:WebApi.Api.Filters.ExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
+            <summary>
+            实现IExceptionFilter的OnException方法
+            <param name="context">异常上下文</param>
+            </summary>
+        </member>
+        <member name="M:WebApi.Api.Filters.ExceptionFilter.WriteLog(System.String,System.Exception)">
+            <summary>
+            自定义返回格式
+            </summary>
+            <param name="throwMsg"></param>
+            <param name="ex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.GreeterService.SayHello(GrpcService.HelloRequest,Grpc.Core.ServerCallContext)">
+            <summary>
+            重载方法
+            </summary>
+            <param name="request"></param>
+            <param name="context">可以获取gRPC API 提供对某些 HTTP/2 消息数据（如方法、主机、标头和尾部）的访问权限</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.GreeterService.StreamingFromServer(GrpcService.HelloRequest,Grpc.Core.IServerStreamWriter{GrpcService.HelloReply},Grpc.Core.ServerCallContext)">
+            <summary>
+            服务器流式处理(以参数的形式获取请求消息,由于可以将多个消息流式传输回调用方，
+            因此可使用 responseStream.WriteAsync 发送响应消息)
+            </summary>
+            <param name="request"></param>
+            <param name="responseStream"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.GreeterService.StreamingFromClient(Grpc.Core.IAsyncStreamReader{GrpcService.HelloRequest},Grpc.Core.ServerCallContext)">
+            <summary>
+            客户端流式处理(在该方法没有接收消息的情况下启动)
+            </summary>
+            <param name="requestStream">用于从客户端读取消息</param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.GreeterService.StreamingBothWays(Grpc.Core.IAsyncStreamReader{GrpcService.HelloRequest},Grpc.Core.IServerStreamWriter{GrpcService.HelloReply},Grpc.Core.ServerCallContext)">
+            <summary>
+            双向流式处理(在该方法没有接收到消息的情况下启动,客户端和服务可在任何时间互相发送消息)
+            </summary>
+            <param name="requestStream">从客户端读取消息</param>
+            <param name="responseStream"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注册服务
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:WebApi.Api.Startup.ConfigureContainer(Autofac.ContainerBuilder)">
+            <summary>w
+            添加autofa服务 （注意：3.0写法 ）
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="T:GrpcService.GreetReflection">
+            <summary>Holder for reflection information generated from Protos/greet.proto</summary>
+        </member>
+        <member name="P:GrpcService.GreetReflection.Descriptor">
+            <summary>File descriptor for Protos/greet.proto</summary>
+        </member>
+        <member name="T:GrpcService.HelloRequest">
+            <summary>
+            定义所需要序列化的数据格式（定义消息类型）
+            The request message containing the user's name.
+            </summary>
+        </member>
+        <member name="F:GrpcService.HelloRequest.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="T:GrpcService.HelloReply">
+            <summary>
+            The response message containing the greetings.
+            </summary>
+        </member>
+        <member name="F:GrpcService.HelloReply.MessageFieldNumber">
+            <summary>Field number for the "message" field.</summary>
+        </member>
+        <member name="T:GrpcService.Greeter">
+            <summary>
+            定义服务
+            The greeting service definition.
+            </summary>
+        </member>
+        <member name="P:GrpcService.Greeter.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:GrpcService.Greeter.GreeterBase">
+            <summary>Base class for server-side implementations of Greeter</summary>
+        </member>
+        <member name="M:GrpcService.Greeter.GreeterBase.SayHello(GrpcService.HelloRequest,Grpc.Core.ServerCallContext)">
+            <summary>
+            定义一个 RPC 服务(一元)
+            </summary>
+            <param name="request">The request received from the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>The response to send back to the client (wrapped by a task).</returns>
+        </member>
+        <member name="M:GrpcService.Greeter.GreeterBase.StreamingFromServer(GrpcService.HelloRequest,Grpc.Core.IServerStreamWriter{GrpcService.HelloReply},Grpc.Core.ServerCallContext)">
+            <summary>
+            Server streaming(服务器流式处理)
+            </summary>
+            <param name="request">The request received from the client.</param>
+            <param name="responseStream">Used for sending responses back to the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>A task indicating completion of the handler.</returns>
+        </member>
+        <member name="M:GrpcService.Greeter.GreeterBase.StreamingFromClient(Grpc.Core.IAsyncStreamReader{GrpcService.HelloRequest},Grpc.Core.ServerCallContext)">
+            <summary>
+            Client streaming(客户端流式处理)
+            </summary>
+            <param name="requestStream">Used for reading requests from the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>The response to send back to the client (wrapped by a task).</returns>
+        </member>
+        <member name="M:GrpcService.Greeter.GreeterBase.StreamingBothWays(Grpc.Core.IAsyncStreamReader{GrpcService.HelloRequest},Grpc.Core.IServerStreamWriter{GrpcService.HelloReply},Grpc.Core.ServerCallContext)">
+            <summary>
+            Bi-directional streaming(双向流式处理)
+            </summary>
+            <param name="requestStream">Used for reading requests from the client.</param>
+            <param name="responseStream">Used for sending responses back to the client.</param>
+            <param name="context">The context of the server-side call handler being invoked.</param>
+            <returns>A task indicating completion of the handler.</returns>
+        </member>
+        <member name="M:GrpcService.Greeter.BindService(GrpcService.Greeter.GreeterBase)">
+            <summary>Creates service definition that can be registered with a server</summary>
+            <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+        </member>
+        <member name="M:GrpcService.Greeter.BindService(Grpc.Core.ServiceBinderBase,GrpcService.Greeter.GreeterBase)">
+            <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+            Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+            <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+            <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+        </member>
+    </members>
+</doc>

@@ -5,8 +5,9 @@ using WebApi.Common.AOP;
 using System;
 using System.Collections.Generic;
 using WebApi.Models;
+using WebApi.Repository;
 
-namespace WebApi.Common
+namespace WebApi.Api
 {
     public class AutoFacModule : Autofac.Module
     {
@@ -42,10 +43,11 @@ namespace WebApi.Common
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
 
+            var cacheType = new List<Type>();
+            builder.RegisterType<LogAop>();
+            cacheType.Add(typeof(LogAop));
 
-            //var cacheType = new List<Type>();
-            //    builder.RegisterType<LogAop>();
-            //    cacheType.Add(typeof(LogAop));
+            //builder.RegisterGeneric(typeof(BaseEntityRepository<>)).As(typeof(IBaseEntityRepository<>)).InstancePerDependency();//注册仓储
 
             // AOP 开关，如果想要打开指定的功能，只需要在 appsettigns.json 对应对应 true 就行。
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services"))
@@ -53,9 +55,9 @@ namespace WebApi.Common
                 .AsImplementedInterfaces()
                 .InstancePerDependency()
                 //引用Autofac.Extras.DynamicProxy;
-                .EnableClassInterceptors();
+                .EnableClassInterceptors()
                 //允许将拦截器服务的列表分配给注册。
-                //.InterceptedBy(cacheType.ToArray());
+                .InterceptedBy(cacheType.ToArray());
         }
 
         /// <summary>
