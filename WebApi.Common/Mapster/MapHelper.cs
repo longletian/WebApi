@@ -9,7 +9,7 @@ namespace WebApi.Common
     /// <summary>
     /// mapster实体映射
     /// </summary>
-    public static  class MapHelper
+    public class MapHelper
     {
         //private  IMapper mapper{get;set;}
         //public MapHelper()
