@@ -73,7 +73,6 @@ namespace WebApi.Services.Service
                         MenuViewDtos = this.menuService.CreateTreeData()
                     };
 
-
                     return new ResponseData { MsgCode = 200, Message = "登录成功", Data = new { token = accessToken } };
                 }
                 return new ResponseData { MsgCode = 400, Message = "账号密码不正确" };

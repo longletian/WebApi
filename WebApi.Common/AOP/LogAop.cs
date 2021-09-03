@@ -8,6 +8,7 @@ using Castle.DynamicProxy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using StackExchange.Profiling;
 using WebApi.Models;
 
@@ -20,12 +21,10 @@ namespace WebApi.Common.AOP
     {
         private readonly IHttpContextAccessor accessor;
         private readonly IWebHostEnvironment environment;
-        private readonly ILogger<LogAop> logger;
-        public LogAop(ILogger<LogAop> logger,
+        public LogAop(
             IHttpContextAccessor _accessor,
             IWebHostEnvironment _environment)
         {
-            this.logger = logger;
             this.environment = _environment;
             this.accessor = _accessor;
         }
@@ -46,7 +45,7 @@ namespace WebApi.Common.AOP
             try
             {
                 MiniProfiler.Current.Step($"执行Service方法：{invocation.Method.Name}() -> ");
-
+                Log.Information("执行方法");
                 //在被拦截的方法执行完毕后 继续执行当前方法，注意是被拦截的是异步的
                 invocation.Proceed();
             }
@@ -62,7 +61,7 @@ namespace WebApi.Common.AOP
             if (ex != null)
             {
                 var messageEx = dataIntercept + $"【异常信息】：{ex.Message}\r\n+{ex.StackTrace}\r\n";
-                logger.LogError(messageEx);
+                Log.Error(messageEx);
             }
         }
 

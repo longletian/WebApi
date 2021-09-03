@@ -49,15 +49,18 @@ namespace WebApi.Api
         /// <param name="services"></param>
         public static void AddControllService(this IServiceCollection services)
         {
-            services.AddControllers()
-                .AddJsonOptions(option => option.JsonSerializerOptions.PropertyNamingPolicy = null)
-                .AddFluentValidation(fv =>
-                {
-                    //是否同时支持两种验证方式
-                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                    //自定义IValidator验证空接口
-                    fv.RegisterValidatorsFromAssemblyContaining<Models.IValidator>();
-                });
+            services.AddControllers((p)=> {
+                //添加全局异常拦截
+                p.Filters.Add(typeof(ExceptionFilter));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            .AddJsonOptions(option => option.JsonSerializerOptions.PropertyNamingPolicy = null)
+            .AddFluentValidation(fv =>
+            {
+                //是否同时支持两种验证方式
+                fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                //自定义IValidator验证空接口
+                fv.RegisterValidatorsFromAssemblyContaining<Models.IValidator>();
+            });
 
             //统一验证错误返回
             services.Configure<ApiBehaviorOptions>(options =>
@@ -79,12 +82,6 @@ namespace WebApi.Api
                     return new BadRequestObjectResult(result);
                 };
             });
-
-            //注入全局异常捕获
-            //services.AddMvc((p)=> {
-            //    p.Filters.Add(typeof(ExceptionFilter));
-            //}).SetCompatibilityVersion (CompatibilityVersion.Version_3_0);
-
         }
 
         /// <summary>
@@ -122,24 +119,26 @@ namespace WebApi.Api
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "ToDo API",
-                    Description = "A simple example ASP.NET Core Web API",
-                    TermsOfService = new Uri("https://example.com/terms"),
+                    Title = "Web API",
+                    Description = "ASP.NET Core Web API",
+                    TermsOfService = new Uri(""),
                     Contact = new OpenApiContact
                     {
                         Name = "xx",
                         Email = string.Empty,
-                        Url = new Uri("https://twitter.com/spboyer"),
+                        Url = new Uri(""),
                     }
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
 
                 // 开启加权小锁
                 c.OperationFilter<AddResponseHeadersFilter>();
                 c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
-
                 // 在header中添加token，传递到后台
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
-
 
                 // Jwt Bearer 认证，必须是 oauth2
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -150,9 +149,6 @@ namespace WebApi.Api
                     Type = SecuritySchemeType.ApiKey
                 });
 
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
                 // 引入Swashbuckle和FluentValidation
                 c.AddFluentValidationRules();
             });
@@ -166,13 +162,17 @@ namespace WebApi.Api
         {
             services.AddMiniProfiler(options =>
             {
-                options.RouteBasePath = "/profiler";
+                options.RouteBasePath = "/mini-profiler-resources";
 
                 (options.Storage as MemoryCacheStorage).CacheDuration = TimeSpan.FromMinutes(10);
 
-                //options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
+                options.PopupRenderPosition = StackExchange.Profiling.RenderPosition.Left;
 
-                //options.TrackConnectionOpenClose = true;
+                options.PopupShowTimeWithChildren = true;
+
+                options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
+
+                options.TrackConnectionOpenClose = true;
             });
         }
 
@@ -520,7 +520,7 @@ namespace WebApi.Api
                .UseNameConvert(NameConvertType.PascalCaseToUnderscoreWithLower)
                .UseMonitorCommand(cmd =>
                {
-                   Log.Information(cmd.CommandText + ";");
+                   Log.Information("Sql语句"+ cmd.CommandText + ";");
                })
                .UseAutoSyncStructure(true) //自动同步实体结构到数据库
                .Build(); //请务必定义成 Singleton 单例模式

@@ -30,7 +30,7 @@ namespace WebApi.Api
 
             //注册拦截器
             //builder.RegisterType<ValidatorAop>();
-            //对目标类型启动动态代理，并注入自定义拦截器拦截
+            ////对目标类型启动动态代理，并注入自定义拦截器拦截
             //builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Models"))
             //        .Where(a => a.Name.EndsWith("Validator"))
             //        .AsImplementedInterfaces()
@@ -38,24 +38,27 @@ namespace WebApi.Api
             //      .EnableInterfaceInterceptors().InterceptedBy(typeof(ValidatorAop));
             #endregion
 
+            #region 注入aop
+            builder.RegisterType<LogAop>();
+
+            var cacheType = new List<Type>();
+
+            cacheType.Add(typeof(LogAop));
+            #endregion
+
+            //builder.RegisterGeneric(typeof(BaseEntityRepository<>)).As(typeof(IBaseEntityRepository<>)).InstancePerDependency();//注册仓储
+
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository"))
                 .Where(a => a.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
 
-            var cacheType = new List<Type>();
-            builder.RegisterType<LogAop>();
-            cacheType.Add(typeof(LogAop));
-
-            //builder.RegisterGeneric(typeof(BaseEntityRepository<>)).As(typeof(IBaseEntityRepository<>)).InstancePerDependency();//注册仓储
-
-            // AOP 开关，如果想要打开指定的功能，只需要在 appsettigns.json 对应对应 true 就行。
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Services"))
                 .Where(a => a.Name.EndsWith("Service"))
                 .AsImplementedInterfaces()
-                .InstancePerDependency()
+                .InstancePerLifetimeScope()
                 //引用Autofac.Extras.DynamicProxy;
-                .EnableClassInterceptors()
+                .EnableInterfaceInterceptors()
                 //允许将拦截器服务的列表分配给注册。
                 .InterceptedBy(cacheType.ToArray());
         }

@@ -88,6 +88,10 @@ namespace WebApi.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            //使用请求日志中间件
+            app.UseSerilogRequestLogging();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -95,7 +99,6 @@ namespace WebApi.Api
             else {
                 app.UseExceptionHandler("/Error");
             }
-
             app.UseSwaggUIConfigure(() => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApi.Api.index.html"));
 
             app.UseCors();
@@ -110,18 +113,15 @@ namespace WebApi.Api
             //授权
             app.UseAuthorization();
 
-            //使用请求日志中间件
-            app.UseSerilogRequestLogging();
-
             app.UseResponseCompression();
              
             app.UseResponseCaching();
 
-            app.UseMiniProfiler();
-
             //app.UseLogMiddleware();
 
             //app.UseGrpcWeb();
+
+            app.UseMiniProfiler();
 
             app.UseEndpoints(endpoints =>
             {

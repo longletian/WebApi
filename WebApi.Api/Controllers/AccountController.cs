@@ -24,10 +24,7 @@ namespace WebApi.Api.Controllers
         [HttpPost, Route("login")]
         public ResponseData AccountLogin([FromBody] AccountLoginDto accountLoginDto)
         {
-            using (MiniProfiler.Current.Step("开始加载数据："))
-            {
-                return accountService.AccountLogin(accountLoginDto);
-            }
+            return accountService.AccountLogin(accountLoginDto);
         }
 
         /// <summary>
