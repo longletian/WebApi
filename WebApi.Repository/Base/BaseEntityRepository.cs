@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -110,33 +111,58 @@ namespace WebApi.Repository
 
         public IEnumerable<TEntity> FindList(Expression<Func<TEntity, bool>> condition, string orderfield, int pagesize, int pageindex, out long total)
         {
-            var list = this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).Where(condition).ToList();
-            total = list.Count;
-            return list;
+            return this.freeSql.Select<TEntity>().WhereDynamic(condition).Count(out total).Page(pageindex, pagesize).ToList();
         }
 
         public IEnumerable<TEntity> FindList(string strsql, string orderfield, int pagesize, int pageindex, out long total)
         {
-            var list = this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).WithSql(strsql).ToList();
-            total = list.Count;
-            return list;
+            return this.freeSql.Select<TEntity>().WithSql(strsql).Count(out total).Page(pageindex, pagesize).OrderBy(orderfield).ToList();
         }
 
-        public IEnumerable<TEntity> FindList(string strsql, string orderfield, int pagesize, int pageindex, out int total, Dictionary<string, string> dict = null)
+        public IEnumerable<TEntity> FindList(string strsql, string orderfield, int pagesize, int pageindex, out long total, Dictionary<string, string> dict = null)
         {
-            var list = this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).WithSql(strsql, dict).ToList();
-            total = list.Count;
-            return list;
+
+            return this.freeSql.Select<TEntity>().WithSql(strsql, dict).Count(out total).Page(pageindex, pagesize).OrderBy(orderfield).ToList();
         }
 
         public object FindObject(string strsql)
         {
-            return this.freeSql.Select<object>().WithSql(strsql);
+            return this.freeSql.Ado.ExecuteScalar(strsql);
         }
 
         public Task<int> UpdateAsync(string sql)
         {
             return this.freeSql.Select<TEntity>().WithSql(sql).ToUpdate().ExecuteAffrowsAsync();
+        }
+
+        public int ExecuteBySql(string sql)
+        {
+            return this.freeSql.Ado.ExecuteNonQuery(sql);
+        }
+
+        public int ExecuteBySql(string sql, object dbParamenter)
+        {
+            return this.freeSql.Ado.ExecuteNonQuery(sql, dbParamenter);
+        }
+
+        public TEntity ExecuteByProc(string procName)
+        {
+            return this.freeSql.Ado.Query<TEntity>(CommandType.StoredProcedure, procName).FirstOrDefault();
+        }
+
+        public TEntity ExecuteByProc(string procName, object dbParamenter)
+        {
+            return this.freeSql.Ado.Query<TEntity>(CommandType.StoredProcedure, procName, null).FirstOrDefault();
+        }
+
+        public IEnumerable<TEntity> QueryByProc(string procName)
+        {
+            return this.freeSql.Ado.Query<TEntity>(CommandType.StoredProcedure, procName);
+        }
+
+        public IEnumerable<TEntity> QueryByProc(string procName, object dbParameter)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

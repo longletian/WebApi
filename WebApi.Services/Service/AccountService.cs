@@ -58,22 +58,8 @@ namespace WebApi.Services.Service
                 accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
                 if (accountModel != null)
                 {
-                    //accessToken = GetJwtAccessToken(accountLoginDto);
-                    LoginAccount loginAccount = new LoginAccount()
-                    {
-                        AccountName = accountModel.AccountName,
-                        RefreshToken = accessToken,
-                    };
-                    //loginRepository.Insert(loginAccount);
-                    UserModelDto userModelDto = new UserModelDto()
-                    {
-                        AccountName = accountModel.AccountName,
-                        AccessToken = accessToken,
-                        Id = Guid.NewGuid(),
-                        MenuViewDtos = this.menuService.CreateTreeData()
-                    };
 
-
+                  
                     return new ResponseData { MsgCode = 200, Message = "登录成功", Data = new { token = accessToken } };
                 }
                 return new ResponseData { MsgCode = 400, Message = "账号密码不正确" };

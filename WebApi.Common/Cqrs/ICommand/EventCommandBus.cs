@@ -20,9 +20,9 @@ namespace WebApi.Common
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<TResponse> Send<TResponse>(IEventCommand<TResponse> command, CancellationToken cancellationToken = default)
+        public async Task<TResponse> Send<TResponse>(IEventCommand<TResponse> command, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await this.mediator.Send<TResponse>(command, cancellationToken);
         }
 
         /// <summary>
@@ -31,9 +31,9 @@ namespace WebApi.Common
         /// <param name="command"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task Send(IEventCommand command, CancellationToken cancellationToken = default)
+        public async Task Send(IEventCommand command, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            await this.mediator.Send(command, cancellationToken);
         }
     }
 }

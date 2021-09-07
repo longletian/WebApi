@@ -507,7 +507,6 @@ namespace WebApi.Api
         ///  注入freesql
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="configuration"></param>
         public static void AddFreeSqlService(this IServiceCollection services)
         {
             IFreeSql freeSql = new FreeSqlBuilder()

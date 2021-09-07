@@ -137,7 +137,7 @@ namespace WebApi.Services
         /// <param name="pageIndex">页码</param>
         /// <param name="total">总共数据条数</param>
         /// <returns></returns>
-        IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total, Dictionary<string, string> dict = null);
+        IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out long total, Dictionary<string, string> dict = null);
         #endregion
 
         #region

@@ -53,7 +53,7 @@ namespace WebApi.Repository
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        //int ExecuteBySql(string sql);
+        int ExecuteBySql(string sql);
 
         /// <summary>
         /// 执行语句带参数
@@ -61,14 +61,14 @@ namespace WebApi.Repository
         /// <param name="sql"></param>
         /// <param name="dbParamenter"></param>
         /// <returns></returns>
-        //int ExecuteBySql(string sql, object dbParamenter);
+        int ExecuteBySql(string sql, object dbParamenter);
 
         /// <summary>
         /// 执行存储过程
         /// </summary>
         /// <param name="procName">存储过程名称</param>
         /// <returns></returns>
-        //TEntity ExecuteByProc(string procName);
+        TEntity ExecuteByProc(string procName);
 
         /// <summary>
         /// 执行存储过程返回一个对象
@@ -77,14 +77,14 @@ namespace WebApi.Repository
         /// <param name="procName"></param>
         /// <param name="dbParamenter"></param>
         /// <returns></returns>
-        //TEntity ExecuteByProc(string procName, object dbParamenter);
+        TEntity ExecuteByProc(string procName, object dbParamenter);
 
         /// <summary>
         /// 执行存储过程
         /// </summary>
         /// <param name="procName">存储过程名称</param>
         /// <returns></returns>
-        //IEnumerable<TEntity> QueryByProc(string procName);
+        IEnumerable<TEntity> QueryByProc(string procName);
 
         /// <summary>
         /// 执行存储过程
@@ -92,7 +92,7 @@ namespace WebApi.Repository
         /// <param name="procName">存储过程名称</param>
         /// <param name="dbParameter">参数</param>
         /// <returns></returns>
-        //IEnumerable<TEntity> QueryByProc(string procName, object dbParameter);
+        IEnumerable<TEntity> QueryByProc(string procName, object dbParameter);
 
         #endregion
 
@@ -194,7 +194,7 @@ namespace WebApi.Repository
         /// <param name="pageIndex">页码</param>
         /// <param name="total">总共数据条数</param>
         /// <returns></returns>
-        IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total, Dictionary<string, string> dict = null);
+        IEnumerable<TEntity> FindList(string strSql, string orderField, int pageSize, int pageIndex, out long total, Dictionary<string, string> dict = null);
         #endregion
 
         #region 数据源查询
