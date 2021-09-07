@@ -81,7 +81,7 @@ namespace WebApi.Repository
 
         public TEntity FindEntity(string strsql, Dictionary<string, string> dbparameter = null)
         {
-            return this.freeSql.Select<TEntity>().WithSql(strsql, dbparameter).ToOne();
+            return this.freeSql.Ado.Query<TEntity>(strsql, dbparameter).FirstOrDefault();
         }
 
         public IEnumerable<TEntity> FindList()

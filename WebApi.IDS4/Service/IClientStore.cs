@@ -7,6 +7,6 @@ namespace WebApi.IDS4.Service
 {
    public  interface IClientStore
     {
-        Task<Client> FindClientByIdAsync(string clientId);
+        //Task<Client> FindClientByIdAsync(string clientId);
     }
 }

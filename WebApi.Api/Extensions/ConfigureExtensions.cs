@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Serilog;
+using Serilog.Core;
 using System;
 using System.IO;
 using System.Text;
@@ -17,12 +19,23 @@ namespace WebApi.Api
        /// swagger-ui
        /// </summary>
        /// <param name="app"></param>
-        public static void UseSwaggUIConfigure(this IApplicationBuilder app)
+       /// <param name="streamHtml"></param>
+        public static void UseSwaggUIConfigure(this IApplicationBuilder app,Func<Stream> streamHtml)
         {
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+
+                // 将swagger首页，设置成我们自定义的页面，记得这个字符串的写法：{项目名.index.html}
+                if (streamHtml.Invoke() == null)
+                {
+                    var msg = "index.html的属性，必须设置为嵌入的资源";
+                    Log.Error(msg);
+                    throw new Exception(msg);
+                }
+                c.IndexStream = streamHtml;
+
                 c.RoutePrefix = string.Empty;
             });
         }

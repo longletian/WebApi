@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace WebApi.Api
 {
@@ -62,12 +63,12 @@ namespace WebApi.Api
 
             //services.AddAuthenticationService();
 
-            // services.AddMiniProfilerService();
+            services.AddMiniProfilerService();
 
-            // services.AddMiniProfiler(options =>
-            // {
-            //     options.RouteBasePath = "/profile";
-            // }).AddEntityFramework();
+            //services.AddMiniProfiler(options =>
+            //{
+            //    options.RouteBasePath = "/profile";
+            //}).AddEntityFramework();
             #endregion
         }
 
@@ -87,20 +88,24 @@ namespace WebApi.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            //使用请求日志中间件
+            app.UseSerilogRequestLogging();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else {
                 app.UseExceptionHandler("/Error");
-                //app.UseHsts();
             }
+            app.UseSwaggUIConfigure(() => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApi.Api.index.html"));
+
+            app.UseCors();
 
             app.UseStaticFiles();
 
             app.UseRoutingConfigure();
-
-            app.UseCors();
 
             //认证
             app.UseAuthentication();
@@ -108,20 +113,15 @@ namespace WebApi.Api
             //授权
             app.UseAuthorization();
 
-            // app.UseMiniProfiler();
-
-            //使用请求日志中间件
-            app.UseSerilogRequestLogging();
-
             app.UseResponseCompression();
              
             app.UseResponseCaching();
 
-            app.UseSwaggUIConfigure();
-
             //app.UseLogMiddleware();
 
             //app.UseGrpcWeb();
+
+            app.UseMiniProfiler();
 
             app.UseEndpoints(endpoints =>
             {

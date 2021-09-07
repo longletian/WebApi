@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StackExchange.Profiling;
+using System.Collections.Generic;
+using System.Linq;
 using WebApi.Models;
 using WebApi.Services.IService;
 
@@ -41,7 +44,24 @@ namespace WebApi.Api.Controllers
         [HttpPut, Route("password")]
         public IActionResult AccountChangePassword()
         {
-            return NotFound();
+            string data = "1,2,3,4";
+            Dictionary<int, string> dict = new Dictionary<int, string>()
+            {
+                { 1,"格式化1"},
+                { 2,"格式化2"},
+                { 3,"格式化3"}
+            };
+
+            if (data.Contains(","))
+            {
+                string[] arrays = data.Split(",");
+                var returnData = from v in dict
+                                 from c in arrays
+                                 where c == v.Key.ToString()
+                                 select v.Value;
+                return Ok(returnData);
+            }
+            return Ok();
         }
 
         /// <summary>
