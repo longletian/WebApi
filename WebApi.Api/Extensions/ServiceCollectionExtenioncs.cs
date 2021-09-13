@@ -121,12 +121,12 @@ namespace WebApi.Api
                     Version = "v1",
                     Title = "Web API",
                     Description = "ASP.NET Core Web API",
-                    TermsOfService = new Uri(""),
+                    TermsOfService = new Uri("https://example.com/terms"),
                     Contact = new OpenApiContact
                     {
                         Name = "xx",
                         Email = string.Empty,
-                        Url = new Uri(""),
+                        Url = new Uri("https://www.baidu.com"),
                     }
                 });
 

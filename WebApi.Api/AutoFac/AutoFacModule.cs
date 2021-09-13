@@ -46,7 +46,7 @@ namespace WebApi.Api
             cacheType.Add(typeof(LogAop));
             #endregion
 
-            //builder.RegisterGeneric(typeof(BaseEntityRepository<>)).As(typeof(IBaseEntityRepository<>)).InstancePerDependency();//注册仓储
+            builder.RegisterGeneric(typeof(BaseEntityRepository<>)).As(typeof(IBaseEntityRepository<>)).InstancePerDependency();//注册仓储
 
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository"))
                 .Where(a => a.Name.EndsWith("Repository"))

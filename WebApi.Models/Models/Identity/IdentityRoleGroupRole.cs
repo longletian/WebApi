@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebApi.Models.Models.Identity
+namespace WebApi.Models
 {
     [Table(Name = "case_role_rolegroup")]
     /// <summary>

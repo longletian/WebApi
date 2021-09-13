@@ -27,7 +27,7 @@ namespace WebApi.Models
         /// 最后修改人Id
         /// </summary>
         [Column(Position = -2)]
-        public long? UpdateUserId { get; set; }
+        public long? UpdateId { get; set; }
         /// <summary>
         /// 修改时间
         /// </summary>
@@ -43,7 +43,7 @@ namespace WebApi.Models
         /// 删除人id
         /// </summary>
         [Column(Position = -4)]
-        public long? DeleteUserId { get; set; }
+        public long? DeleteId { get; set; }
 
         /// <summary>
         /// 删除时间
@@ -55,13 +55,13 @@ namespace WebApi.Models
         /// </summary>
 
         [Column(Position = -7)]
-        public long CreateUserId { get; set; }
+        public long CreateId { get; set; }
 
         /// <summary>
         /// 创建时间
         /// </summary>
         [Column(Position = -6)]
-        public DateTime CreateTime { get; set; }
+        public DateTime? GmtCreate { get; set; }
     }
 
     [Serializable]

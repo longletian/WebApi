@@ -8,12 +8,12 @@ namespace WebApi.Models
         /// <summary>
         /// 创建者ID
         /// </summary>
-        long CreateUserId { get; set; }
+        long CreateId { get; set; }
 
         /// <summary>
         /// 创建时间
         /// </summary>
-        DateTime CreateTime { get; set; }
+        DateTime? GmtCreate { get; set; }
 
     }
     #endregion
@@ -24,7 +24,7 @@ namespace WebApi.Models
         /// <summary>
         /// 最后修改人Id
         /// </summary>
-        long? UpdateUserId { get; set; }
+        long? UpdateId { get; set; }
         /// <summary>
         /// 修改时间
         /// </summary>
@@ -43,7 +43,7 @@ namespace WebApi.Models
         /// <summary>
         /// 删除人id
         /// </summary>
-        long? DeleteUserId { get; set; }
+        long? DeleteId { get; set; }
 
         /// <summary>
         /// 删除时间
