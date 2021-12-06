@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\ViewModels\Qo\" />
+    <Folder Include="Models\ViewModels\QO" />
   </ItemGroup>
 
 </Project>

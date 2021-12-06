@@ -4,7 +4,7 @@ using System;
 namespace WebApi.Models
 {
     [Table(Name = "case_dict_item")]
-    public class IdentityBaseItem : Entity<long>, IDeleteAduitEntity
+    public class DictBaseItemEntity : Entity<long>, IDeleteAduitEntity
     {
         public int ItemTypeId { get; set; }
         public string Value { get; set; }

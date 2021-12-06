@@ -237,7 +237,6 @@ namespace WebApi.Common
                     {
                         UserName="admin",
                         NickName="开发部经理",
-                        CreateTime=DateTime.Now,
                         UserSex=0,
                         Email="11143343@qq.com",
                         BirthDay="1992",
@@ -252,7 +251,6 @@ namespace WebApi.Common
                     {
                         UserName="admin1",
                         NickName="系统管理员",
-                        CreateTime=DateTime.Now,
                         UserSex=0,
                         Email="11143343@qq.com",
                         BirthDay="1992",

@@ -7,7 +7,7 @@ namespace WebApi.Models
     /// 账号信息表
     /// </summary>
     [Table(Name = "case_account")]
-    public class AccountModel: FullEntity
+    public class AccountEntity: FullEntity
     {
         /// <summary>
         /// 账号名称
