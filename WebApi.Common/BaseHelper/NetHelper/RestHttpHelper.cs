@@ -23,7 +23,7 @@ namespace WebApi.Common.BaseHelper.NetHelper
         {
             try
             {
-                var client = new RestClient(AppSetting.AppSetting.GetSection("BaseClientUrl").ToString());
+                var client = new RestClient(AppSetting.GetSection("BaseClientUrl").ToString());
                 var request = new RestRequest(url, method);
                 if (headerDict?.Count > 0)
                     request.AddHeaders(headerDict);

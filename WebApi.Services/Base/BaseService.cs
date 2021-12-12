@@ -1,66 +1,32 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using WebApi.Repository.Base;
+using WebApi.Repository;
 
-namespace WebApi.Services.Base
+namespace WebApi.Services
 {
-   public class BaseService<T> :IBaseService<T> where T:class,new ()
+
+    public class BaseService<T> : IBaseService<T> where T : class, new()
     {
-        public IBaseRepository<T> baseRepository;
+        //通过在子类的构造函数中注入，这里是基类，不用构造函数
+        public IBaseEntityRepository<T> baseRepository;
 
-        public void Delete(T entity)
-        {
-            baseRepository.Delete(entity);
-        }
-
-        public void Delete(IEnumerable<T> entities)
-        {
-            baseRepository.Delete(entities);
-        }
-
-        public void Delete(Expression<Func<T, bool>> condition)
-        {
-            baseRepository.Delete(condition);
-        }
-
-        public Task DeleteAsync(T entity)
+        #region 封装方法
+        public Task<int> DeleteAsync(T entity)
         {
             return baseRepository.DeleteAsync(entity);
         }
 
-        public Task DeleteAsync(IEnumerable<T> entities)
+        public Task<int> DeleteAsync(IEnumerable<T> entities)
         {
             return baseRepository.DeleteAsync(entities);
         }
 
-        public Task DeleteAsync(Expression<Func<T, bool>> condition)
+        public Task<int> DeleteAsync(Expression<Func<T, bool>> condition)
         {
             return baseRepository.DeleteAsync(condition);
-        }
-
-        public T ExecuteByProc(string procName)
-        {
-            return baseRepository.ExecuteByProc(procName);
-        }
-
-        public T ExecuteByProc(string procName, object dbParamenter)
-        {
-            return baseRepository.ExecuteByProc(procName, dbParamenter);
-        }
-
-        public int ExecuteBySql(string sql)
-        {
-            return baseRepository.ExecuteBySql(sql);
-        }
-
-        public int ExecuteBySql(string sql, object dbParamenter)
-        {
-            return baseRepository.ExecuteBySql(sql, dbParamenter);
         }
 
         public T FindEntity(object KeyValue)
@@ -73,7 +39,7 @@ namespace WebApi.Services.Base
             return baseRepository.FindEntity(condition);
         }
 
-        public T FindEntity(string strSql, object dbParameter = null)
+        public T FindEntity(string strSql, Dictionary<string, string> dbParameter = null)
         {
             return baseRepository.FindEntity(strSql, dbParameter);
         }
@@ -81,11 +47,6 @@ namespace WebApi.Services.Base
         public IEnumerable<T> FindList()
         {
             return baseRepository.FindList();
-        }
-
-        public IEnumerable<T> FindList(Func<T, object> orderby)
-        {
-            return baseRepository.FindList(orderby);
         }
 
         public IEnumerable<T> FindList(Expression<Func<T, bool>> condition)
@@ -103,24 +64,24 @@ namespace WebApi.Services.Base
             return baseRepository.FindList(strSql, dbParameter);
         }
 
-        public IEnumerable<T> FindList(string orderField, int pageSize, int pageIndex, out int total)
+        public IEnumerable<T> FindList(string orderField, int pageSize, int pageIndex)
         {
-            return baseRepository.FindList(orderField, pageSize, pageIndex,out total);
+            return baseRepository.FindList(orderField, pageSize, pageIndex);
         }
 
-        public IEnumerable<T> FindList(Expression<Func<T, bool>> condition, string orderField, int pageSize, int pageIndex, out int total)
+        public IEnumerable<T> FindList(Expression<Func<T, bool>> condition, string orderField, int pageSize, int pageIndex, out long total)
         {
             return baseRepository.FindList(condition, orderField, pageSize, pageIndex, out total);
         }
 
-        public IEnumerable<T> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total)
+        public IEnumerable<T> FindList(string strSql, string orderField, int pageSize, int pageIndex, out long total)
         {
             return baseRepository.FindList(strSql, orderField, pageSize, pageIndex, out total);
         }
 
-        public IEnumerable<T> FindList(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total)
+        public IEnumerable<T> FindList(string strSql, string orderField, int pageSize, int pageIndex, out long total, Dictionary<string, string> dict = null)
         {
-            return baseRepository.FindList(strSql, dbParameter,orderField, pageSize, pageIndex, out total);
+            return baseRepository.FindList(strSql, orderField, pageSize, pageIndex, out total, dict);
         }
 
         public object FindObject(string strSql)
@@ -128,89 +89,35 @@ namespace WebApi.Services.Base
             return baseRepository.FindObject(strSql);
         }
 
-        public object FindObject(string strSql, object dbParameter)
+        public Task<int> InsertAsync(T entity)
         {
-            return baseRepository.FindObject(strSql, dbParameter);
+            return baseRepository.InsertAsync(entity);
         }
 
-        public DataTable FindTable(string strSql)
-        {
-            return baseRepository.FindTable(strSql);
-        }
-
-        public DataTable FindTable(string strSql, object dbParameter)
-        {
-            return baseRepository.FindTable(strSql,dbParameter);
-        }
-
-        public DataTable FindTable(string strSql, string orderField, int pageSize, int pageIndex, out int total)
-        {
-            return baseRepository.FindTable(strSql, orderField, pageSize,pageIndex,out total);
-        }
-
-        public DataTable FindTable(string strSql, object dbParameter, string orderField, int pageSize, int pageIndex, out int total)
-        {
-            return baseRepository.FindTable(strSql, dbParameter,orderField, pageSize, pageIndex, out total);
-        }
-
-        public IEnumerable<T> GetDBTable()
-        {
-            return baseRepository.GetDBTable();
-        }
-
-        public IEnumerable<T> GetDBTableFields(string tableName)
-        {
-            return baseRepository.GetDBTableFields(tableName);
-        }
-
-        public void Insert(T entity)
-        {
-             baseRepository.Insert(entity);
-        }
-
-        public void Insert(IEnumerable<T> entities)
-        {
-            baseRepository.Insert(entities);
-        }
-
-        public Task InsertAsync(T entity)
-        {
-           return baseRepository.InsertAsync(entity);
-        }
-
-        public Task InsertAsync(IEnumerable<T> entities)
+        public Task<int> InsertAsync(IEnumerable<T> entities)
         {
             return baseRepository.InsertAsync(entities);
         }
 
-        public IEnumerable<T> QueryByProc(string procName)
+        public long InsertIdentityId(T entity)
         {
-            return baseRepository.QueryByProc(procName);
+            return baseRepository.InsertIdentityId(entity);
         }
 
-        public IEnumerable<T> QueryByProc(string procName, object dbParameter)
+        public Task InsertPgCopy(IEnumerable<T> entities)
         {
-            return baseRepository.QueryByProc(procName, dbParameter);
+            return baseRepository.InsertPgCopy(entities);
         }
 
-        public void Update(T entity)
+        public Task<int> UpdateAsync(T entity)
         {
-             baseRepository.Update(entity);
+            return baseRepository.UpdateAsync(entity);
         }
 
-        public void Update(IEnumerable<T> entities)
-        {
-             baseRepository.Update(entities);
-        }
-
-        public Task UpdateAsync(T entity)
-        {
-          return  baseRepository.UpdateAsync(entity);
-        }
-
-        public Task UpdateAsync(IEnumerable<T> entities)
+        public Task<int> UpdateAsync(IEnumerable<T> entities)
         {
             return baseRepository.UpdateAsync(entities);
         }
+        #endregion
     }
 }

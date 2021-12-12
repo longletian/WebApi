@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcService";
+
+package greet;
+
+service Greeter {
+   rpc SayHello (HelloRequest) returns (HelloReply);
+
+     // Server streaming(服务器流式处理)
+  rpc StreamingFromServer (HelloRequest) returns (stream HelloReply);
+
+  // Client streaming(客户端流式处理)
+  rpc StreamingFromClient (stream HelloRequest) returns (HelloReply);
+
+  // Bi-directional streaming(双向流式处理)
+  rpc StreamingBothWays (stream HelloRequest) returns (stream HelloReply);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloReply {
+  string message = 1;
+}

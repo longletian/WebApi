@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +28,7 @@ namespace WebApi.Api.Controllers
             return NotFound();
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet,Route("identity")]
         public IActionResult Get()
         {
@@ -60,6 +60,5 @@ namespace WebApi.Api.Controllers
         {
             return NotFound();
         }
-
     }
 }

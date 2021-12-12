@@ -1,58 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using FreeSql.DataAnnotations;
 
 namespace WebApi.Models
 {
-    /// <summary>
-    /// 角色信息表
-    /// </summary>
-   [Table("case_role")]
-    public class IdentityRole: Entity
+    [Table(Name = "case_role")]
+    public class IdentityRole:FullEntity
     {
-        //public IdentityRole()
-        //{
-        //    IdentityUserRoleList = new List<IdentityUserRole>();
-        //    IdentityUserGroupRoleList = new List<IdentityUserGroupRole>();
-        //    IdentityRolePermissionList = new List<IdentityRolePermission>();
-        //    MenuModelList = new List<MenuModel>();
-        //}
-
-        [Required]
         /// <summary>
         /// 角色code
         /// </summary>
-        public string RoleCode { get; set; }
+        //public string RoleCode { get; set; }
 
-        [Required]
         /// <summary>
         /// 角色名称
         /// </summary>
         public string RoleName { get; set; }
+
         /// <summary>
-        /// 角色父code
+        /// 角色父组id
         /// </summary>
-        public string ParentCode { get; set; }
+        //public string ParentRoleId { get; set; }
+
+        /// <summary>
+        /// 角色父组Code
+        /// </summary>
+        //public string ParentRoleCode { get; set; }
+
         /// <summary>
         /// 角色备注
         /// </summary>
         public string RoleRemark { get; set; }
-
         /// <summary>
         /// 排序
         /// </summary>
         public long SortNum { get; set; }
 
-        //public ICollection<MenuModel> MenuModelList { get; set; }
+        ///// <summary>
+        ///// 一个角色对应多个用户
+        ///// </summary>
 
-        //public ICollection<IdentityUserRole>  IdentityUserRoleList { get; set; }
+        //[Navigate(ManyToMany = typeof(IdentityUserRole))]
+        //public virtual ICollection<IdentityUser> IdentityUsers { get; set; }
 
-        //public ICollection<IdentityUserGroupRole> IdentityUserGroupRoleList { get; set; }
+        ////[Navigate("RoleId")]
+        //public virtual ICollection<IdentityUserRole> IdentityGroupUsers { get; set; }
 
-        //public ICollection<IdentityRolePermission> IdentityRolePermissionList { get; set; }
+        ///// <summary>
+        ///// 一个角色对应多个用户组
+        ///// </summary>
+        //[Navigate(ManyToMany = typeof(IdentityGroupRole))]
+        //public virtual ICollection<IdentityGroup> IdentityGroups { get; set; }
 
+        ////[Navigate("RoleId")]
+        //public virtual ICollection<IdentityGroupRole>  IdentityGroupRoles { get; set; }
+
+
+        ///// <summary>
+        ///// 一个角色对应权限
+        ///// </summary>
+        //[Navigate(ManyToMany = typeof(IdentityRolePermission))]
+        //public virtual ICollection<IdentityPermission>  IdentityPermissions { get; set; }
+
+        ////[Navigate("RoleId")]
+        //public virtual ICollection<IdentityRolePermission>  IdentityRolePermissions { get; set; }
 
     }
 }

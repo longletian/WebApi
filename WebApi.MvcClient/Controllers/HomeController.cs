@@ -19,12 +19,10 @@ namespace WebApi.MvcClient.Controllers
             _logger = logger;
         }
 
-       
         public  IActionResult Index()
         {
             return View();
         }
-
 
         public async Task<IActionResult>  Privacy()
         {

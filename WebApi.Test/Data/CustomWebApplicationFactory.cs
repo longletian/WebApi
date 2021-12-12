@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebApi.Common.AutoFac;
-using WebApi.Models;
+using Serilog;
+using WebApi.Api;
+using WebApi.Common;
 
 namespace WebApi.Test.Data
 {
@@ -26,15 +27,15 @@ namespace WebApi.Test.Data
                 using (var scope = sp.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<DataDbContext>();
-                    db.Database.EnsureCreated();
+                    var freeSql = scopedServices.GetRequiredService<IFreeSql>();
+                    freeSql.CodeFirst.IsAutoSyncStructure=true;
                     try
                     {
-                        Utilities.InitializeDbForTests(db);
+                        Utilities.InitializeDbForTests(freeSql);
                     }
                     catch (Exception ex)
                     {
-
+                        Log.Error(ex.Message);
                     }
                 }
             });

@@ -1,18 +1,14 @@
 using Serilog;
 using Autofac;
 using AutoMapper;
+using WebApi.Common;
 using WebApi.Common.AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using WebApi.Api.ConfigureExtensions;
-using WebApi.Api.ServiceExtensions;
-using WebApi.Api.MiddlewareExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebApi.Common.AutoFac;
-using WebApi.Common;
-using Microsoft.AspNetCore.Http.Features;
+using System.Reflection;
 
 namespace WebApi.Api
 {
@@ -25,7 +21,6 @@ namespace WebApi.Api
             Configuration = configuration;
             Env = env;
         }
-
         /// <summary>
         /// 注册服务
         /// </summary>
@@ -34,89 +29,111 @@ namespace WebApi.Api
         {
             services.AddSingleton(new AppSetting(Configuration, Env));
 
+            services.AddCommonService();
+
+            services.AddFreeSqlService();
+
             services.AddSwaggUIService();
 
             services.AddControllService();
-
-            services.AddDataDbContext();
             
             services.AddAutoMapper(typeof(AutoMapperHelper));
-            
-            // services.AddRedisService();
+
+            //services.AddCapEvent(Configuration);
+
+            services.AddMongodbService();
+
+            services.AddRedisService();
 
             services.AddCorsService();
             
             services.AddHttpClientService();
 
-            services.Configure<FormOptions>(options =>
-            {
-                //超出设置范围会报InvalidDataException 异常信息
-                //主要是限制缓冲形式中的文件的长度
-                options.MultipartBodyLengthLimit = long.MaxValue;
-            });
+            services.AddRabbitmqService();
 
-            services.AddResponseCachingService();
-            
             services.AddResponseCompressionService();
 
-            // services.AddEasyNetQService();
-            
-            // services.AddMiniProfilerService();
+            services.AddJwtService();
 
-            //services.AddSignalR();
-            
+            services.AddEventStoreService();
+
+            #region 查看接口访问速度
+
+            //services.AddEasyNetQService();
+
             //services.AddAuthenticationService();
 
-            //services.AddJwtService();
+            services.AddMiniProfilerService();
 
-            // services.AddMiniProfiler(options =>
-            // {
-            //     options.RouteBasePath = "/profile";
-            // }).AddEntityFramework();
+            //services.AddMiniProfiler(options =>
+            //{
+            //    options.RouteBasePath = "/profile";
+            //}).AddEntityFramework();
+            #endregion
         }
 
         #region 注入autofac
 
-        /// <summary>
+        /// <summary>w
         /// 添加autofa服务 （注意：3.0写法 ）
         /// </summary>
         /// <param name="builder"></param>
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            //新模块组件注册    
+            //新模块组件注册
             builder.RegisterModule(new AutoFacModule());
+            builder.RegisterModule(new DependencyModule());
         }
-
         #endregion
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseStaticFiles();
+
+            //使用请求日志中间件
+            app.UseSerilogRequestLogging();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            // app.UseMiniProfiler();
-            
-            //使用请求日志中间件
-            app.UseSerilogRequestLogging();
-
-            app.UseRoutingConfigure();
-
-            app.UseResponseCaching();
-
-            app.UseResponseCompression();
-
-            app.UseSwaggUIConfigure();
+            else {
+                app.UseExceptionHandler("/Error");
+            }
+            app.UseSwaggUIConfigure(() => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("WebApi.Api.index.html"));
 
             app.UseCors();
 
-            //app.UseCap();
+            app.UseStaticFiles();
 
-            app.UseLogMiddleware();
+            app.UseRoutingConfigure();
 
+            //认证
+            app.UseAuthentication();
+
+            //授权
+            app.UseAuthorization();
+
+            app.UseResponseCompression();
+             
+            app.UseResponseCaching();
+
+            //app.UseLogMiddleware();
+
+            //app.UseGrpcWeb();
+
+            app.UseMiniProfiler();
+
+            app.UseEndpoints(endpoints =>
+            {
+                // 配置跨域
+                endpoints.MapGrpcService<GreeterService>()
+                .EnableGrpcWeb()
+                .RequireCors("AllowAll");
+
+            endpoints.MapControllers();
+                //禁用整个应用程序的匿名访问
+                //.RequireAuthorization();
+            });
         }
     }
 }

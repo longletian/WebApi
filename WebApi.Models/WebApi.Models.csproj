@@ -5,22 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.78" />
-    <PackageReference Include="DotNetCore.CAP.MongoDB" Version="3.0.3" />
-    <PackageReference Include="DotNetCore.CAP.MySql" Version="3.0.3" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.1" />
-    <PackageReference Include="FreeSql.DbContext" Version="2.0.101" />
-    <PackageReference Include="FreeSql.Extensions.Linq" Version="2.0.101" />
-    <PackageReference Include="FreeSql.Provider.MySql" Version="2.0.101" />
-    <PackageReference Include="FreeSql.Provider.PostgreSQL" Version="2.0.101" />
+	  <PackageReference Include="FreeSql" Version="2.0.105" />
+	  <PackageReference Include="FreeSql.Extensions.LazyLoading" Version="2.0.105" />
+	  <PackageReference Include="FreeSql.Extensions.Linq" Version="2.0.105" />
+	  <PackageReference Include="FreeSql.Provider.MySqlConnector" Version="2.0.105" />
+	  <PackageReference Include="FreeSql.Provider.PostgreSQL" Version="2.0.105" />
+	  <PackageReference Include="FreeSql.Repository" Version="2.0.105" />
+	  <PackageReference Include="MySqlConnector" Version="1.2.1" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\ViewModels\QO" />
   </ItemGroup>
 
 </Project>

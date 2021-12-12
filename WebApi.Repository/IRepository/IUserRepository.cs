@@ -1,10 +1,10 @@
 ﻿
 using WebApi.Models;
-using WebApi.Repository.Base;
 
-namespace WebApi.Repository.IRepository
+namespace WebApi.Repository
 {
-   public interface IUserRepository:IBaseRepository<IdentityUser>
+    public interface IUserRepository : IBaseEntityRepository<IdentityUser>
     {
+      
     }
 }

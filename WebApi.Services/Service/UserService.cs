@@ -1,12 +1,13 @@
 ﻿
 using WebApi.Models;
-using WebApi.Services.Base;
+using WebApi.Repository;
 using WebApi.Services.IService;
 
-namespace WebApi.Services.Service
+namespace WebApi.Services
 {
     public class UserService : BaseService<IdentityUser>, IUserService
     {
-      
+
     }
 }
+  

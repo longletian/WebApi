@@ -1,18 +1,15 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using Autofac;
-using FakeItEasy;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WebApi.Api;
-using WebApi.Common.AutoFac;
 using WebApi.Models;
 using WebApi.Test.Data;
 using Xunit;
 
 namespace WebApi.Test.Controllers
 {
+    /// <summary>
+    /// 集成测试
+    /// </summary>
     public class MenuControllerShould : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private readonly CustomWebApplicationFactory<Startup> _factory;
@@ -26,6 +23,8 @@ namespace WebApi.Test.Controllers
         public async Task MenuListTest()
         {
             var client = _factory.CreateClient();
+
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bebaer","");
             // Act
             var response = await client.GetAsync("api/Menu");
             response.EnsureSuccessStatusCode();

@@ -17,7 +17,6 @@ namespace WebApi.Api
                 Log.Logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(Configuration)
                     .CreateLogger();
-
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
@@ -26,6 +25,7 @@ namespace WebApi.Api
             }
             finally
             {
+                // 需要释放
                 Log.CloseAndFlush();
             }
         }
@@ -37,6 +37,7 @@ namespace WebApi.Api
             {
                 webBuilder.UseStartup<Startup>()
                     .UseSerilog()
+                    .UseUrls("https://localhost:6001")
                     .ConfigureKestrel((context, options) =>
                     {
                         //设置应用服务器Kestrel请求体最大为50MB
@@ -47,6 +48,7 @@ namespace WebApi.Api
         #region 配置读取
         public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings_log.json", optional: true, reloadOnChange: true)
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .Build();
         #endregion

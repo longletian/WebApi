@@ -1,0 +1,37 @@
+// 
+syntax = "proto3";
+
+// 
+option csharp_namespace = "GrpcService";
+
+// 命名空间
+package greet;
+
+
+// 定义服务
+// The greeting service definition.
+service Greeter {
+
+  // 定义一个 RPC 服务(一元)
+  rpc SayHello (HelloRequest) returns (HelloReply);
+
+  // Server streaming(服务器流式处理)
+  rpc StreamingFromServer (HelloRequest) returns (stream HelloReply);
+
+  // Client streaming(客户端流式处理)
+  rpc StreamingFromClient (stream HelloRequest) returns (HelloReply);
+
+  // Bi-directional streaming(双向流式处理)
+  rpc StreamingBothWays (stream HelloRequest) returns (stream HelloReply);
+}
+
+// 定义所需要序列化的数据格式（定义消息类型）
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}

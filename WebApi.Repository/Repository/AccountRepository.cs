@@ -1,16 +1,45 @@
 ﻿
+using FreeSql;
+using System;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using WebApi.Models;
-using WebApi.Repository.Base;
-using WebApi.Repository.Base.Unitwork;
-using WebApi.Repository.IRepository;
-
 namespace WebApi.Repository.Repository
 {
-    public class AccountRepository : BaseRepository<AccountModel>, IAccountRepository
+    public class AccountRepository : BaseEntityRepository<AccountModel>, IAccountRepository
     {
-        public AccountRepository(IUnitworkRepository _unitOfWork, DataDbContext dataDbContext) : base(_unitOfWork, dataDbContext)
+        public AccountRepository(UnitOfWorkManager unitOfWork) : base(unitOfWork)
         {
 
+        }
+
+        public Task ChangePasswordAsync(string userName, string newpassword)
+        {
+            string sql = @"
+UPDATE case_account 
+SET accountpasswd = @newpassword 
+WHERE
+	accountname = @userName 
+	AND isdeleted = FALSE";
+            return UpdateAsync(sql);
+        }
+
+        public Task DeleteAsync(string userName)
+        {
+            Expression<Func<AccountModel, bool>> expression = c => c.AccountName == userName;
+            return DeleteAsync(expression);
+        }
+
+        public AccountModel GetFirstByUserIdAsync(string userName)
+        {
+            Expression<Func<AccountModel, bool>> expression = c => c.AccountName == userName;
+            return FindEntity(expression);
+        }
+
+        public AccountModel VerifyUserPasswordAsync(string userName, string password)
+        {
+            Expression<Func<AccountModel, bool>> expression = c => c.AccountName == userName && c.AccountPasswd == password && c.IsDeleted == false;
+            return FindEntity(expression);
         }
     }
 }
