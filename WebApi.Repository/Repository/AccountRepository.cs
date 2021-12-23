@@ -4,7 +4,7 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebApi.Models;
-namespace WebApi.Repository.Repository
+namespace WebApi.Repository
 {
     public class AccountRepository : BaseEntityRepository<AccountEntity>, IAccountRepository
     {
@@ -13,14 +13,14 @@ namespace WebApi.Repository.Repository
 
         }
 
-        public Task ChangePasswordAsync(string userName, string newpassword)
+        public Task ChangePasswordAsync(string userName, string newPassword)
         {
             string sql = @"
 UPDATE case_account 
-SET accountpasswd = @newpassword 
+SET account_pass = @newPassword 
 WHERE
-	accountname = @userName 
-	AND isdeleted = FALSE";
+	account_name = @userName 
+	AND is_deleted = FALSE";
             return UpdateAsync(sql);
         }
 

@@ -17,5 +17,6 @@ namespace WebApi.Model
         public string FilePath { get; set; }
         [Column(StringLength = 40)]
         public string FileMd5 { get; set; }
+        public string Remark { get; set; }
     }
 }

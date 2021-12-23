@@ -169,7 +169,7 @@ namespace WebApi.Repository
     }
 
 
-    public abstract class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, long> where TEntity : class, new()
+    public abstract class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, long>,IBaseEntityRepository<TEntity> where TEntity : class, new()
     {
         public BaseEntityRepository(UnitOfWorkManager unitofworkmanager) : base(unitofworkmanager)
         {

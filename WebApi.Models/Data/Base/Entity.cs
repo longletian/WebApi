@@ -32,13 +32,8 @@ namespace WebApi.Models
         /// 修改时间
         /// </summary>
         [Column(Position = -1)]
-        public DateTime? UpdateTime { get; set; }
+        public DateTime? GmtModified { get; set; }
 
-        /// <summary>
-        /// 是否删除
-        /// </summary>
-        [Column(Position = -5)]
-        public bool IsDeleted { get; set; }
         /// <summary>
         /// 删除人id
         /// </summary>
@@ -49,13 +44,19 @@ namespace WebApi.Models
         /// 删除时间
         /// </summary>
         [Column(Position = -3)]
-        public DateTime? DeleteTime { get; set; }
+        public DateTime? GmtDeleted { get; set; }
+        
+        /// <summary>
+        /// 是否删除
+        /// </summary>
+        [Column(Position = -5)]
+        public bool IsDeleted { get; set; }
         /// <summary>
         /// 创建者ID
         /// </summary>
 
         [Column(Position = -7)]
-        public long CreateId { get; set; }
+        public long? CreateId { get; set; }
 
         /// <summary>
         /// 创建时间

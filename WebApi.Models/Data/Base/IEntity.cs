@@ -8,7 +8,7 @@ namespace WebApi.Models
         /// <summary>
         /// 创建者ID
         /// </summary>
-        long CreateId { get; set; }
+        long? CreateId { get; set; }
 
         /// <summary>
         /// 创建时间
@@ -28,18 +28,13 @@ namespace WebApi.Models
         /// <summary>
         /// 修改时间
         /// </summary>
-        DateTime? UpdateTime { get; set; }
+        DateTime? GmtModified { get; set; }
     }
     #endregion
 
     #region 删除接口
     public interface IDeleteAduitEntity
     {
-        /// <summary>
-        /// 是否删除
-        /// </summary>
-        bool IsDeleted { get; set; }
-
         /// <summary>
         /// 删除人id
         /// </summary>
@@ -48,7 +43,12 @@ namespace WebApi.Models
         /// <summary>
         /// 删除时间
         /// </summary>
-        DateTime? DeleteTime { get; set; }
+        DateTime? GmtDeleted { get; set; }
+        
+        /// <summary>
+        /// 是否删除
+        /// </summary>
+        bool IsDeleted { get; set; }
     }
     #endregion
 

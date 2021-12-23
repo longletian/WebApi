@@ -17,8 +17,8 @@ namespace WebApi.Repository
         /// 根据用户ID，修改用户的密码
         /// </summary>
         /// <param name="userName"></param>
-        /// <param name="newpassword"></param>
-        Task ChangePasswordAsync(string userName, string newpassword);
+        /// <param name="newPassword"></param>
+        Task ChangePasswordAsync(string userName, string newPassword);
 
         /// <summary>
         /// 删除用户

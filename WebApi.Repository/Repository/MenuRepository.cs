@@ -10,5 +10,15 @@ namespace WebApi.Repository
         {
 
         }
+
+        /// <summary>
+        /// 获取导航数据
+        /// </summary>
+        /// <returns></returns>
+        public MenuEntity GetMenuData()
+        {
+            string sql = "";
+            return FindEntity(sql);
+        }
     }
 }

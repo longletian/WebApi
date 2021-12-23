@@ -8,7 +8,7 @@ namespace WebApi.Test
     {
         public static void InitializeDbForTests(IFreeSql db)
         {
-            db.GetGuidRepository<MenuModel>().Insert(GetSeedingMessages());
+            db.GetGuidRepository<MenuEntity>().Insert(GetSeedingMessages());
         }
 
         public static void ReinitializeDbForTests(IFreeSql db)
@@ -17,9 +17,9 @@ namespace WebApi.Test
             InitializeDbForTests(db);
         }
 
-        public static List<MenuModel> GetSeedingMessages()
+        public static List<MenuEntity> GetSeedingMessages()
         {
-            return new List<MenuModel>()
+            return new List<MenuEntity>()
             {
                 //new MenuModel{ CreateorId = 1,UpdateorId = 1,CreateTime =DateTime.Parse("2020-11-23 15:32:50") ,IsDelete = false,
                 //    MenuCode = "hnxy",MenuName = "湖南学院",MenuPath = "hnxy",ParentMenuCode = "",MenuUrl = "/hnxy",MenuRemark = ""},
