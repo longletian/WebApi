@@ -6,16 +6,16 @@ namespace WebApi.Models
     /// <summary>
     /// 用户组角色关联表
     /// </summary>
-   [Table(Name= "case_group_role")]
-    public class IdentityGroupRole:Entity<long>
+   [Table(Name= "sys_group_role")]
+    public class GroupRoleEntity:Entity<long>
     {
 
-        public IdentityGroupRole()
+        public GroupRoleEntity()
         { 
         
         }
 
-        public IdentityGroupRole(long roleId, long groupId)
+        public GroupRoleEntity(long roleId, long groupId)
         {
             this.RoleId = roleId;
             this.GroupId = groupId;

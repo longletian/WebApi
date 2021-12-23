@@ -18,7 +18,7 @@ using WebApi.Tools;
 
 namespace WebApi.Services.Service
 {
-    public class AccountService : BaseService<AccountModel>, IAccountService
+    public class AccountService : BaseService<AccountEntity>, IAccountService
     {
         private readonly UnitOfWorkManager freeSql;
         private readonly IMapper mapper;
@@ -52,18 +52,18 @@ namespace WebApi.Services.Service
         public ResponseData AccountLogin(AccountLoginDto accountLoginDto)
         {
             string accessToken = "";
-            AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName);
+            AccountEntity accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName);
             if (accountModel != null)
             {
                 accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
                 if (accountModel != null)
                 {
                     accessToken = GetJwtToken(accountLoginDto).Data.ToString();
-                    LoginAccount loginAccount = new LoginAccount()
-                    {
-                        AccountName = accountModel.AccountName,
-                        RefreshToken = accessToken,
-                    };
+                    // LoginAccount loginAccount = new LoginAccount()
+                    // {
+                    //     AccountName = accountModel.AccountName,
+                    //     RefreshToken = accessToken,
+                    // };
                     //loginRepository.Insert(loginAccount);
                     UserModelDto userModelDto = new UserModelDto()
                     {
@@ -83,7 +83,7 @@ namespace WebApi.Services.Service
         public ResponseData AccountrRegirst(AccountRegirstDto accountRegirstDto)
         {
             //注册用户
-            AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == accountRegirstDto.AccountName);
+            AccountEntity accountModel = accountRepository.FindEntity(c => c.AccountName == accountRegirstDto.AccountName);
             if (accountModel != null)
             {
                 return new ResponseData { MsgCode = 400, Message = "账号已注册" };
@@ -91,8 +91,8 @@ namespace WebApi.Services.Service
             else
             {
                 //注册用户 
-                IdentityUser identityUser = mapper.Map<AccountRegirstDto, IdentityUser>(accountRegirstDto);
-                accountModel = this.mapper.Map<AccountRegirstDto, AccountModel>(accountRegirstDto);
+                UserEntity identityUser = mapper.Map<AccountRegirstDto, UserEntity>(accountRegirstDto);
+                accountModel = this.mapper.Map<AccountRegirstDto, AccountEntity>(accountRegirstDto);
                 accountModel.AccountPasswdEncrypt = Md5Helper.MD5Encrypt64(accountRegirstDto.AccountPasswd);
                 using (var uow = freeSql.Orm.CreateUnitOfWork())
                 {
@@ -140,7 +140,7 @@ namespace WebApi.Services.Service
             //在数据库/Redis/xxx存一份，然后验证接口的时候再把这个值拿出来去一起校验。
             //如果值变了校验就失败了，当然，重新登陆就会刷新这个值
             #endregion
-            AccountModel accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
+            AccountEntity accountModel = accountRepository.FindEntity(c => c.AccountName == accountLoginDto.AccountName && c.AccountPasswd == accountLoginDto.AccountPasswd);
             if (accountModel != null)
             {
                 var claims = new Claim[]{

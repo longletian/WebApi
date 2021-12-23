@@ -5,7 +5,7 @@ namespace WebApi.Models
     /// <summary>
     /// 接口管理类
     /// </summary>
-    [Table(Name = "case_api")]
+    [Table(Name = "sys_api")]
     public class ApiEntity : FullEntity
     {
         public string ApiName { get; set; }

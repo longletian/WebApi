@@ -13,10 +13,10 @@ namespace WebApi.Common.AutoMapper.Profiles
         /// </summary>
         public AccountProfiles()
         {
-            CreateMap<IdentityUser, AccountRegirstDto>();
-            CreateMap<AccountModel, AccountRegirstDto>();
-            CreateMap<AccountRegirstDto, IdentityUser>();
-            CreateMap<AccountRegirstDto, AccountModel>();
+            CreateMap<UserEntity, AccountRegirstDto>();
+            CreateMap<AccountEntity, AccountRegirstDto>();
+            CreateMap<AccountRegirstDto, AccountEntity>();
+            CreateMap<AccountRegirstDto, UserEntity>();
         }
     }
 }

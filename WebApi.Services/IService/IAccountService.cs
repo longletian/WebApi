@@ -2,7 +2,7 @@
 
 namespace WebApi.Services.IService
 {
-    public interface IAccountService:IBaseService<AccountModel>
+    public interface IAccountService:IBaseService<AccountEntity>
     {
         /// <summary>
         /// 账号登录

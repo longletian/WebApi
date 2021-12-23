@@ -4,7 +4,7 @@ using WebApi.Models;
 
 namespace WebApi.Services.IService
 {
-   public interface IMenuService : IBaseService<MenuModel>
+   public interface IMenuService : IBaseService<MenuEntity>
     {
         /// <summary>
         /// 获取导航列表

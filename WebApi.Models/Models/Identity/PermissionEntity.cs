@@ -2,8 +2,8 @@
 
 namespace WebApi.Models
 {
-    [Table(Name = "case_permission")]
-    public class IdentityPermission:Entity<long>
+    [Table(Name = "sys_permission")]
+    public class PermissionEntity:Entity<long>
     { 
         /// <summary>
         /// 权限code

@@ -6,7 +6,7 @@ namespace WebApi.Models
     /// <summary>
     /// 账号信息表
     /// </summary>
-    [Table(Name = "case_account")]
+    [Table(Name = "sys_account")]
     public class AccountEntity: FullEntity
     {
         /// <summary>

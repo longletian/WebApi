@@ -6,8 +6,8 @@ namespace WebApi.Models
     /// <summary>
     /// 字典类型表
     /// </summary>
-    [Table(Name = "case_dict_type")]
-    public class IdentityBaseType : Entity<long>, IDeleteAduitEntity
+    [Table(Name = "sys_dict_type")]
+    public class DictBaseTypeEntity : Entity<long>, IDeleteAduitEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }

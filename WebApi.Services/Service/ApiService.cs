@@ -6,14 +6,14 @@ using WebApi.Services.IService;
 
 namespace WebApi.Services.Service
 {
-    public class ApiService : BaseService<ApiModel>, IApiService
+    public class ApiService : BaseService<ApiEntity>, IApiService
     {
         private readonly IMapper mapper;
-        private readonly IBaseEntityRepository<ApiModel> baseApiRepository;
+        private readonly IBaseEntityRepository<ApiEntity> baseApiRepository;
 
         public ApiService(
             IMapper mapper,
-            IBaseEntityRepository<ApiModel> baseApiRepository)
+            IBaseEntityRepository<ApiEntity> baseApiRepository)
         {
             this.mapper = mapper;
             base.baseRepository = baseApiRepository;
@@ -32,7 +32,7 @@ namespace WebApi.Services.Service
 
         public ResponseData GetApiList()
         {
-            var result = this.baseApiRepository.Orm.Select<ApiModel>().Page(1, 10).ToList();
+            var result = this.baseApiRepository.Orm.Select<ApiEntity>().Page(1, 10).ToList();
             return new ResponseData { MsgCode = 200, Message = "请求成功", Data = new { dataNum = result.Count, dataList = result } };
 
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WebApi.Models;
 namespace WebApi.Repository.Repository
 {
-    public class AccountRepository : BaseEntityRepository<AccountModel>, IAccountRepository
+    public class AccountRepository : BaseEntityRepository<AccountEntity>, IAccountRepository
     {
         public AccountRepository(UnitOfWorkManager unitOfWork) : base(unitOfWork)
         {
@@ -26,19 +26,19 @@ WHERE
 
         public Task DeleteAsync(string userName)
         {
-            Expression<Func<AccountModel, bool>> expression = c => c.AccountName == userName;
+            Expression<Func<AccountEntity, bool>> expression = c => c.AccountName == userName;
             return DeleteAsync(expression);
         }
 
-        public AccountModel GetFirstByUserIdAsync(string userName)
+        public AccountEntity GetFirstByUserIdAsync(string userName)
         {
-            Expression<Func<AccountModel, bool>> expression = c => c.AccountName == userName;
+            Expression<Func<AccountEntity, bool>> expression = c => c.AccountName == userName;
             return FindEntity(expression);
         }
 
-        public AccountModel VerifyUserPasswordAsync(string userName, string password)
+        public AccountEntity VerifyUserPasswordAsync(string userName, string password)
         {
-            Expression<Func<AccountModel, bool>> expression = c => c.AccountName == userName && c.AccountPasswd == password && c.IsDeleted == false;
+            Expression<Func<AccountEntity, bool>> expression = c => c.AccountName == userName && c.AccountPasswd == password && c.IsDeleted == false;
             return FindEntity(expression);
         }
     }

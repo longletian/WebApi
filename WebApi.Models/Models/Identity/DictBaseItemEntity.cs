@@ -3,7 +3,7 @@ using System;
 
 namespace WebApi.Models
 {
-    [Table(Name = "case_dict_item")]
+    [Table(Name = "sys_dict_item")]
     public class DictBaseItemEntity : Entity<long>, IDeleteAduitEntity
     {
         public int ItemTypeId { get; set; }

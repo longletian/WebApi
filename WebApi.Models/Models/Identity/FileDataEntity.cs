@@ -6,13 +6,13 @@ namespace WebApi.Model
     /// <summary>
     /// 数据权限(文件操作方面的)
     /// </summary>
-    [Table(Name = "case_filedata")]
-    public class FileDataModel : FullEntity
+    [Table(Name = "sys_filedata")]
+    public class FileDataEntity : FullEntity
     {
         [Column(StringLength = 300)]
-        public string FileName { get; set; }
-        public short? FileType { get; set; }
-        public long? FileSize { get; set; }
+        public string Name { get; set; }
+        public short? Type { get; set; }
+        public long? Size { get; set; }
         [Column(StringLength = 500)]
         public string FilePath { get; set; }
         [Column(StringLength = 40)]

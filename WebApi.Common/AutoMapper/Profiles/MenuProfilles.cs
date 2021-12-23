@@ -12,8 +12,8 @@ namespace WebApi.Common.AutoMapper.Profiles
         /// </summary>
         public MenuProfilles()
         {
-            CreateMap<MenuModel, MenuViewDto>();
-            CreateMap<MenuViewDto, MenuModel>();
+            CreateMap<MenuEntity, MenuViewDto>();
+            CreateMap<MenuViewDto, MenuEntity>();
         }
     }
 }

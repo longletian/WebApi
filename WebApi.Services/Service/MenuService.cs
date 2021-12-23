@@ -9,15 +9,15 @@ using WebApi.Repository;
 
 namespace WebApi.Services.Service
 {
-    public class MenuService : BaseService<MenuModel>, IMenuService
+    public class MenuService : BaseService<MenuEntity>, IMenuService
     {
         private readonly IMapper mapper;
         private readonly ILogger<MenuService> logger;
-        private readonly IBaseEntityRepository<MenuModel> menuRepository;
+        private readonly IBaseEntityRepository<MenuEntity> menuRepository;
         public MenuService(
             IMapper mapper,
             ILogger<MenuService> logger,
-            IBaseEntityRepository<MenuModel> menuRepository)
+            IBaseEntityRepository<MenuEntity> menuRepository)
         {
             this.mapper = mapper;
             this.logger = logger;
@@ -45,8 +45,8 @@ namespace WebApi.Services.Service
             else
             {
                 //先获取所有的组查询应该更加仔细，权限应该和导航分开
-                List<MenuModel> menu = menuRepository.FindList().ToList();
-                List<MenuViewDto> menuViews = mapper.Map<List<MenuModel>, List<MenuViewDto>>(menu);
+                List<MenuEntity> menu = menuRepository.FindList().ToList();
+                List<MenuViewDto> menuViews = mapper.Map<List<MenuEntity>, List<MenuViewDto>>(menu);
                 var result = this.CreateTree(menuViews);
                 return result;
             }
@@ -61,8 +61,8 @@ namespace WebApi.Services.Service
         public ResponseData GetMenuList()
         {
             //先获取所有的组查询应该更加仔细，权限应该和导航分开
-            List<MenuModel> menu = menuRepository.FindList().ToList();
-            List<MenuViewDto> menuViews = mapper.Map<List<MenuModel>, List<MenuViewDto>>(menu);
+            List<MenuEntity> menu = menuRepository.FindList().ToList();
+            List<MenuViewDto> menuViews = mapper.Map<List<MenuEntity>, List<MenuViewDto>>(menu);
             var result = this.CreateTree(menuViews);
             return new ResponseData { MsgCode = 200, Message = "成功", Data = result };
         }
@@ -74,8 +74,8 @@ namespace WebApi.Services.Service
         public List<MenuViewDto> GetMenuListById(long userId)
         {
             //先获取所有的组查询应该更加仔细，权限应该和导航分开
-            List<MenuModel> menu = menuRepository.FindList().ToList();
-            List<MenuViewDto> menuViews = mapper.Map<List<MenuModel>, List<MenuViewDto>>(menu);
+            List<MenuEntity> menu = menuRepository.FindList().ToList();
+            List<MenuViewDto> menuViews = mapper.Map<List<MenuEntity>, List<MenuViewDto>>(menu);
             return this.CreateTree(menuViews);
         }
 

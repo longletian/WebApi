@@ -8,8 +8,8 @@ namespace WebApi.Models
     /// <summary>
     /// 用户组信息表
     /// </summary>
-    [Table(Name="case_user_group")]
-    public class IdentityGroup :FullEntity
+    [Table(Name="sys_user_group")]
+    public class GroupEntity :FullEntity
     {
         /// <summary>
         /// 组名称
@@ -32,11 +32,11 @@ namespace WebApi.Models
         /// <summary>
         /// 用户组排序
         /// </summary>
-        public long GroupSort { get; set; }
+        public long Sort { get; set; }
         /// <summary>
         /// 用户组备注
         /// </summary>
-        public string  UserGroupRemark { get; set; }
+        public string  Remark { get; set; }
 
         //[Navigate(ManyToMany = typeof(IdentityGroupUser))]
         //public virtual ICollection<IdentityUser>  IdentityUsers { get; set; }

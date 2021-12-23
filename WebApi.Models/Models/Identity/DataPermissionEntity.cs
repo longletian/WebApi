@@ -5,15 +5,15 @@ namespace WebApi.Models
     /// <summary>
     /// 数据权限关联表
     /// </summary>
-    [Table(Name="case_file_permission")]
-    public class IdentityDataPermission:Entity<long>
+    [Table(Name="sys_file_permission")]
+    public class DataPermissionEntity:Entity<long>
     {
-        public IdentityDataPermission()
+        public DataPermissionEntity()
         { 
         
         }
 
-        public IdentityDataPermission(long fileDataId, long permissionId)
+        public DataPermissionEntity(long fileDataId, long permissionId)
         {
             this.FileDataId = fileDataId;
             this.PermissionId = permissionId;

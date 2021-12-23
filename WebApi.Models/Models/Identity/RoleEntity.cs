@@ -2,8 +2,8 @@
 
 namespace WebApi.Models
 {
-    [Table(Name = "case_role")]
-    public class IdentityRole:FullEntity
+    [Table(Name = "sys_role")]
+    public class RoleEntity:FullEntity
     {
         /// <summary>
         /// 角色code
