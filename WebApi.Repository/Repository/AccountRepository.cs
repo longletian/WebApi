@@ -4,41 +4,41 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebApi.Models;
-namespace WebApi.Repository
+namespace WebApi.Repository.Repository
 {
-    public class AccountRepository : BaseEntityRepository<AccountEntity>, IAccountRepository
+    public class AccountRepository : BaseEntityRepository<AccountModel>, IAccountRepository
     {
         public AccountRepository(UnitOfWorkManager unitOfWork) : base(unitOfWork)
         {
 
         }
 
-        public Task ChangePasswordAsync(string userName, string newPassword)
+        public Task ChangePasswordAsync(string userName, string newpassword)
         {
             string sql = @"
 UPDATE case_account 
-SET account_pass = @newPassword 
+SET accountpasswd = @newpassword 
 WHERE
-	account_name = @userName 
-	AND is_deleted = FALSE";
+	accountname = @userName 
+	AND isdeleted = FALSE";
             return UpdateAsync(sql);
         }
 
         public Task DeleteAsync(string userName)
         {
-            Expression<Func<AccountEntity, bool>> expression = c => c.AccountName == userName;
+            Expression<Func<AccountModel, bool>> expression = c => c.AccountName == userName;
             return DeleteAsync(expression);
         }
 
-        public AccountEntity GetFirstByUserIdAsync(string userName)
+        public AccountModel GetFirstByUserIdAsync(string userName)
         {
-            Expression<Func<AccountEntity, bool>> expression = c => c.AccountName == userName;
+            Expression<Func<AccountModel, bool>> expression = c => c.AccountName == userName;
             return FindEntity(expression);
         }
 
-        public AccountEntity VerifyUserPasswordAsync(string userName, string password)
+        public AccountModel VerifyUserPasswordAsync(string userName, string password)
         {
-            Expression<Func<AccountEntity, bool>> expression = c => c.AccountName == userName && c.AccountPasswd == password && c.IsDeleted == false;
+            Expression<Func<AccountModel, bool>> expression = c => c.AccountName == userName && c.AccountPasswd == password && c.IsDeleted == false;
             return FindEntity(expression);
         }
     }

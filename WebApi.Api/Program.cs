@@ -15,7 +15,7 @@ namespace WebApi.Api
             try
             {
                 Log.Logger = new LoggerConfiguration()
-                    .ReadFrom.Configuration(Configuration)
+                    .ReadFrom.Configuration(Configuration.Build())
                     .CreateLogger();
                 CreateHostBuilder(args).Build().Run();
             }
@@ -37,6 +37,7 @@ namespace WebApi.Api
             {
                 webBuilder.UseStartup<Startup>()
                     .UseSerilog()
+                    .UseConfiguration(Configuration.Build())
                     .UseUrls("https://localhost:6001")
                     .ConfigureKestrel((context, options) =>
                     {
@@ -46,11 +47,10 @@ namespace WebApi.Api
             });
 
         #region ≈‰÷√∂¡»°
-        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
+        public static IConfigurationBuilder Configuration { get; } = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings_log.json", optional: true, reloadOnChange: true)
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .Build();
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         #endregion
     }
 }

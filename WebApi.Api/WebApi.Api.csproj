@@ -58,9 +58,13 @@
   <ItemGroup>
     <None Update="index.html">
     </None>
+  </ItemGroup>	
+	
+  <ItemGroup>
+    <Folder Include="Logs\" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_3log_1json__JsonSchema="https://json.schemastore.org/appsettings" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" appsettings_3log_1json__JsonSchema="https://json.schemastore.org/appsettings" /></VisualStudio></ProjectExtensions>
 
 
 </Project>

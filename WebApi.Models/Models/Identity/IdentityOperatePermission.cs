@@ -5,15 +5,15 @@ namespace WebApi.Models
     /// <summary>
     /// 功能权限关联表
     /// </summary>
-    [Table(Name = "sys_operate_permission")]
-    public class OperatePermissionEntity : Entity<long>
+    [Table(Name = "case_operate_permission")]
+    public class IdentityOperatePermission : Entity<long>
     {
-        public OperatePermissionEntity()
+        public IdentityOperatePermission()
         {
 
         }
 
-        public OperatePermissionEntity(long operateId, long permissionId)
+        public IdentityOperatePermission(long operateId, long permissionId)
         {
             this.OperateId = operateId;
             this.PermissionId = permissionId;

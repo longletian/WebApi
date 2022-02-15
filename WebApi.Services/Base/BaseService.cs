@@ -79,7 +79,7 @@ namespace WebApi.Services
             return baseRepository.FindList(strSql, orderField, pageSize, pageIndex, out total);
         }
 
-        public IEnumerable<T> FindList(string strSql, string orderField, int pageSize, int pageIndex, out long total, Dictionary<string, string> dict = null)
+        public IEnumerable<T> FindList(string strSql, string orderField, int pageSize, int pageIndex, out int total, Dictionary<string, string> dict = null)
         {
             return baseRepository.FindList(strSql, orderField, pageSize, pageIndex, out total, dict);
         }

@@ -6,15 +6,15 @@ namespace WebApi.Models
     /// <summary>
     /// 菜单权限关联表(菜单操作方面)
     /// </summary>
-    [Table(Name = "sys_menu_permission")]
-    public class MenuPermissionEntity : Entity<long>
+    [Table(Name = "case_menu_permission")]
+    public class IdentityMenuPermission : Entity<long>
     {
-        public MenuPermissionEntity()
+        public IdentityMenuPermission()
         { 
         
         }
 
-        public MenuPermissionEntity(long menuId, long permissionId)
+        public IdentityMenuPermission(long menuId, long permissionId)
         {
             this.MenuId = menuId;
             this.PermissionId = permissionId;

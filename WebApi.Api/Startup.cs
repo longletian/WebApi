@@ -53,7 +53,7 @@ namespace WebApi.Api
 
             services.AddResponseCompressionService();
 
-            services.AddJwtService();
+            //services.AddJwtService();
 
             services.AddEventStoreService();
 
@@ -61,14 +61,9 @@ namespace WebApi.Api
 
             //services.AddEasyNetQService();
 
-            //services.AddAuthenticationService();
+            services.AddAuthenticationService();
 
             services.AddMiniProfilerService();
-
-            //services.AddMiniProfiler(options =>
-            //{
-            //    options.RouteBasePath = "/profile";
-            //}).AddEntityFramework();
             #endregion
         }
 
@@ -107,10 +102,11 @@ namespace WebApi.Api
 
             app.UseRoutingConfigure();
 
-            //认证
+            //身份验证是确定用户标识的一个过程
             app.UseAuthentication();
 
-            //授权
+            //授权是指判断用户可执行的操作的过程
+            //授权需要一种身份验证机制。 。
             app.UseAuthorization();
 
             app.UseResponseCompression();

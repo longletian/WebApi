@@ -3,7 +3,7 @@ using WebApi.Models;
 
 namespace WebApi.Repository
 {
-    public interface IAccountRepository : IBaseEntityRepository<AccountEntity>
+    public interface IAccountRepository : IBaseEntityRepository<AccountModel>
     {
         /// <summary>
         /// 验证用户密码是否正确
@@ -11,14 +11,14 @@ namespace WebApi.Repository
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        AccountEntity VerifyUserPasswordAsync(string userName, string password);
+        AccountModel VerifyUserPasswordAsync(string userName, string password);
 
         /// <summary>
         /// 根据用户ID，修改用户的密码
         /// </summary>
         /// <param name="userName"></param>
-        /// <param name="newPassword"></param>
-        Task ChangePasswordAsync(string userName, string newPassword);
+        /// <param name="newpassword"></param>
+        Task ChangePasswordAsync(string userName, string newpassword);
 
         /// <summary>
         /// 删除用户
@@ -32,7 +32,7 @@ namespace WebApi.Repository
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        AccountEntity GetFirstByUserIdAsync(string userName);
+        AccountModel GetFirstByUserIdAsync(string userName);
 
     }
 }

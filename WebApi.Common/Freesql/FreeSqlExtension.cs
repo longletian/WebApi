@@ -176,50 +176,68 @@ namespace WebApi.Common
 
         public static ICodeFirst SeedData(this ICodeFirst @this)
         {
-            @this.Entity<RoleEntity>(e =>
+            @this.Entity<IdentityRoleGroup>(e =>
             {
-                e.HasData(new List<RoleEntity>
+                #region 角色数据
+                e.HasData(new List<IdentityRoleGroup>()
+                    {
+                        new IdentityRoleGroup{ RoleGroupCode="jt",ParentRoleGroupCode="", RoleGroupName="集团",RoleGroupRemark="集团",SortNum=0},
+                        new IdentityRoleGroup{ RoleGroupCode="jt.zgs",ParentRoleGroupCode="jt", RoleGroupName="子公司",RoleGroupRemark="子公司",SortNum=1},
+                        new IdentityRoleGroup{ RoleGroupCode="jt.zgs.kfb",ParentRoleGroupCode="jt.zgs", RoleGroupName="开发部",RoleGroupRemark="开发部",SortNum=1},
+                        new IdentityRoleGroup{ RoleGroupCode="jt.zgs.xsb",ParentRoleGroupCode="jt.zgs", RoleGroupName="销售部",RoleGroupRemark="销售部",SortNum=2},
+                        new IdentityRoleGroup{ RoleGroupCode="jt.zgs.ssb",ParentRoleGroupCode="jt.zgs", RoleGroupName="实施部",RoleGroupRemark="开发部",SortNum=3},
+                        new IdentityRoleGroup{ RoleGroupCode="jt.zgs.cwb",ParentRoleGroupCode="jt.zgs",  RoleGroupName="财务部",RoleGroupRemark="财务部",SortNum=4},
+                        new IdentityRoleGroup{ RoleGroupCode="jt.zgs.xsb.xsb1",ParentRoleGroupCode="jt.zgs.xsb", RoleGroupName="销售一部",RoleGroupRemark="销售一部",SortNum=0},
+                        new IdentityRoleGroup{ RoleGroupCode="jt.zgs.xsb.xsb2",ParentRoleGroupCode="jt.zgs.xsb", RoleGroupName="销售二部",RoleGroupRemark="销售二部",SortNum=1},
+                     });
+                #endregion
+            });
+
+            @this.Entity<IdentityRole>(e =>
+            {
+                e.HasData(new List<IdentityRole>
                 {
-                    new RoleEntity { RoleName="系统管理员",RoleRemark="系统管理员", SortNum=0},
-                    new RoleEntity { RoleName="网格员",RoleRemark="网格员", SortNum=1},
-                    new RoleEntity { RoleName="坐席员",RoleRemark="坐席员", SortNum=2},
-                    new RoleEntity { RoleName="处置人员",RoleRemark="处置人员", SortNum=3}
+                    new IdentityRole { RoleName="系统管理员",RoleRemark="系统管理员", SortNum=0},
+                    new IdentityRole { RoleName="网格员",RoleRemark="网格员", SortNum=1},
+                    new IdentityRole { RoleName="坐席员",RoleRemark="坐席员", SortNum=2},
+                    new IdentityRole { RoleName="处置人员",RoleRemark="处置人员", SortNum=3}
                 });
             });
 
             #region 导航数据
-            @this.Entity<MenuEntity>(e =>
+            @this.Entity<MenuModel>(e =>
             {
-                e.HasData(new List<MenuEntity>()
+                e.HasData(new List<MenuModel>()
                 {
-                    new MenuEntity {  MenuCode="yywh",MenuName="应用维护",MenuPath="/1/", MenuRemark="应用维护", MenuUrl="/yywh",ParentMenuCode="" ,SortNum=0 },
-                    new MenuEntity {  MenuCode="yywh.zzjggl",MenuName="组织结构管理",MenuPath="/1/2/", MenuRemark="组织结构管理", MenuUrl="/xxtz",ParentMenuCode="yywh" ,SortNum=0 },
-                    new MenuEntity { MenuCode="yywh.zzjggl.bmgl",MenuName="部门管理",MenuPath="/1/2/3", MenuRemark="部门管理", MenuUrl="/bmgl",ParentMenuCode="yywh.zzjggl" ,SortNum=0 },
-                    new MenuEntity { MenuCode="yywh.zzjggl.yhgl",MenuName="用户管理",MenuPath="/1/2/4", MenuRemark="用户管理", MenuUrl="/yhgl",ParentMenuCode="yywh.zzjggl",SortNum=1 },
-                    new MenuEntity {  MenuCode="yywh.jsqxgl",MenuName="角色权限管理",MenuPath="/1/3", MenuRemark="角色权限管理", MenuUrl="/jsqxgl",ParentMenuCode="yywh" ,SortNum=1 },
-                    new MenuEntity { MenuCode="yywh.jsqxgl.jsgl",MenuName="角色管理",MenuPath="/1/3/6", MenuRemark="企业走访", MenuUrl="/jsgl",ParentMenuCode="yywh.jsqxgl" ,SortNum=0 },
-                    new MenuEntity { MenuCode="yywh.jsqxgl.qxgl",MenuName="权限管理",MenuPath="/1/3/7", MenuRemark="权限管理", MenuUrl="/qxgl",ParentMenuCode="yywh.jsqxgl",SortNum=1 },
-                    new MenuEntity {  MenuCode="ddd",MenuName="钉钉端",MenuPath="/8/", MenuRemark="钉钉端", MenuUrl="/ddd",ParentMenuCode="" ,SortNum=0 },
-                    new MenuEntity {  MenuCode="ddd.zhjj",MenuName="智慧经济",MenuPath="/8/9", MenuRemark="智慧经济", MenuUrl="/zhjj",ParentMenuCode="ddd" ,SortNum=0 },
-                    new MenuEntity {  MenuCode="ddd.zhzf",MenuName="智慧执法",MenuPath="/8/10", MenuRemark="智慧执法", MenuUrl="/zhzf",ParentMenuCode="ddd" ,SortNum=1 },
-                    new MenuEntity {  MenuCode="ddd.zhpa",MenuName="智慧平安",MenuPath="/8/11", MenuRemark="智慧平安", MenuUrl="/zhpa",ParentMenuCode="ddd" ,SortNum=2 },
-                    new MenuEntity {  MenuCode="ddd.zhzf.zczsb",MenuName="自处置上报",MenuPath="/8/9/12", MenuRemark="自处置上报", MenuUrl="/zczsb",ParentMenuCode="ddd.zhjj" ,SortNum=0 },
-                    new MenuEntity {  MenuCode="zhzf",MenuName="智慧执法",MenuPath="/13/", MenuRemark="智慧执法", MenuUrl="/zhzf",ParentMenuCode="" ,SortNum=2 },
-                    new MenuEntity {  MenuCode="zhzf.ysll",MenuName="预受理事件",MenuPath="/13/14", MenuRemark="预受理事件", MenuUrl="/yslsj",ParentMenuCode="zhzf" ,SortNum=0 },
-                    new MenuEntity {  MenuCode="zhzf.dpql",MenuName="待派遣事件",MenuPath="/13/15", MenuRemark="待派遣事件", MenuUrl="/dpqsj",ParentMenuCode="zhzf" ,SortNum=1 },
+                    new MenuModel {  MenuCode="yywh",MenuName="应用维护",MenuPath="/1/", MenuRemark="应用维护", MenuUrl="/yywh",ParentMenuCode="" ,SortNum=0 },
+                    new MenuModel {  MenuCode="yywh.zzjggl",MenuName="组织结构管理",MenuPath="/1/2/", MenuRemark="组织结构管理", MenuUrl="/xxtz",ParentMenuCode="yywh" ,SortNum=0 },
+                    new MenuModel { MenuCode="yywh.zzjggl.bmgl",MenuName="部门管理",MenuPath="/1/2/3", MenuRemark="部门管理", MenuUrl="/bmgl",ParentMenuCode="yywh.zzjggl" ,SortNum=0 },
+                    new MenuModel { MenuCode="yywh.zzjggl.yhgl",MenuName="用户管理",MenuPath="/1/2/4", MenuRemark="用户管理", MenuUrl="/yhgl",ParentMenuCode="yywh.zzjggl",SortNum=1 },
+                    new MenuModel {  MenuCode="yywh.jsqxgl",MenuName="角色权限管理",MenuPath="/1/3", MenuRemark="角色权限管理", MenuUrl="/jsqxgl",ParentMenuCode="yywh" ,SortNum=1 },
+                    new MenuModel { MenuCode="yywh.jsqxgl.jsgl",MenuName="角色管理",MenuPath="/1/3/6", MenuRemark="企业走访", MenuUrl="/jsgl",ParentMenuCode="yywh.jsqxgl" ,SortNum=0 },
+                    new MenuModel { MenuCode="yywh.jsqxgl.qxgl",MenuName="权限管理",MenuPath="/1/3/7", MenuRemark="权限管理", MenuUrl="/qxgl",ParentMenuCode="yywh.jsqxgl",SortNum=1 },
+                    new MenuModel {  MenuCode="ddd",MenuName="钉钉端",MenuPath="/8/", MenuRemark="钉钉端", MenuUrl="/ddd",ParentMenuCode="" ,SortNum=0 },
+                    new MenuModel {  MenuCode="ddd.zhjj",MenuName="智慧经济",MenuPath="/8/9", MenuRemark="智慧经济", MenuUrl="/zhjj",ParentMenuCode="ddd" ,SortNum=0 },
+                    new MenuModel {  MenuCode="ddd.zhzf",MenuName="智慧执法",MenuPath="/8/10", MenuRemark="智慧执法", MenuUrl="/zhzf",ParentMenuCode="ddd" ,SortNum=1 },
+                    new MenuModel {  MenuCode="ddd.zhpa",MenuName="智慧平安",MenuPath="/8/11", MenuRemark="智慧平安", MenuUrl="/zhpa",ParentMenuCode="ddd" ,SortNum=2 },
+                    new MenuModel {  MenuCode="ddd.zhzf.zczsb",MenuName="自处置上报",MenuPath="/8/9/12", MenuRemark="自处置上报", MenuUrl="/zczsb",ParentMenuCode="ddd.zhjj" ,SortNum=0 },
+                    new MenuModel {  MenuCode="zhzf",MenuName="智慧执法",MenuPath="/13/", MenuRemark="智慧执法", MenuUrl="/zhzf",ParentMenuCode="" ,SortNum=2 },
+                    new MenuModel {  MenuCode="zhzf.ysll",MenuName="预受理事件",MenuPath="/13/14", MenuRemark="预受理事件", MenuUrl="/yslsj",ParentMenuCode="zhzf" ,SortNum=0 },
+                    new MenuModel {  MenuCode="zhzf.dpql",MenuName="待派遣事件",MenuPath="/13/15", MenuRemark="待派遣事件", MenuUrl="/dpqsj",ParentMenuCode="zhzf" ,SortNum=1 },
                  });
             });
             #endregion
 
-            @this.Entity<UserEntity>(e =>
+            @this.Entity<IdentityUser>(e =>
             {
                 #region 用户数据
-                e.HasData(new List<UserEntity>()
+                e.HasData(new List<IdentityUser>()
                  {
-                    new UserEntity()
+                    new IdentityUser()
                     {
                         UserName="admin",
                         NickName="开发部经理",
+                        CreateTime=DateTime.Now,
                         UserSex=0,
                         Email="11143343@qq.com",
                         BirthDay="1992",
@@ -230,10 +248,11 @@ namespace WebApi.Common
                         TelePhone="19912313123",
                         IsDeleted=false,
                     },
-                    new UserEntity()
+                    new IdentityUser()
                     {
                         UserName="admin1",
                         NickName="系统管理员",
+                        CreateTime=DateTime.Now,
                         UserSex=0,
                         Email="11143343@qq.com",
                         BirthDay="1992",
@@ -248,136 +267,136 @@ namespace WebApi.Common
                 #endregion
             });
 
-            @this.Entity<UserRoleEntity>(e =>
+            @this.Entity<IdentityUserRole>(e =>
             {
                 #region 用户角色组
-                e.HasData(new List<UserRoleEntity>()
+                e.HasData(new List<IdentityUserRole>()
                 {
-                     new UserRoleEntity(1,1),
+                     new IdentityUserRole(1,1),
                 });
                 #endregion
             });
 
-            @this.Entity<PermissionEntity>(e =>
+            @this.Entity<IdentityPermission>(e =>
             {
-                e.HasData(new List<PermissionEntity>()
+                e.HasData(new List<IdentityPermission>()
                 {
-                    new PermissionEntity {PermissionCode="zhzf",PermissionName="智慧执法模块",PermissionRemark= "智慧执法模块", ParentPermissionCode=""},
-                    new PermissionEntity {PermissionCode="ddd",PermissionName="钉钉端模块",PermissionRemark= "钉钉端模块", ParentPermissionCode=""},
-                    new PermissionEntity { PermissionCode = "yywh", PermissionName = "应用维护模块", PermissionRemark = "应用维护模块", ParentPermissionCode = "" }
+                    new IdentityPermission {PermissionCode="zhzf",PermissionName="智慧执法模块",PermissionRemark= "智慧执法模块", ParentPermissionCode=""},
+                    new IdentityPermission {PermissionCode="ddd",PermissionName="钉钉端模块",PermissionRemark= "钉钉端模块", ParentPermissionCode=""},
+                    new IdentityPermission { PermissionCode = "yywh", PermissionName = "应用维护模块", PermissionRemark = "应用维护模块", ParentPermissionCode = "" }
                 });
             });
 
-            @this.Entity<MenuPermissionEntity>(e =>
+            @this.Entity<IdentityMenuPermission>(e =>
             {
-                e.HasData(new List<MenuPermissionEntity>()
+                e.HasData(new List<IdentityMenuPermission>()
                 {
-                    new MenuPermissionEntity{  MenuId=1, PermissionId=3},
-                    new MenuPermissionEntity{  MenuId=2, PermissionId=3},
-                    new MenuPermissionEntity{  MenuId=3, PermissionId=3},
-                    new MenuPermissionEntity{  MenuId=4, PermissionId=3},
-                    new MenuPermissionEntity{ MenuId=8,PermissionId=2},
-                    new MenuPermissionEntity{ MenuId=13,PermissionId=1},
+                    new IdentityMenuPermission{  MenuId=1, PermissionId=3},
+                    new IdentityMenuPermission{  MenuId=2, PermissionId=3},
+                    new IdentityMenuPermission{  MenuId=3, PermissionId=3},
+                    new IdentityMenuPermission{  MenuId=4, PermissionId=3},
+                    new IdentityMenuPermission{ MenuId=8,PermissionId=2},
+                    new IdentityMenuPermission{ MenuId=13,PermissionId=1},
                 });
             });
 
-            @this.Entity<OperateEntity>(e =>
+            @this.Entity<OperateModel>(e =>
             {
-                e.HasData(new List<OperateEntity>()
+                e.HasData(new List<OperateModel>()
                 {
-                    new OperateEntity { OperateCode="ysll.sl", OperateName="预受理事件受理", OperateParentCode="zhzf.ysll", OperateRemark="预受理事件受理"},
-                    new OperateEntity { OperateCode="ysll.ja", OperateName="预受理事件受理结案", OperateParentCode="zhzf.ysll", OperateRemark="预受理事件受理"},
+                    new OperateModel { OperateCode="ysll.sl", OperateName="预受理事件受理", OperateParentCode="zhzf.ysll", OperateRemark="预受理事件受理"},
+                    new OperateModel { OperateCode="ysll.ja", OperateName="预受理事件受理结案", OperateParentCode="zhzf.ysll", OperateRemark="预受理事件受理"},
                 });
             });
 
-            @this.Entity<OperatePermissionEntity>(e =>
+            @this.Entity<IdentityOperatePermission>(e =>
             {
-                e.HasData(new List<OperatePermissionEntity>()
+                e.HasData(new List<IdentityOperatePermission>()
                 {
-                    new OperatePermissionEntity {OperateId=1,PermissionId=1},
-                    new OperatePermissionEntity {OperateId=2,PermissionId=1}
+                    new IdentityOperatePermission {OperateId=1,PermissionId=1},
+                    new IdentityOperatePermission {OperateId=2,PermissionId=1}
                 });
             });
 
-            @this.Entity<RolePermissionEntity>(e =>
+            @this.Entity<IdentityRolePermission>(e =>
             {
-                e.HasData(new List<RolePermissionEntity>()
+                e.HasData(new List<IdentityRolePermission>()
                 {
-                    new RolePermissionEntity { PermissionId=1,RoleId=1},
-                    new RolePermissionEntity { PermissionId=1,RoleId=3},
-                    new RolePermissionEntity { PermissionId=2,RoleId=2},
+                    new IdentityRolePermission { PermissionId=1,RoleId=1},
+                    new IdentityRolePermission { PermissionId=1,RoleId=3},
+                    new IdentityRolePermission { PermissionId=2,RoleId=2},
                 });
             });
 
-            @this.Entity<GroupEntity>(e =>
+            @this.Entity<IdentityGroup>(e =>
             {
                 #region 组
-                e.HasData(new List<GroupEntity>()
+                e.HasData(new List<IdentityGroup>()
                 {
-                    new GroupEntity{GroupCode= "sdzzf", GroupName= "三墩镇政府", Remark= "" , ParentGroupCode=""},
-                    new GroupEntity{GroupCode="sdzzf.jfb", GroupName="经发办", Remark="经发办" , ParentGroupCode="sdzzf"},
-                    new GroupEntity{GroupCode="sdzzf.jfb.mtbm", GroupName="矛调部门", Remark="矛调部门" , ParentGroupCode="sdzzf.jfb"},
-                    new GroupEntity{GroupCode="sdzzf.jfb.znbm", GroupName="职能部门", Remark="职能部门" , ParentGroupCode="sdzzf.jfb"},
-                    new GroupEntity{GroupCode="sdzzf.jfb.sqc", GroupName="社区(村)", Remark="社区(村)" , ParentGroupCode="sdzzf.jfb"},
-                    new GroupEntity{GroupCode="wbdw", GroupName="外部单位", Remark="" , ParentGroupCode=""},
-                    new GroupEntity{GroupCode="wbdw.trgc", GroupName="同人广场", Remark="经发办" , ParentGroupCode="wbdw"},
-                    new GroupEntity{GroupCode="wbdw.ypsd", GroupName="优盘时代", Remark="优盘时代" , ParentGroupCode="wbdw"},
-                    new GroupEntity{GroupCode="wbdw.trjh", GroupName="同人精华", Remark="同人精华" , ParentGroupCode="wbdw"},
-                    new GroupEntity{GroupCode="wbdw.jqrs", GroupName="剑桥人社", Remark="剑桥人社" , ParentGroupCode="wbdw"},
-                    new GroupEntity{GroupCode="wbdw.zjgc", GroupName="紫金广场", Remark="紫金广场" , ParentGroupCode="wbdw"}
+                    new IdentityGroup{GroupCode="sdzzf", GroupName="三墩镇政府", UserGroupRemark="" , ParentGroupCode=""},
+                    new IdentityGroup{GroupCode="sdzzf.jfb", GroupName="经发办", UserGroupRemark="经发办" , ParentGroupCode="sdzzf"},
+                    new IdentityGroup{GroupCode="sdzzf.jfb.mtbm", GroupName="矛调部门", UserGroupRemark="矛调部门" , ParentGroupCode="sdzzf.jfb"},
+                    new IdentityGroup{GroupCode="sdzzf.jfb.znbm", GroupName="职能部门", UserGroupRemark="职能部门" , ParentGroupCode="sdzzf.jfb"},
+                    new IdentityGroup{GroupCode="sdzzf.jfb.sqc", GroupName="社区(村)", UserGroupRemark="社区(村)" , ParentGroupCode="sdzzf.jfb"},
+                    new IdentityGroup{GroupCode="wbdw", GroupName="外部单位", UserGroupRemark="" , ParentGroupCode=""},
+                    new IdentityGroup{GroupCode="wbdw.trgc", GroupName="同人广场", UserGroupRemark="经发办" , ParentGroupCode="wbdw"},
+                    new IdentityGroup{GroupCode="wbdw.ypsd", GroupName="优盘时代", UserGroupRemark="优盘时代" , ParentGroupCode="wbdw"},
+                    new IdentityGroup{GroupCode="wbdw.trjh", GroupName="同人精华", UserGroupRemark="同人精华" , ParentGroupCode="wbdw"},
+                    new IdentityGroup{GroupCode="wbdw.jqrs", GroupName="剑桥人社", UserGroupRemark="剑桥人社" , ParentGroupCode="wbdw"},
+                    new IdentityGroup{GroupCode="wbdw.zjgc", GroupName="紫金广场", UserGroupRemark="紫金广场" , ParentGroupCode="wbdw"}
                 });
                 #endregion
             });
 
-            @this.Entity<ApiEntity>(e =>
+            @this.Entity<ApiModel>(e =>
             {
-                e.HasData(new List<ApiEntity>()
+                e.HasData(new List<ApiModel>()
                 {
-                    new ApiEntity { ApiName = "登陆接口", LinkUrl = "api/account/login", ApiRemark = "登陆接口", ApiType = Convert.ToInt32(RequestEnum.Post), IsEnable = false, IsAuth = false},
-                    new ApiEntity { ApiName = "注册接口", LinkUrl = "api/account/regirst", ApiRemark = "注册接口", ApiType = Convert.ToInt32(RequestEnum.Post), IsEnable = false, IsAuth = false},
-                    new ApiEntity { ApiName = "修改密码", LinkUrl = "api/account/{password}", ApiRemark = "修改密码", ApiType = Convert.ToInt32(RequestEnum.Put), IsEnable = false, IsAuth = false },
-                    new ApiEntity { ApiName = "删除用户", LinkUrl = "api/account/{userId}", ApiRemark = "删除用户", ApiType = Convert.ToInt32(RequestEnum.Delete), IsEnable = false, IsAuth = false}
+                    new ApiModel { ApiName = "登陆接口", LinkUrl = "api/account/login", ApiRemark = "登陆接口", ApiType = Convert.ToInt32(RequestEnum.Post), IsEnable = false, IsAuth = false},
+                    new ApiModel { ApiName = "注册接口", LinkUrl = "api/account/regirst", ApiRemark = "注册接口", ApiType = Convert.ToInt32(RequestEnum.Post), IsEnable = false, IsAuth = false},
+                    new ApiModel { ApiName = "修改密码", LinkUrl = "api/account/{password}", ApiRemark = "修改密码", ApiType = Convert.ToInt32(RequestEnum.Put), IsEnable = false, IsAuth = false },
+                    new ApiModel { ApiName = "删除用户", LinkUrl = "api/account/{userId}", ApiRemark = "删除用户", ApiType = Convert.ToInt32(RequestEnum.Delete), IsEnable = false, IsAuth = false}
                 });
             });
 
-            @this.Entity<GroupRoleEntity>(e =>
+            @this.Entity<IdentityGroupRole>(e =>
             {
-                e.HasData(new List<GroupRoleEntity>()
+                e.HasData(new List<IdentityGroupRole>()
                 {
-                    new GroupRoleEntity{ RoleId=1,GroupId=1},
+                    new IdentityGroupRole{ RoleId=1,GroupId=1},
                 });
             });
 
-            @this.Entity<GroupUserEntity>(e =>
+            @this.Entity<IdentityGroupUser>(e =>
             {
-                e.HasData(new List<GroupUserEntity>()
+                e.HasData(new List<IdentityGroupUser>()
                 {
-                    new GroupUserEntity{ GroupId=4, UserId=1 },
-                    new GroupUserEntity{ GroupId=5, UserId=2 }
+                    new IdentityGroupUser{ GroupId=4, UserId=1 },
+                    new IdentityGroupUser{ GroupId=5, UserId=2 }
                 });
 
             });
 
-            @this.Entity<AccountEntity>(e =>
+            @this.Entity<AccountModel>(e =>
             {
                 #region 账号数据
-                e.HasData(new List<AccountEntity>()
+                e.HasData(new List<AccountModel>()
                 {
-                    new AccountEntity {
+                    new AccountModel {
                         AccountName="11143343@qq.com",
                         AccountPasswd="123456",
                         AccountPasswdEncrypt="123456",
                         AccountType=2,
                         AccountState=1
                         },
-                    new AccountEntity{
+                    new AccountModel{
                         AccountName="admin22@qq.com",
                         AccountPasswd="123456",
                         AccountPasswdEncrypt="123456",
                         AccountType=2,
                         AccountState=1,
                     },
-                        new AccountEntity{
+                        new AccountModel{
                         AccountName="admin33@qq.com",
                         AccountPasswd="123456",
                         AccountPasswdEncrypt="123456",

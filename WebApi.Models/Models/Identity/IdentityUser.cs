@@ -3,13 +3,13 @@ using FreeSql.DataAnnotations;
 
 namespace WebApi.Models
 {
-    [Table(Name ="sys_user")]
-    public class UserEntity: FullEntity
+    [Table(Name ="case_user")]
+    public class IdentityUser: FullEntity
     {
         /// <summary>
         /// 系统会自动创建一个空构造
         /// </summary>
-        public UserEntity() { }
+        public IdentityUser() { }
 
         /// <summary>
         /// 用户名

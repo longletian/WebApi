@@ -5,8 +5,8 @@ namespace WebApi.Models
     /// <summary>
     /// 功能权限表(按钮操作方面)
     /// </summary>
-    [Table(Name = "sys_operate")]
-    public class OperateEntity:Entity<long>
+    [Table(Name = "case_operate")]
+    public class OperateModel:Entity<long>
     {
         /// <summary>
         /// 功能编码

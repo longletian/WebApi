@@ -27,42 +27,41 @@ namespace WebApi.Models
         /// 最后修改人Id
         /// </summary>
         [Column(Position = -2)]
-        public long? UpdateId { get; set; }
+        public long? UpdateUserId { get; set; }
         /// <summary>
         /// 修改时间
         /// </summary>
         [Column(Position = -1)]
-        public DateTime? GmtModified { get; set; }
+        public DateTime? UpdateTime { get; set; }
 
-        /// <summary>
-        /// 删除人id
-        /// </summary>
-        [Column(Position = -4)]
-        public long? DeleteId { get; set; }
-
-        /// <summary>
-        /// 删除时间
-        /// </summary>
-        [Column(Position = -3)]
-        public DateTime? GmtDeleted { get; set; }
-        
         /// <summary>
         /// 是否删除
         /// </summary>
         [Column(Position = -5)]
         public bool IsDeleted { get; set; }
         /// <summary>
+        /// 删除人id
+        /// </summary>
+        [Column(Position = -4)]
+        public long? DeleteUserId { get; set; }
+
+        /// <summary>
+        /// 删除时间
+        /// </summary>
+        [Column(Position = -3)]
+        public DateTime? DeleteTime { get; set; }
+        /// <summary>
         /// 创建者ID
         /// </summary>
 
         [Column(Position = -7)]
-        public long? CreateId { get; set; }
+        public long CreateUserId { get; set; }
 
         /// <summary>
         /// 创建时间
         /// </summary>
         [Column(Position = -6)]
-        public DateTime? GmtCreate { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 
     [Serializable]

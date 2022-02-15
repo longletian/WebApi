@@ -53,4 +53,8 @@
 		<ProjectReference Include="..\WebApi.Models\WebApi.Models.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Authorications\AuthoricationHandler\" />
+	</ItemGroup>
+
 </Project>

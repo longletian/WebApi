@@ -2,13 +2,8 @@
 
 namespace WebApi.Repository
 {
-    public interface IMenuRepository: IBaseEntityRepository<MenuEntity>
+    public interface IMenuRepository: IBaseEntityRepository<MenuModel>
     {
-        
-        /// <summary>
-        /// 获取导航数据
-        /// </summary>
-        /// <returns></returns>
-        MenuEntity GetMenuData();
+
     }
 }

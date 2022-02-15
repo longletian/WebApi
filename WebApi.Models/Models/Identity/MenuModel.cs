@@ -7,8 +7,8 @@ namespace WebApi.Models
     /// <summary>
     /// 菜单权限表
     /// </summary>
-    [Table(Name = "sys_menu")]
-    public class MenuEntity : Entity<long>
+    [Table(Name = "case_menu")]
+    public class MenuModel : Entity<long>
     {
         /// <summary>
         /// 菜单编码

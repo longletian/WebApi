@@ -7,15 +7,15 @@ namespace WebApi.Models
     /// <summary>
     /// 用户组和用户关系表
     /// </summary>
-    [Table(Name = "sys_group_user")]
-    public class GroupUserEntity : Entity<long>
+    [Table(Name = "case_group_user")]
+    public class IdentityGroupUser : Entity<long>
     {
-        public GroupUserEntity()
+        public IdentityGroupUser()
         { 
         
         }
 
-        public GroupUserEntity(long userId,long groupId)
+        public IdentityGroupUser(long userId,long groupId)
         {
             this.UserId = userId;
             this.GroupId = groupId;

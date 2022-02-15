@@ -22,6 +22,7 @@ namespace WebApi.Common
         public override Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
+            //this.channel.BasicPublish(@event, cancellationToken);
         }
 
         public override void Subscribe<TEvent, TEventHandler>()

@@ -5,7 +5,7 @@ using WebApi.Services.IService;
 
 namespace WebApi.Services
 {
-    public class UserService : BaseService<UserEntity>, IUserService
+    public class UserService : BaseService<IdentityUser>, IUserService
     {
 
     }

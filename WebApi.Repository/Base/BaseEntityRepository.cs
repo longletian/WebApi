@@ -111,65 +111,40 @@ namespace WebApi.Repository
 
         public IEnumerable<TEntity> FindList(Expression<Func<TEntity, bool>> condition, string orderfield, int pagesize, int pageindex, out long total)
         {
-            return this.freeSql.Select<TEntity>().WhereDynamic(condition).Count(out total).Page(pageindex, pagesize).ToList();
+            var list = this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).Where(condition).ToList();
+            total = list.Count;
+            return list;
         }
 
         public IEnumerable<TEntity> FindList(string strsql, string orderfield, int pagesize, int pageindex, out long total)
         {
-            return this.freeSql.Select<TEntity>().WithSql(strsql).Count(out total).Page(pageindex, pagesize).OrderBy(orderfield).ToList();
+            var list = this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).WithSql(strsql).ToList();
+            total = list.Count;
+            return list;
         }
 
-        public IEnumerable<TEntity> FindList(string strsql, string orderfield, int pagesize, int pageindex, out long total, Dictionary<string, string> dict = null)
+        public IEnumerable<TEntity> FindList(string strsql, string orderfield, int pagesize, int pageindex, out int total, Dictionary<string, string> dict = null)
         {
-
-            return this.freeSql.Select<TEntity>().WithSql(strsql, dict).Count(out total).Page(pageindex, pagesize).OrderBy(orderfield).ToList();
+            var list = this.freeSql.Select<TEntity>().Page(pageindex, pagesize).OrderBy(orderfield).WithSql(strsql, dict).ToList();
+            total = list.Count;
+            return list;
         }
 
         public object FindObject(string strsql)
         {
-            return this.freeSql.Ado.ExecuteScalar(strsql);
+            return this.freeSql.Select<object>().WithSql(strsql);
         }
 
         public Task<int> UpdateAsync(string sql)
         {
             return this.freeSql.Select<TEntity>().WithSql(sql).ToUpdate().ExecuteAffrowsAsync();
         }
-
-        public int ExecuteBySql(string sql)
-        {
-            return this.freeSql.Ado.ExecuteNonQuery(sql);
-        }
-
-        public int ExecuteBySql(string sql, object dbParamenter)
-        {
-            return this.freeSql.Ado.ExecuteNonQuery(sql, dbParamenter);
-        }
-
-        public TEntity ExecuteByProc(string procName)
-        {
-            return this.freeSql.Ado.Query<TEntity>(CommandType.StoredProcedure, procName).FirstOrDefault();
-        }
-
-        public TEntity ExecuteByProc(string procName, object dbParamenter)
-        {
-            return this.freeSql.Ado.Query<TEntity>(CommandType.StoredProcedure, procName, null).FirstOrDefault();
-        }
-
-        public IEnumerable<TEntity> QueryByProc(string procName)
-        {
-            return this.freeSql.Ado.Query<TEntity>(CommandType.StoredProcedure, procName);
-        }
-
-        public IEnumerable<TEntity> QueryByProc(string procName, object dbParameter)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
     }
 
 
-    public abstract class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, long>,IBaseEntityRepository<TEntity> where TEntity : class, new()
+    public abstract class BaseEntityRepository<TEntity> : BaseEntityRepository<TEntity, long> where TEntity : class, new()
     {
         public BaseEntityRepository(UnitOfWorkManager unitofworkmanager) : base(unitofworkmanager)
         {

@@ -3,7 +3,7 @@ using WebApi.Models;
 
 namespace WebApi.Repository
 {
-    public interface IUserRepository : IBaseEntityRepository<UserEntity>
+    public interface IUserRepository : IBaseEntityRepository<IdentityUser>
     {
       
     }

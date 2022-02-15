@@ -39,14 +39,14 @@ namespace WebApi.Api
             #endregion
 
             #region 注入aop
-            builder.RegisterType<LogAop>();
+            //builder.RegisterType<LogAop>();
 
-            var cacheType = new List<Type>();
+            //var cacheType = new List<Type>();
 
-            cacheType.Add(typeof(LogAop));
+            //cacheType.Add(typeof(LogAop));
             #endregion
 
-            builder.RegisterGeneric(typeof(BaseEntityRepository<>)).As(typeof(IBaseEntityRepository<>)).InstancePerDependency();//注册仓储
+            //builder.RegisterGeneric(typeof(BaseEntityRepository<>)).As(typeof(IBaseEntityRepository<>)).InstancePerDependency();//注册仓储
 
             builder.RegisterAssemblyTypes(GetAssemblyByName("WebApi.Repository"))
                 .Where(a => a.Name.EndsWith("Repository"))
@@ -58,9 +58,9 @@ namespace WebApi.Api
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope()
                 //引用Autofac.Extras.DynamicProxy;
-                .EnableInterfaceInterceptors()
+                .EnableInterfaceInterceptors();
                 //允许将拦截器服务的列表分配给注册。
-                .InterceptedBy(cacheType.ToArray());
+                //.InterceptedBy(cacheType.ToArray());
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ using WebApi.Models;
 
 namespace WebApi.Repository
 {
-    public class RoleRepository : BaseEntityRepository<RoleEntity>, IRoleRepository
+    public class RoleRepository : BaseEntityRepository<IdentityRole>, IRoleRepository
     {
         public RoleRepository(UnitOfWorkManager unitOfWork) : base(unitOfWork)
         {
@@ -18,7 +18,7 @@ namespace WebApi.Repository
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<RoleEntity> GetIdentityRoles(int? userId)
+        public List<IdentityRole> GetIdentityRoles(int? userId)
         {
             string Sql = @"
 SELECT

@@ -49,7 +49,8 @@ namespace WebApi.Api
         /// <param name="services"></param>
         public static void AddControllService(this IServiceCollection services)
         {
-            services.AddControllers((p)=> {
+            services.AddControllers((p) =>
+            {
                 //添加全局异常拦截
                 p.Filters.Add(typeof(ExceptionFilter));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
@@ -121,12 +122,11 @@ namespace WebApi.Api
                     Version = "v1",
                     Title = "Web API",
                     Description = "ASP.NET Core Web API",
-                    TermsOfService = new Uri("https://example.com/terms"),
+                    TermsOfService = new Uri("http://www.baidu.com"),
                     Contact = new OpenApiContact
                     {
                         Name = "xx",
                         Email = string.Empty,
-                        Url = new Uri("https://www.baidu.com"),
                     }
                 });
 
@@ -233,7 +233,7 @@ namespace WebApi.Api
 
             JwtConfig jwtConfig = new JwtConfig();
             AppSetting.BindSection("Audience", jwtConfig);
-            
+
             services.AddAuthentication(o =>
             {
                 //添加JWT Scheme
@@ -257,7 +257,7 @@ namespace WebApi.Api
                     ValidateLifetime = true,
                     // 缓冲过期时间，总的有效时间等于这个时间加上jwt的过期时间，如果不配置，默认是5分钟
                     //ClockSkew = TimeSpan.FromMinutes(jwtConfig.RefreshTokenExpiresMinutes),
-                    ClockSkew=TimeSpan.FromSeconds(1),
+                    ClockSkew = TimeSpan.FromSeconds(1),
                     RequireExpirationTime = true,
                 };
                 options.Events = new JwtBearerEvents
@@ -284,7 +284,7 @@ namespace WebApi.Api
                         }
 
                         return Task.CompletedTask;
-                    }
+                    },
                 };
             });
         }
@@ -300,7 +300,7 @@ namespace WebApi.Api
                 options.Providers.Add<GzipCompressionProvider>();
                 options.MimeTypes =
                     ResponseCompressionDefaults.MimeTypes.Concat(
-                        new[] {"image/svg+xml"});
+                        new[] { "image/svg+xml" });
             });
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -313,7 +313,7 @@ namespace WebApi.Api
         /// </summary>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
-        public static void AddCapEvent(this IServiceCollection services,IConfiguration configuration)
+        public static void AddCapEvent(this IServiceCollection services, IConfiguration configuration)
         {
             #region cap简介
 
@@ -341,19 +341,35 @@ namespace WebApi.Api
         {
             //将身份验证服务添加到DI和身份验证中间件到管道
             //注入身份认证服务
-            services.AddAuthentication("Bearer")
-                //  JWT 认证处理程序添加到DI中以供身份认证服务使用
-                .AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(o =>
+            {
+
+                o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            //  JWT 认证处理程序添加到DI中以供身份认证服务使用
+            .AddJwtBearer("Bearer", options =>
                 {
                     // 验证传入令牌以确保它来自受信任的颁发者
-                    options.Authority = "https://localhost:5001";
+                    //options.Authority = "https://localhost:5001";
 
-                    // 验证token参数
-                    options.TokenValidationParameters = new TokenValidationParameters
+                    TokenValidationParameters parameters = new TokenValidationParameters
                     {
-                        ValidateAudience = false
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromSeconds(30),
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = AppSetting.GetSection("JwtConfig:Issuer").Value.ToString(),//发行人
+                        ValidAudience = AppSetting.GetSection("JwtConfig:Audience").Value.ToString(),//订阅人
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSetting.GetSection("JwtConfig:IssuerSigningKey").Value.ToString()))
                     };
 
+
+                    // 验证token参数
+                    options.TokenValidationParameters = parameters;
                     options.Events = new JwtBearerEvents
                     {
                         OnMessageReceived = context =>
@@ -366,9 +382,53 @@ namespace WebApi.Api
                                 context.Token = accessToken;
                             }
                             return Task.CompletedTask;
-                        }
+                        },
+
+                        //在Token验证通过后调用
+                        OnAuthenticationFailed = context =>
+                        {
+                            var jwtHandler = new JwtSecurityTokenHandler();
+                            var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                            if (!string.IsNullOrEmpty(token) && jwtHandler.CanReadToken(token))
+                            {
+                                var jwtToken = jwtHandler.ReadJwtToken(token);
+
+                                if (jwtToken.Issuer != parameters.ValidIssuer)
+                                {
+                                    context.Response.Headers.Add("Token-Error-Iss", "issuer is wrong!");
+                                }
+
+                                if (jwtToken.Audiences.FirstOrDefault() != parameters.ValidAudience)
+                                {
+                                    context.Response.Headers.Add("Token-Error-Aud", "Audience is wrong!");
+                                }
+                            }
+
+                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                context.Response.Headers.Add("Token-Expired", "true");
+                            }
+                            return Task.CompletedTask;
+                        },
+
+                        //未授权时调用失败
+                        OnChallenge = context =>
+                        {
+                            if (context.Error != null)
+                            {
+                                string message = context.ErrorDescription;
+                            }
+
+                            context.Response.Headers.Add("Token-Error-Iss", "请授权");
+                            return Task.CompletedTask;
+                        },
+                        //在Token验证通过后调用
+                        //OnTokenValidated = context => { 
+                        //}
+
                     };
-                });
+                })
+            .AddCookie();           
             //授权
             services.AddAuthorization(options =>
             {
@@ -412,7 +472,7 @@ namespace WebApi.Api
         ///注入MediatR服务
         /// </summary>
         /// <param name="services"></param>
-        public static void AddMediatRService(this  IServiceCollection services)
+        public static void AddMediatRService(this IServiceCollection services)
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
         }
@@ -426,7 +486,8 @@ namespace WebApi.Api
             services.Configure<RabbitmqOptions>(AppSetting.GetSection("RabbitMQ"));
             RabbitmqOptions options = new RabbitmqOptions();
             AppSetting.BindSection("RabbitMQ", options);
-            if (options != null&&options.Enabled) {
+            if (options != null && options.Enabled)
+            {
                 services.AddSingleton<IRabbitmqConnection, RabbitmqConnection>();
             }
         }
@@ -459,15 +520,15 @@ namespace WebApi.Api
         /// 公共服务
         /// </summary>
         /// <param name="services"></param>
-        public  static  void  AddCommonService(this  IServiceCollection services)
+        public static void AddCommonService(this IServiceCollection services)
         {
-            services.AddOptions<JwtConfig>(AppSetting.GetSection("Audience").ToString());
+            services.Configure<JwtConfig>(AppSetting.GetSection("JwtConfig"));
 
             // 配置kestrel
             services.Configure<KestrelServerOptions>(AppSetting.GetSection("Kestrel"));
 
             // 延迟加载，注入（避免循环注入）
-            services.AddTransient(typeof(Lazy<>),typeof(LazilyResolved<>));
+            services.AddTransient(typeof(Lazy<>), typeof(LazilyResolved<>));
 
             services.AddGrpc();
 
@@ -485,7 +546,7 @@ namespace WebApi.Api
             //.AddInterceptor()
             //配置 gRPC 客户端的基础通道
             //.ConfigureChannel();
-            
+
             services.Configure<FormOptions>(options =>
             {
                 //超出设置范围会报InvalidDataException 异常信息
@@ -520,13 +581,14 @@ namespace WebApi.Api
                .UseNameConvert(NameConvertType.PascalCaseToUnderscoreWithLower)
                .UseMonitorCommand(cmd =>
                {
-                   Log.Information("Sql语句"+ cmd.CommandText + ";");
+                   Log.Information("Sql语句" + cmd.CommandText + ";");
                })
                .UseAutoSyncStructure(true) //自动同步实体结构到数据库
                .Build(); //请务必定义成 Singleton 单例模式
 
             //增删改查触发
-            freeSql.Aop.CurdAfter += (s, e) => {
+            freeSql.Aop.CurdAfter += (s, e) =>
+            {
 
             };
 

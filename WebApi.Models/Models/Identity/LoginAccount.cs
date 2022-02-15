@@ -6,8 +6,8 @@ namespace WebApi.Models
     /// <summary>
     /// 登录账号表
     /// </summary>
-    [Table(Name = "sys_login")]
-    public class LoginAccountEntity : Entity<long>
+    [Table(Name = "case_login")]
+    public class LoginAccount : Entity<long>
     {
         /// <summary>
         /// 用户名

@@ -11,6 +11,6 @@ namespace WebApi.Repository
         /// 获取角色列表
         /// </summary>
         /// <returns></returns>
-        List<RoleEntity> GetIdentityRoles(int? userId); 
+        List<IdentityRole> GetIdentityRoles(int? userId); 
     }
 }

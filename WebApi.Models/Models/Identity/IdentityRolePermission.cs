@@ -6,15 +6,15 @@ namespace WebApi.Models
     /// <summary>
     /// 角色权限关联表
     /// </summary>
-    [Table(Name = "sys_role_permission")]
-    public class RolePermissionEntity : Entity<long>
+    [Table(Name = "case_role_permission")]
+    public class IdentityRolePermission : Entity<long>
     {
-        public RolePermissionEntity()
+        public IdentityRolePermission()
         { 
         
         }
 
-        public RolePermissionEntity(long permissionId, long roleId)
+        public IdentityRolePermission(long permissionId, long roleId)
         {
             this.RoleId = roleId;
             this.PermissionId = permissionId;
